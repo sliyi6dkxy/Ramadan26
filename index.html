@@ -15,10 +15,17 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
     #image {
-      display: none;
+      opacity: 0;
+      transition: opacity 2s ease;
       margin-top: 20px;
     }
+
+    #image.show {
+      opacity: 1;
+    }
+
     img {
       max-width: 90%;
       height: auto;
@@ -36,9 +43,7 @@
   </div>
 
   <script>
-    // التاريخ المستهدف: 11 أبريل 2025 - الساعة 6:30 مساءً
-    var targetDate = new Date("April 11, 2025 18:30:00").getTime();
-
+    var targetDate = new Date("April 11, 2025 18:45:00").getTime();
     var countdown = document.getElementById("countdown");
     var image = document.getElementById("image");
 
@@ -54,8 +59,8 @@
         countdown.innerHTML = "تبقى " + hours + " ساعة و " + minutes + " دقيقة و " + seconds + " ثانية";
       } else {
         clearInterval(x);
-        countdown.innerHTML = "المفاجأة ظهرت!";
-        image.style.display = "block";
+        countdown.innerHTML = "عيد مبارك!";
+        image.classList.add("show"); // تشغيل الأنيميشن
       }
     }, 1000);
   </script>
