@@ -2,48 +2,79 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>مفاجأة بعد العد التنازلي</title>
+  <title>مفاجأة ودعاء اليوم</title>
   <style>
     body {
       background-color: #111;
       color: white;
       text-align: center;
       font-family: 'Arial', sans-serif;
-      padding-top: 50px;
+      padding-top: 40px;
     }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #ccc;
+      margin-bottom: 25px;
+    }
+
     #countdown {
       font-size: 2em;
       margin-bottom: 20px;
     }
 
-    #image {
+    #image, #dua {
       opacity: 0;
       transition: opacity 2s ease;
       margin-top: 20px;
     }
 
-    #image.show {
+    #image.show, #dua.show {
       opacity: 1;
     }
 
     img {
       max-width: 90%;
       height: auto;
-      border-radius: 10px;
-      border: 3px solid #999;
+      border-radius: 12px;
+      border: 3px solid #888;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      margin-top: 10px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #555;
+      margin: 40px auto;
+      width: 60%;
     }
   </style>
 </head>
 <body>
-  <h1>العد التنازلي للمفاجأة!</h1>
+  <h1>العد التنازلي للمفاجأة</h1>
+
   <div id="countdown"></div>
 
   <div id="image">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Rama26/main/%D9%82%D8%B5%D8%A9%20%D8%A7%D9%86%D8%B3%D8%AA%D9%82%D8%B1%D8%A7%D9%85%20%D8%B9%D9%8A%D8%AF%20%D9%85%D8%A8%D8%A7%D8%B1%D9%83%20%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B3%D9%8A%D8%B7%20%D9%84%D9%88%D9%86%20%D8%A7%D8%B3%D9%88%D8%AF%20%D9%88%D8%B1%D8%B5%D8%A7%D8%B5%D9%8A_20250325_202649_%D9%A0%D9%A0%D9%A0%D9%A0.png" alt="صورة مفاجأة">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Rama26/main/قصة%20انستقرام%20عيد%20مبارك%20تصميم%20بسيط%20لون%20اسود%20ورصاصي_20250325_202649_٠٠٠٠.png" alt="المفاجأة">
+  </div>
+
+  <hr>
+
+  <p>كل يوم سيتم نشر دعاء جديد إن شاء الله، تابع الموقع يوميًا لتقرأ وتشارك الأدعية الرمضانية.</p>
+
+  <div id="dua" class="show">
+    <h2>دعاء اليوم</h2>
+    <img src="https://file/d/1R2Aa2K_YAy2SBYRq2RNP_DU3OiLZgw03/view?usp=drivesdk" alt="دعاء اليوم">
   </div>
 
   <script>
-    var targetDate = new Date("April 12, 2025 18:40:00").getTime();
+    var targetDate = new Date("April 11, 2025 18:30:00").getTime();
     var countdown = document.getElementById("countdown");
     var image = document.getElementById("image");
 
@@ -59,8 +90,8 @@
         countdown.innerHTML = "تبقى " + hours + " ساعة و " + minutes + " دقيقة و " + seconds + " ثانية";
       } else {
         clearInterval(x);
-        countdown.innerHTML = "عيد مبارك!";
-        image.classList.add("show"); // تشغيل الأنيميشن
+        countdown.innerHTML = "المفاجأة ظهرت!";
+        image.classList.add("show");
       }
     }, 1000);
   </script>
