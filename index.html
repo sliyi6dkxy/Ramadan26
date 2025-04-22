@@ -17,12 +17,6 @@
       margin-bottom: 10px;
     }
 
-    p {
-      font-size: 1.2em;
-      color: #ccc;
-      margin-bottom: 25px;
-    }
-
     #countdown {
       font-size: 2em;
       margin-bottom: 20px;
@@ -53,6 +47,13 @@
       margin: 40px auto;
       width: 60%;
     }
+
+    .description {
+      font-size: 1.5em;
+      color: #f0f0f0;
+      margin-bottom: 25px;
+      line-height: 1.8;
+    }
   </style>
 </head>
 <body>
@@ -61,22 +62,24 @@
   <div id="countdown"></div>
 
   <div id="image">
-    <!-- وضع الرابط المباشر للصورة هنا -->
-    <img src="https://drive.google.com/uc?export=view&id=1R2Aa2K_YAy2SBYRq2RNP_DU3OiLZgw03" alt="المفاجأة">
+    <!-- صورة المفاجأة -->
+    <img src="https://drive.google.com/uc?export=view&id=1Rg8umDRow6HTd_LJxzmSuSIYW9QaHCEA" alt="المفاجأة">
   </div>
 
   <hr>
 
-  <p>كل يوم سيتم نشر دعاء جديد إن شاء الله، تابع الموقع يوميًا لتقرأ وتشارك الأدعية الرمضانية.</p>
+  <div class="description">
+    ابتداءً من اليوم، سيتم نشر دعاء جديد يوميًا على هذا الموقع. تابعنا كل يوم لقراءة دعاء مميز ومشاركته مع من تحب.
+  </div>
 
   <div id="dua" class="show">
     <h2>دعاء اليوم</h2>
-    <!-- رابط الصورة اليومية هنا -->
-    <img src="https://drive.google.com/uc?export=view&id=IMG_20250420_201704_519.jpg" alt="دعاء اليوم">
+    <!-- يمكنك تغيير هذه الصورة لاحقًا حسب الدعاء -->
+    <img src="https://drive.google.com/uc?export=view&id=1Rg8umDRow6HTd_LJxzmSuSIYW9QaHCEA" alt="دعاء اليوم">
   </div>
 
   <script>
-    var targetDate = new Date("may 11, 2025 18:30:00").getTime();
+    var targetDate = new Date("May 11, 2025 18:30:00").getTime();
     var countdown = document.getElementById("countdown");
     var image = document.getElementById("image");
 
