@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المفاجأة والدعاء</title>
+  <title>مفاجأة العيد مع الأدعية</title>
   <style>
     body {
       text-align: center;
@@ -11,39 +11,75 @@
       background-color: #f7f7f7;
       padding: 0;
       margin: 0;
-      overflow: hidden;
     }
+
     h1 {
-      font-size: 26px;
+      font-size: 24px;
       color: #333;
+    }
+
+    .countdown {
+      font-size: 30px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    #surprise {
+      display: none;
       margin-top: 20px;
     }
-    h2 {
-      font-size: 20px;
-      color: #555;
-      margin-top: 10px;
+
+    .message {
+      font-size: 26px;
+      color: #28a745;
+      font-weight: bold;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 10px;
+      margin-top: 20px;
     }
+
     img {
       max-width: 100%;
       height: auto;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin-top: 20px;
     }
 
-    /* العد التنازلي */
-    .countdown {
-      font-size: 26px;
-      color: #333;
-      margin-top: 20px;
-      font-weight: bold;
-      display: inline-block;
+    /* إعدادات سلايدر الأدعية */
+    .prayers-container {
+      display: flex;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 30px;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* مفاجأة */
-    #surprise {
-      display: none;
-      margin-top: 20px;
+    .prayer {
+      flex: 0 0 100%;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      margin: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* سلايدر الأدعية */
+    .prayers-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .prayer-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    /* تأثير التمرير */
+    .prayers-container:hover {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -53,15 +89,40 @@
   <h1>المفاجأة تظهر بعد:</h1>
   <div class="countdown" id="countdown">00:00:00:00</div>
 
-  <!-- عرض الصورة المفاجئة بعد العد التنازلي -->
+  <!-- عرض المفاجأة بعد العد التنازلي -->
   <div id="surprise">
-    <h2>مفاجأة اليوم</h2>
+    <!-- رسالة التهنئة -->
+    <div class="message">
+      <p>عيد مبارك! أعاده الله عليكم بالخير والبركات.</p>
+    </div>
+    
+    <!-- صورة المفاجأة -->
+    <h2>صورة المفاجأة</h2>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="مفاجأة">
+  </div>
+
+  <!-- سلايدر الأدعية -->
+  <div class="prayers-container" id="prayers-container">
+    <div class="prayers-wrapper" id="prayers-wrapper">
+      <!-- إضافة صور الأدعية -->
+      <div class="prayer">
+        <img src="
+https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-23-00-385.jpg" alt="دعاء 1">
+      </div>
+      <div class="prayer">
+        <img src="
+https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-23-00-385.jpg" alt="دعاء 2">
+      </div>
+      <div class="prayer">
+        <img src="
+https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-23-00-385.jpg" alt="دعاء 3">
+      </div>
+    </div>
   </div>
 
   <script>
     // تحديد وقت المفاجأة (اليوم والساعة والدقيقة والثانية)
-    const targetDate = new Date("2025-04-22T20:17:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
+    const targetDate = new Date("2025-04-22T20:35:00").getTime(); // حدد التاريخ والوقت الذي تريد أن تظهر فيه المفاجأة
     
     // العد التنازلي
     function startCountdown() {
@@ -94,6 +155,43 @@
 
     // بدء العد التنازلي
     startCountdown();
+
+    // سحب الأدعية
+    let currentIndex = 0;
+    const prayersWrapper = document.getElementById("prayers-wrapper");
+    const prayers = document.querySelectorAll(".prayer");
+    
+    // خاصية السحب لليمين أو اليسار لتغيير الدعاء
+    prayersWrapper.addEventListener("touchstart", handleTouchStart, false);
+    prayersWrapper.addEventListener("touchend", handleTouchEnd, false);
+    
+    let touchStartX = 0;
+    
+    function handleTouchStart(event) {
+      touchStartX = event.touches[0].clientX;
+    }
+    
+    function handleTouchEnd(event) {
+      let touchEndX = event.changedTouches[0].clientX;
+      if (touchStartX - touchEndX > 50) { // السحب لليمين
+        if (currentIndex < prayers.length - 1) {
+          currentIndex++;
+          updatePrayers();
+        }
+      } else if (touchEndX - touchStartX > 50) { // السحب لليسار
+        if (currentIndex > 0) {
+          currentIndex--;
+          updatePrayers();
+        }
+      }
+    }
+    
+    // تحديث عرض الدعاء
+    function updatePrayers() {
+      const offset = -currentIndex * 100;
+      prayersWrapper.style.transform = `translateX(${offset}%)`;
+    }
+
   </script>
 
 </body>
