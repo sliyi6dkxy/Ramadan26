@@ -2,103 +2,147 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>مفاجأة ودعاء اليوم</title>
+  <title>المفاجأة والدعاء</title>
   <style>
     body {
-      background-color: #111;
-      color: white;
       text-align: center;
-      font-family: 'Arial', sans-serif;
-      padding-top: 40px;
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      padding: 50px;
     }
-
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-
-    #countdown {
-      font-size: 2em;
+      font-size: 28px;
+      color: #333;
       margin-bottom: 20px;
     }
-
-    #image, #dua {
-      opacity: 0;
-      transition: opacity 2s ease;
-      margin-top: 20px;
+    h2 {
+      font-size: 24px;
+      color: #555;
+      margin-top: 40px;
     }
-
-    #image.show, #dua.show {
-      opacity: 1;
-    }
-
     img {
       max-width: 90%;
       height: auto;
-      border-radius: 12px;
-      border: 3px solid #888;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      margin-top: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    hr {
+    /* سلايدر */
+    .slider {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      margin: 50px auto;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slides img {
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .nav {
+      margin-top: 15px;
+    }
+
+    .nav button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      font-size: 16px;
       border: none;
-      border-top: 1px solid #555;
-      margin: 40px auto;
-      width: 60%;
+      background: #444;
+      color: #fff;
+      border-radius: 5px;
     }
 
-    .description {
-      font-size: 1.5em;
-      color: #f0f0f0;
-      margin-bottom: 25px;
-      line-height: 1.8;
+    .nav button:hover {
+      background: #000;
+    }
+
+    /* عد تنازلي */
+    .countdown {
+      font-size: 24px;
+      color: #f00;
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>العد التنازلي للمفاجأة</h1>
 
-  <div id="countdown"></div>
+  <!-- العد التنازلي -->
+  <h1>المفاجأة تظهر بعد:</h1>
+  <div class="countdown" id="countdown">00:00</div>
 
-  <div id="image">
-    <!-- صورة المفاجأة -->
-    <img src="https://drive.google.com/uc?export=view&id=1Rg8umDRow6HTd_LJxzmSuSIYW9QaHCEA" alt="المفاجأة">
+  <!-- عرض الصورة المفاجئة بعد العد التنازلي -->
+  <div id="surprise" style="display: none;">
+    <h2>مفاجأة اليوم</h2>
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="مفاجأة">
   </div>
 
-  <hr>
-
-  <div class="description">
-    ابتداءً من اليوم، سيتم نشر دعاء جديد يوميًا على هذا الموقع. تابعنا كل يوم لقراءة دعاء مميز ومشاركته مع من تحب.
+  <!-- سلايدر الصور -->
+  <h2>دعاء اليوم</h2>
+  <div class="slider">
+    <div class="slides" id="slides">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+      <img src="
+https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-23-00-385.jpg" alt="دعاء 2">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg" alt="دعاء 3">
+    </div>
   </div>
 
-  <div id="dua" class="show">
-    <h2>دعاء اليوم</h2>
-    <!-- يمكنك تغيير هذه الصورة لاحقًا حسب الدعاء -->
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء اليوم">
+  <div class="nav">
+    <button onclick="prev()">السابق</button>
+    <button onclick="next()">التالي</button>
   </div>
 
   <script>
-    var targetDate = new Date("May 11, 2025 18:30:00").getTime();
-    var countdown = document.getElementById("countdown");
-    var image = document.getElementById("image");
+    // عد تنازلي
+    let countdownTime = 10; // عدد الثواني قبل ظهور المفاجأة
+    const countdownElement = document.getElementById("countdown");
+    const surpriseElement = document.getElementById("surprise");
 
-    var x = setInterval(function () {
-      var now = new Date().getTime();
-      var distance = targetDate - now;
+    function startCountdown() {
+      const countdownInterval = setInterval(function() {
+        if (countdownTime <= 0) {
+          clearInterval(countdownInterval);
+          countdownElement.style.display = "none"; // إخفاء العد التنازلي
+          surpriseElement.style.display = "block"; // إظهار المفاجأة
+        } else {
+          countdownElement.innerHTML = `00:${countdownTime < 10 ? '0' : ''}${countdownTime}`;
+        }
+        countdownTime--;
+      }, 1000);
+    }
 
-      if (distance > 0) {
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // سلايدر الصور
+    let index = 0;
+    const slides = document.getElementById("slides");
+    const total = slides.children.length;
 
-        countdown.innerHTML = "تبقى " + hours + " ساعة و " + minutes + " دقيقة و " + seconds + " ثانية";
-      } else {
-        clearInterval(x);
-        countdown.innerHTML = "المفاجأة ظهرت!";
-        image.classList.add("show");
-      }
-    }, 1000);
+    function showSlide(i) {
+      index = (i + total) % total;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    function next() {
+      showSlide(index + 1);
+    }
+
+    function prev() {
+      showSlide(index - 1);
+    }
+
+    // بدء العد التنازلي
+    startCountdown();
   </script>
+
 </body>
 </html>
