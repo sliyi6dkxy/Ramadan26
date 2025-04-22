@@ -9,31 +9,32 @@
       text-align: center;
       font-family: Arial, sans-serif;
       background-color: #f7f7f7;
-      padding: 50px;
+      padding: 0;
       margin: 0;
+      overflow: hidden;
     }
     h1 {
-      font-size: 28px;
+      font-size: 26px;
       color: #333;
-      margin-bottom: 20px;
+      margin-top: 20px;
     }
     h2 {
-      font-size: 24px;
+      font-size: 20px;
       color: #555;
-      margin-top: 40px;
+      margin-top: 10px;
     }
     img {
       max-width: 100%;
       height: auto;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin-bottom: 30px;
+      margin-top: 20px;
     }
 
     /* العد التنازلي */
     .countdown {
-      font-size: 30px;
-      color: #f00;
+      font-size: 26px;
+      color: #333; /* اللون المعاد إلى الأسود */
       margin-top: 20px;
       font-weight: bold;
       display: block;
@@ -42,7 +43,7 @@
     /* مفاجأة */
     #surprise {
       display: none;
-      margin-top: 40px;
+      margin-top: 20px;
     }
 
     /* سلايدر */
@@ -50,7 +51,7 @@
       position: relative;
       width: 90%;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 20px auto;
       overflow: hidden;
       border-radius: 15px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -84,6 +85,16 @@
     .nav button:hover {
       background: #000;
     }
+
+    /* لضمان التناسب مع الشاشة */
+    @media (max-width: 600px) {
+      h1, h2 {
+        font-size: 22px;
+      }
+      .countdown {
+        font-size: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -116,7 +127,7 @@ https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-
 
   <script>
     // تحديد وقت المفاجأة (اليوم والساعة والدقيقة والثانية)
-    const targetDate = new Date("2025-04-30T18:30:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
+    const targetDate = new Date("2025-04-30T19:00:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
     
     // العد التنازلي
     function startCountdown() {
