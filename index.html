@@ -12,27 +12,29 @@
       text-align: center;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
     }
 
     h1 {
       font-size: 20px;
-      margin: 10px;
+      margin-top: 15px;
     }
 
     .countdown {
       font-size: 26px;
       font-weight: bold;
       color: #444;
-      margin-bottom: 20px;
+      margin: 10px 0 20px;
     }
 
     #surprise {
       display: none;
       animation: fadeIn 1s ease-in-out forwards;
+      z-index: 2;
     }
 
     @keyframes fadeIn {
@@ -53,9 +55,34 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
+    /* بالونات */
+    .balloon {
+      width: 40px;
+      height: 60px;
+      background: red;
+      border-radius: 50% 50% 50% 50%;
+      position: absolute;
+      bottom: -100px;
+      animation: float 6s ease-in infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    .balloon:nth-child(1) { left: 10%; background: red; animation-delay: 0s; }
+    .balloon:nth-child(2) { left: 30%; background: blue; animation-delay: 2s; }
+    .balloon:nth-child(3) { left: 50%; background: green; animation-delay: 1s; }
+    .balloon:nth-child(4) { left: 70%; background: orange; animation-delay: 3s; }
+    .balloon:nth-child(5) { left: 85%; background: purple; animation-delay: 4s; }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 0.8; }
+      50% { transform: translateY(-300px) scale(1.1); opacity: 1; }
+      100% { transform: translateY(-600px); opacity: 0; }
+    }
+
     /* قسم الأدعية */
     .duas-section {
-      margin-top: 20px;
+      margin-top: 30px;
       width: 100%;
     }
 
@@ -90,10 +117,18 @@
   <div class="countdown" id="countdown">00:00:00</div>
 
   <div id="surprise">
+    <!-- بالونات -->
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+
+    <!-- تهنئة -->
     <div class="message">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</div>
     <img class="surprise-img" src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="تهنئة العيد" />
-    
-    <!-- قسم الأدعية -->
+
+    <!-- الأدعية -->
     <div class="duas-section">
       <div class="duas-title">تابع أدعية رمضان كل يوم:</div>
       <div class="duas-container">
@@ -108,7 +143,7 @@
     const countdownElement = document.getElementById("countdown");
     const surpriseElement = document.getElementById("surprise");
 
-    const targetDate = new Date("2025-04-22T20:45:00").getTime();
+    const targetDate = new Date("2025-04-22T20:50:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -117,7 +152,6 @@
       if (distance <= 0) {
         countdownElement.style.display = "none";
         surpriseElement.style.display = "block";
-        document.body.style.overflow = "auto"; // لتفعيل التمرير بعد ظهور المفاجأة
         return;
       }
 
