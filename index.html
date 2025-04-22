@@ -37,7 +37,7 @@
       color: #333; /* اللون المعاد إلى الأسود */
       margin-top: 20px;
       font-weight: bold;
-      display: block;
+      display: inline-block;
     }
 
     /* مفاجأة */
@@ -46,7 +46,7 @@
       margin-top: 20px;
     }
 
-    /* سلايدر */
+    /* سلايدر الصور */
     .slider {
       position: relative;
       width: 90%;
@@ -101,7 +101,7 @@
 
   <!-- العد التنازلي -->
   <h1>المفاجأة تظهر بعد:</h1>
-  <div class="countdown" id="countdown">00 يوم 00:00:00</div>
+  <div class="countdown" id="countdown">00:00:00:00</div> <!-- الترتيب الجديد هنا -->
 
   <!-- عرض الصورة المفاجئة بعد العد التنازلي -->
   <div id="surprise">
@@ -143,7 +143,7 @@ https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        countdownElement.innerHTML = `${days} يوم ${hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        countdownElement.innerHTML = `${days}:${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 
         if (distance < 0) {
           clearInterval();
