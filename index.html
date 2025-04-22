@@ -45,63 +45,13 @@
       display: none;
       margin-top: 20px;
     }
-
-    /* سلايدر الصور */
-    .slider {
-      position: relative;
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      overflow: hidden;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-
-    .slides {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .slides img {
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    /* التنقل بين الصور */
-    .nav {
-      margin-top: 20px;
-    }
-
-    .nav button {
-      padding: 10px 15px;
-      margin: 0 5px;
-      font-size: 16px;
-      border: none;
-      background: #444;
-      color: #fff;
-      border-radius: 5px;
-    }
-
-    .nav button:hover {
-      background: #000;
-    }
-
-    /* لضمان التناسب مع الشاشة */
-    @media (max-width: 600px) {
-      h1, h2 {
-        font-size: 22px;
-      }
-      .countdown {
-        font-size: 20px;
-      }
-    }
   </style>
 </head>
 <body>
 
   <!-- العد التنازلي -->
   <h1>المفاجأة تظهر بعد:</h1>
-  <div class="countdown" id="countdown">00:19:00:00</div>
+  <div class="countdown" id="countdown">00:00:00:00</div>
 
   <!-- عرض الصورة المفاجئة بعد العد التنازلي -->
   <div id="surprise">
@@ -109,24 +59,9 @@
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="مفاجأة">
   </div>
 
-  <!-- سلايدر الصور -->
-  <h2>دعاء اليوم</h2>
-  <div class="slider" id="slider">
-    <div class="slides" id="slides">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/صورة2.jpg" alt="دعاء 2">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/صورة3.jpg" alt="دعاء 3">
-    </div>
-  </div>
-
-  <div class="nav">
-    <button onclick="prev()">السابق</button>
-    <button onclick="next()">التالي</button>
-  </div>
-
   <script>
     // تحديد وقت المفاجأة (اليوم والساعة والدقيقة والثانية)
-    const targetDate = new Date("2025-04-30T18:30:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
+    const targetDate = new Date("2025-04-30T20:12:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
     
     // العد التنازلي
     function startCountdown() {
@@ -155,24 +90,6 @@
           surpriseElement.style.display = "block"; // إظهار المفاجأة
         }
       }, 1000);
-    }
-
-    // سلايدر الصور
-    let index = 0;
-    const slides = document.getElementById("slides");
-    const total = slides.children.length;
-
-    function showSlide(i) {
-      index = (i + total) % total;
-      slides.style.transform = `translateX(-${index * 100}%)`;
-    }
-
-    function next() {
-      showSlide(index + 1);
-    }
-
-    function prev() {
-      showSlide(index - 1);
     }
 
     // بدء العد التنازلي
