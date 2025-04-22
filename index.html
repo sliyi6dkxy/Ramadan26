@@ -34,7 +34,7 @@
     /* العد التنازلي */
     .countdown {
       font-size: 26px;
-      color: #333; /* اللون المعاد إلى الأسود */
+      color: #333;
       margin-top: 20px;
       font-weight: bold;
       display: inline-block;
@@ -101,7 +101,7 @@
 
   <!-- العد التنازلي -->
   <h1>المفاجأة تظهر بعد:</h1>
-  <div class="countdown" id="countdown">00:00:00:00</div> <!-- الترتيب الجديد هنا -->
+  <div class="countdown" id="countdown">00:19:00:00</div>
 
   <!-- عرض الصورة المفاجئة بعد العد التنازلي -->
   <div id="surprise">
@@ -114,9 +114,8 @@
   <div class="slider" id="slider">
     <div class="slides" id="slides">
       <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg" alt="دعاء 2">
-      <img src="
-https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-23-00-385.jpg" alt="دعاء 3">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/صورة2.jpg" alt="دعاء 2">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/صورة3.jpg" alt="دعاء 3">
     </div>
   </div>
 
@@ -127,7 +126,7 @@ https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-
 
   <script>
     // تحديد وقت المفاجأة (اليوم والساعة والدقيقة والثانية)
-    const targetDate = new Date("2025-04-30T19:00:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
+    const targetDate = new Date("2025-04-30T18:30:00").getTime(); // التاريخ المستهدف للمفاجأة (تعديل التاريخ والوقت هنا)
     
     // العد التنازلي
     function startCountdown() {
@@ -143,7 +142,12 @@ https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-04-11_18-
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        countdownElement.innerHTML = `${days}:${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        // إخفاء خانة الأيام إذا كانت الأيام 0
+        if (days <= 0) {
+          countdownElement.innerHTML = `${hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        } else {
+          countdownElement.innerHTML = `${days}:${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
 
         if (distance < 0) {
           clearInterval();
