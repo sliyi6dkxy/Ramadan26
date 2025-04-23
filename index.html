@@ -2,124 +2,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مفاجأة العيد وأدعية رمضان</title>
+  <title>مفاجأة العيد</title>
   <style>
     body {
-      font-family: 'Tahoma', sans-serif;
-      background-color: #111;
+      background-color: #000;
       color: white;
       text-align: center;
+      font-family: 'Tahoma', sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 0 10px;
     }
-    .countdown {
-      font-size: 2em;
-      margin: 20px 0;
+    h1, h2 {
+      margin-top: 20px;
+    }
+    #countdown {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      margin: 15px 0;
     }
     .hidden {
       display: none;
     }
-    .balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 10;
+    #surprise {
+      font-size: 22px;
+      color: #6cf;
+      margin-bottom: 15px;
     }
-    .balloon {
-      width: 50px;
-      height: 70px;
-      background-color: red;
-      border-radius: 50% 50% 50% 50%;
-      position: absolute;
-      animation: float 6s ease-in infinite;
+    .carousel {
+      display: flex;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      gap: 10px;
+      padding: 10px 0;
+      -webkit-overflow-scrolling: touch;
     }
-    @keyframes float {
-      0% { transform: translateY(100vh); }
-      100% { transform: translateY(-100vh); }
+    .carousel img {
+      scroll-snap-align: center;
+      max-width: 90%;
+      border-radius: 12px;
     }
-    .duas-section {
-      margin-top: 40px;
-    }
-    .swiper {
-      width: 90%;
-      height: auto;
-      margin: auto;
-    }
-    .swiper-slide img {
-      width: 100%;
-      border-radius: 20px;
-    }
-    .description {
-      font-size: 1.3em;
-      margin-top: 30px;
+    .section-title {
+      font-size: 20px;
+      margin-top: 20px;
     }
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
 </head>
 <body>
   <h2>المفاجأة تظهر بعد:</h2>
-  <div id="countdown" class="countdown"></div>  <div id="surprise" class="hidden">
-    <h2 style="color: #64b5f6">عيدكم مبارك! أعاده الله عليكم بالفرح واليمن والبركات.</h2>
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="تهنئة العيد" style="width:90%; border-radius:20px;">
-    <div class="balloons"></div>
-  </div>  <div class="duas-section">
-    <p class="description">تابع أدعية رمضان كل يوم:</p>
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua1.jpg" alt="دعاء 1"></div>
-        <div class="swiper-slide"><img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua2.jpg" alt="دعاء 2"></div>
-        <div class="swiper-slide"><img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua3.jpg" alt="دعاء 3"></div>
-      </div>
-    </div>
-  </div>  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>  <script>
-    // العد التنازلي للمفاجأة
+  <div id="countdown"></div>  <div id="surprise" class="hidden">
+    عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.
+  </div>  <div class="section-title">تابع أدعية رمضان كل يوم:</div>
+  <div class="carousel">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="دعاء 3">
+  </div>  <script>
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
-    const balloonsContainer = document.querySelector(".balloons");
-    const targetDate = new Date("2025-04-23T15:35:00").getTime();
+    const targetDate = new Date("2025-04-23T15:43:00").getTime();
 
-    const timer = setInterval(() => {
+    function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdown.classList.add("hidden");
+        surprise.classList.remove("hidden");
+        return;
+      }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdown.innerHTML =
-        (days > 0 ? days + " يوم " : "") +
-        hours + " ساعة " + minutes + " دقيقة " + seconds + " ثانية ";
-
-      if (distance < 0) {
-        clearInterval(timer);
-        countdown.style.display = "none";
-        surprise.classList.remove("hidden");
-        launchBalloons();
-      }
-    }, 1000);
-
-    function launchBalloons() {
-      for (let i = 0; i < 20; i++) {
-        const balloon = document.createElement("div");
-        balloon.classList.add("balloon");
-        balloon.style.left = Math.random() * 100 + "%";
-        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-        balloon.style.animationDelay = Math.random() * 5 + "s";
-        balloonsContainer.appendChild(balloon);
-      }
+      let display = '';
+      if (days > 0) display += `${days} : `;
+      display += `${String(hours).padStart(2, '0')} : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+      countdown.innerHTML = display;
     }
 
-    // سلايدر الأدعية
-    const swiper = new Swiper('.swiper', {
-      direction: 'horizontal',
-      loop: false,
-      spaceBetween: 20,
-      slidesPerView: 1,
-    });
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script></body>
 </html>
