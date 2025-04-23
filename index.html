@@ -36,7 +36,7 @@
       padding-bottom: 20px;
     }
     .carousel img {
-      flex: 0 0 80%;
+      flex: 0 0 60%;
       scroll-snap-align: center;
       border-radius: 12px;
     }
@@ -49,7 +49,8 @@
 
 <div id="surprise" class="hidden">
   <h2 style="color: #4ea6ff;">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</h2>
-  <img src="your_eid_image.jpg" alt="تهنئة العيد" class="eid-image">
+  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="تهنئة العيد" class="eid-image">
 </div>
 
 <h3>تابع أدعية رمضان كل يوم:</h3>
@@ -63,8 +64,8 @@
 </div>
 
 <script>
-  // ضبط الوقت المستهدف للمفاجأة
-  const targetDate = new Date("2025-04-23T18:55:00").getTime();
+  // وقت المفاجأة
+  const targetDate = new Date("2025-04-23T19:03:00").getTime();
 
   const countdownEl = document.getElementById("countdown");
   const surpriseEl = document.getElementById("surprise");
@@ -83,10 +84,7 @@
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      let display = "";
-      if (days > 0) display += `${days.toString().padStart(2, '0')} : `;
-      display += `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-
+      const display = `${days.toString().padStart(2, '0')} : ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
       countdownEl.textContent = display;
     }
   }, 1000);
