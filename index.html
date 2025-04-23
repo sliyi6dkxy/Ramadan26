@@ -2,152 +2,130 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>تهنئة العيد</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مفاجأة العيد + أدعية</title>
   <style>
     body {
-      background-color: black;
-      color: white;
-      text-align: center;
-      font-family: 'Cairo', sans-serif;
       margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      font-family: 'Arial', sans-serif;
+      background: #fff;
+      text-align: center;
     }
-
     .countdown {
-      font-size: 24px;
-      margin: 20px 0;
+      font-size: 28px;
       display: flex;
-      flex-direction: row-reverse;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
+      margin-top: 30px;
     }
-
     .countdown div {
-      background: #222;
+      background: #f0f0f0;
       padding: 10px 15px;
       border-radius: 10px;
       min-width: 50px;
     }
-
     .hidden {
       display: none;
     }
-
-    .eid-image {
-      width: 80%;
-      border-radius: 12px;
-      margin: 20px 0;
+    .celebration {
+      animation: float 4s ease-in-out infinite;
+      position: absolute;
+      width: 30px;
     }
-
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      gap: 10px;
-      margin: 10px;
-      padding-bottom: 20px;
+    @keyframes float {
+      0% {transform: translateY(0);}
+      50% {transform: translateY(-20px);}
+      100% {transform: translateY(0);}
     }
-
-    .carousel img {
-      flex: 0 0 40%;
-      scroll-snap-align: center;
-      border-radius: 12px;
-    }
-
-    /* بالونات */
-    .balloon {
+    .balloons {
       position: fixed;
-      bottom: -100px;
-      width: 40px;
-      height: 60px;
-      background-color: red;
-      border-radius: 50% 50% 45% 45%;
-      animation: rise 5s linear infinite;
-      z-index: 1000;
-      opacity: 0.8;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
     }
-
-    @keyframes rise {
-      0% { bottom: -100px; opacity: 0.8; }
-      100% { bottom: 110%; opacity: 0; }
+    #surprise {
+      margin-top: 40px;
+    }
+    #surprise img {
+      width: 90%;
+      max-width: 400px;
+      border-radius: 15px;
+    }
+    .section-title {
+      margin-top: 50px;
+      font-size: 24px;
+      color: #333;
+    }
+    .duas {
+      display: flex;
+      overflow-x: scroll;
+      gap: 10px;
+      padding: 20px;
+      scroll-snap-type: x mandatory;
+    }
+    .duas img {
+      width: 90%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 10px;
+      scroll-snap-align: center;
     }
   </style>
 </head>
 <body>
 
-<h2>المفاجأة تظهر بعد:</h2>
-<div class="countdown" id="countdown">
-  <div id="days">00</div>
-  <div id="hours">00</div>
-  <div id="minutes">00</div>
-  <div id="seconds">00</div>
-</div>
+  <div id="countdown-container">
+    <div class="countdown" id="countdown"></div>
+  </div>
 
-<div id="surprise" class="hidden">
-  <h2 style="color: #4ea6ff;">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</h2>
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="تهنئة العيد" class="eid-image">
-</div>
+  <div id="surprise" class="hidden">
+    <div class="balloons">
+      <img src="https://i.imgur.com/YEaUxrE.png" class="celebration" style="left: -60px;">
+      <img src="https://i.imgur.com/ZI6S8tr.png" class="celebration" style="left: 0;">
+      <img src="https://i.imgur.com/YEaUxrE.png" class="celebration" style="left: 60px;">
+    </div>
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Rama26/main/تهنئة-العيد.png" alt="مفاجأة العيد">
+  </div>
 
-<h3>تابع أدعية رمضان كل يوم:</h3>
-<div class="carousel">
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="دعاء 1">
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="دعاء 2">
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="دعاء 3">
-</div>
+  <h2 class="section-title">كل يوم دعاء جديد على الموقع</h2>
 
-<script>
-  const targetDate = new Date("2025-04-23T19:21:00").getTime();
+  <div class="duas">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250420_201704_519.jpg" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/دعاء3.jpg" alt="دعاء 3">
+  </div>
 
-  const daysEl = document.getElementById("days");
-  const hoursEl = document.getElementById("hours");
-  const minutesEl = document.getElementById("minutes");
-  const secondsEl = document.getElementById("seconds");
-  const surpriseEl = document.getElementById("surprise");
+  <script>
+    const targetDate = new Date("2025-04-23T19:30:00").getTime();
+    const countdown = document.getElementById("countdown");
+    const surprise = document.getElementById("surprise");
 
-  const timer = setInterval(() => {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
 
-    if (diff <= 0) {
-      clearInterval(timer);
-      document.getElementById("countdown").style.display = "none";
-      surpriseEl.classList.remove("hidden");
-      showBalloons();
-    } else {
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      if (distance <= 0) {
+        document.getElementById("countdown-container").style.display = "none";
+        surprise.classList.remove("hidden");
+        clearInterval(timer);
+        return;
+      }
 
-      daysEl.textContent = days.toString().padStart(2, '0');
-      hoursEl.textContent = hours.toString().padStart(2, '0');
-      minutesEl.textContent = minutes.toString().padStart(2, '0');
-      secondsEl.textContent = seconds.toString().padStart(2, '0');
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdown.innerHTML = `
+        ${days > 0 ? `<div>${days}</div>` : ''}
+        <div>${hours}</div>
+        <div>${minutes}</div>
+        <div>${seconds}</div>
+      `;
     }
-  }, 1000);
 
-  function showBalloons() {
-    for (let i = 0; i < 20; i++) {
-      const balloon = document.createElement("div");
-      balloon.className = "balloon";
-      balloon.style.left = Math.random() * 100 + "vw";
-      balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 60%)`;
-      balloon.style.animationDuration = `${3 + Math.random() * 3}s`;
-      document.body.appendChild(balloon);
-
-      setTimeout(() => {
-        balloon.remove();
-      }, 7000);
-    }
-  }
-</script>
-
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
 </html>
