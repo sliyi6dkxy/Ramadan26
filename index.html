@@ -1,94 +1,96 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <title>تهنئة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مفاجأة العيد</title>
   <style>
     body {
-      background-color: #000;
+      background-color: black;
       color: white;
       text-align: center;
-      font-family: 'Tahoma', sans-serif;
+      font-family: 'Cairo', sans-serif;
       margin: 0;
-      padding: 0 10px;
+      padding: 0;
     }
-    h1, h2 {
-      margin-top: 20px;
-    }
-    #countdown {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      font-size: 22px;
-      font-weight: bold;
-      margin: 15px 0;
+    .countdown {
+      font-size: 24px;
+      letter-spacing: 5px;
+      margin: 20px 0;
     }
     .hidden {
       display: none;
     }
-    #surprise {
-      font-size: 22px;
-      color: #6cf;
-      margin-bottom: 15px;
+    .eid-image {
+      width: 80%;
+      border-radius: 12px;
+      margin: 20px 0;
     }
     .carousel {
       display: flex;
       overflow-x: scroll;
       scroll-snap-type: x mandatory;
-      gap: 10px;
-      padding: 10px 0;
       -webkit-overflow-scrolling: touch;
+      gap: 10px;
+      margin: 10px;
+      padding-bottom: 20px;
     }
     .carousel img {
+      flex: 0 0 80%;
       scroll-snap-align: center;
-      max-width: 90%;
       border-radius: 12px;
-    }
-    .section-title {
-      font-size: 20px;
-      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h2>المفاجأة تظهر بعد:</h2>
-  <div id="countdown"></div>  <div id="surprise" class="hidden">
-    عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.
-  </div>  <div class="section-title">تابع أدعية رمضان كل يوم:</div>
-  <div class="carousel">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+
+<h2>المفاجأة تظهر بعد:</h2>
+<div class="countdown" id="countdown"></div>
+
+<div id="surprise" class="hidden">
+  <h2 style="color: #4ea6ff;">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</h2>
+  <img src="your_eid_image.jpg" alt="تهنئة العيد" class="eid-image">
+</div>
+
+<h3>تابع أدعية رمضان كل يوم:</h3>
+<div class="carousel">
+  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 1">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 2">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 3">
-  </div>  <script>
-    const countdown = document.getElementById("countdown");
-    const surprise = document.getElementById("surprise");
-    const targetDate = new Date("2025-04-23T15:43:00").getTime();
+</div>
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
+<script>
+  // ضبط الوقت المستهدف للمفاجأة
+  const targetDate = new Date("2025-04-23T18:55:00").getTime();
 
-      if (distance <= 0) {
-        countdown.classList.add("hidden");
-        surprise.classList.remove("hidden");
-        return;
-      }
+  const countdownEl = document.getElementById("countdown");
+  const surpriseEl = document.getElementById("surprise");
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
 
-      let display = '';
-      if (days > 0) display += `${days} : `;
-      display += `${String(hours).padStart(2, '0')} : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
-      countdown.innerHTML = display;
+    if (diff <= 0) {
+      clearInterval(timer);
+      countdownEl.style.display = "none";
+      surpriseEl.classList.remove("hidden");
+    } else {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      let display = "";
+      if (days > 0) display += `${days.toString().padStart(2, '0')} : `;
+      display += `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+
+      countdownEl.textContent = display;
     }
+  }, 1000);
+</script>
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script></body>
+</body>
 </html>
