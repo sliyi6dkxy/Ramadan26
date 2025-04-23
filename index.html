@@ -12,40 +12,79 @@
       font-family: 'Cairo', sans-serif;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
+
     .countdown {
       font-size: 24px;
-      letter-spacing: 5px;
       margin: 20px 0;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      gap: 10px;
     }
+
+    .countdown div {
+      background: #222;
+      padding: 10px 15px;
+      border-radius: 10px;
+      min-width: 50px;
+    }
+
     .hidden {
       display: none;
     }
+
     .eid-image {
       width: 80%;
       border-radius: 12px;
       margin: 20px 0;
     }
+
     .carousel {
       display: flex;
-      overflow-x: scroll;
+      overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       gap: 10px;
       margin: 10px;
       padding-bottom: 20px;
     }
+
     .carousel img {
-      flex: 0 0 60%;
+      flex: 0 0 40%;
       scroll-snap-align: center;
       border-radius: 12px;
+    }
+
+    /* بالونات */
+    .balloon {
+      position: fixed;
+      bottom: -100px;
+      width: 40px;
+      height: 60px;
+      background-color: red;
+      border-radius: 50% 50% 45% 45%;
+      animation: rise 5s linear infinite;
+      z-index: 1000;
+      opacity: 0.8;
+    }
+
+    @keyframes rise {
+      0% { bottom: -100px; opacity: 0.8; }
+      100% { bottom: 110%; opacity: 0; }
     }
   </style>
 </head>
 <body>
 
 <h2>المفاجأة تظهر بعد:</h2>
-<div class="countdown" id="countdown"></div>
+<div class="countdown" id="countdown">
+  <div id="days">00</div>
+  <div id="hours">00</div>
+  <div id="minutes">00</div>
+  <div id="seconds">00</div>
+</div>
 
 <div id="surprise" class="hidden">
   <h2 style="color: #4ea6ff;">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</h2>
@@ -64,10 +103,12 @@
 </div>
 
 <script>
-  // وقت المفاجأة
-  const targetDate = new Date("2025-04-23T19:03:00").getTime();
+  const targetDate = new Date("2025-04-23T19:15:00").getTime();
 
-  const countdownEl = document.getElementById("countdown");
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
   const surpriseEl = document.getElementById("surprise");
 
   const timer = setInterval(() => {
@@ -76,18 +117,36 @@
 
     if (diff <= 0) {
       clearInterval(timer);
-      countdownEl.style.display = "none";
+      document.getElementById("countdown").style.display = "none";
       surpriseEl.classList.remove("hidden");
+      showBalloons();
     } else {
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      const display = `${days.toString().padStart(2, '0')} : ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-      countdownEl.textContent = display;
+      daysEl.textContent = days.toString().padStart(2, '0');
+      hoursEl.textContent = hours.toString().padStart(2, '0');
+      minutesEl.textContent = minutes.toString().padStart(2, '0');
+      secondsEl.textContent = seconds.toString().padStart(2, '0');
     }
   }, 1000);
+
+  function showBalloons() {
+    for (let i = 0; i < 20; i++) {
+      const balloon = document.createElement("div");
+      balloon.className = "balloon";
+      balloon.style.left = Math.random() * 100 + "vw";
+      balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 60%)`;
+      balloon.style.animationDuration = `${3 + Math.random() * 3}s`;
+      document.body.appendChild(balloon);
+
+      setTimeout(() => {
+        balloon.remove();
+      }, 7000);
+    }
+  }
 </script>
 
 </body>
