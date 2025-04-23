@@ -1,26 +1,29 @@
-<!DOCTYPE html><html lang="ar">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مفاجأة العيد</title>
   <style>
     body {
+      font-family: 'Tahoma', sans-serif;
+      background-color: #fff;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      padding: 0;
       text-align: center;
+      overflow-x: hidden;
     }
-    .countdown {
+    .container {
+      padding: 20px;
+    }
+    #countdown {
       font-size: 2em;
       margin-top: 20px;
-      direction: rtl;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
     }
     .hidden {
       display: none;
-    }
-    .surprise {
-      margin-top: 50px;
-      animation: popUp 1s ease-out;
     }
     .balloons {
       position: fixed;
@@ -29,86 +32,104 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: -1;
+      overflow: hidden;
+      z-index: 9999;
     }
     .balloon {
-      width: 50px;
-      height: 70px;
+      position: absolute;
+      bottom: -100px;
+      width: 40px;
+      height: 60px;
       background-color: red;
       border-radius: 50% 50% 50% 50%;
-      position: absolute;
       animation: float 6s ease-in infinite;
-      opacity: 0.7;
     }
     @keyframes float {
-      0% { transform: translateY(100%); }
-      100% { transform: translateY(-100%); }
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-110vh); }
     }
-    @keyframes popUp {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+    .surprise {
+      font-size: 2em;
+      margin-top: 20px;
     }
-    .explanation {
-      font-size: 20px;
-      margin: 30px 10px 10px;
+    .duas-container {
+      margin-top: 40px;
     }
-    .carousel {
+    .duas {
       display: flex;
-      overflow-x: scroll;
+      overflow-x: auto;
       scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      margin: 20px auto;
-      width: 90%;
-      max-width: 500px;
     }
-    .carousel img {
-      width: 100%;
-      height: auto;
+    .duas img {
       scroll-snap-align: center;
-      border-radius: 12px;
-      margin: 0 10px;
+      max-width: 90%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 10px;
+    }
+    .note {
+      font-size: 1.2em;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="countdown" id="countdown"></div>  <div id="surprise" class="hidden">
-    <h1>عيدكم مبارك!</h1>
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" class="surprise" alt="مفاجأة العيد" width="300" />
-  </div>  <div class="balloons">
-    <div class="balloon" style="left: 10%; background-color: pink;"></div>
-    <div class="balloon" style="left: 30%; background-color: lightblue;"></div>
-    <div class="balloon" style="left: 50%; background-color: yellow;"></div>
-    <div class="balloon" style="left: 70%; background-color: orange;"></div>
-    <div class="balloon" style="left: 90%; background-color: violet;"></div>
-  </div>  <div class="explanation">كل يوم سيتم نشر دعاء جديد في الأسفل، اسحب لليمين أو اليسار لتصفحه</div>
-  <div class="carousel">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1" />
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2" />
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3" />
+  <div class="container">
+    <div id="countdown"></div>
+    <div id="surprise" class="hidden">
+      <div class="balloons" id="balloonContainer"></div>
+      <h1 class="surprise">عيدكم مبارك وكل عام وأنتم بخير!</h1>
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="تهنئة العيد" style="width: 90%; max-width: 500px; border-radius: 10px;">
+    </div>
+    <div class="duas-container">
+      <p class="note" style="font-size: 1.5em;">كل يوم سيتم نشر دعاء جديد، تصفح الأدعية بالسحب يمين أو يسار</p>
+      <div class="duas">
+        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/duaa1.jpg" alt="دعاء 1">
+        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/duaa2.jpg" alt="دعاء 2">
+        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/duaa3.jpg" alt="دعاء 3">
+      </div>
+    </div>
   </div>  <script>
-    const countdownEl = document.getElementById("countdown");
-    const surpriseEl = document.getElementById("surprise");
-    const targetDate = new Date("2025-04-11T18:30:00").getTime();
+    const countdown = document.getElementById("countdown");
+    const surprise = document.getElementById("surprise");
+    const balloonContainer = document.getElementById("balloonContainer");
 
-    const updateCountdown = () => {
-      const now = new Date().getTime();
+    function updateCountdown() {
+      const now = new Date();
+      const targetDate = new Date("2025-04-30T18:30:00");
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        countdownEl.classList.add("hidden");
-        surpriseEl.classList.remove("hidden");
+        countdown.classList.add("hidden");
+        surprise.classList.remove("hidden");
+        launchBalloons();
         return;
       }
 
+      const seconds = Math.floor((diff / 1000) % 60);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      const showDays = days > 0 ? `${days} : ` : "";
-      countdownEl.innerHTML = `${showDays}${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-    };
+      countdown.innerHTML = `
+        ${days > 0 ? `<span>${days}</span>` : ""}
+        <span>${hours.toString().padStart(2, '0')}</span>
+        <span>${minutes.toString().padStart(2, '0')}</span>
+        <span>${seconds.toString().padStart(2, '0')}</span>
+      `;
+    }
 
+    function launchBalloons() {
+      for (let i = 0; i < 30; i++) {
+        const balloon = document.createElement("div");
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "%";
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        balloonContainer.appendChild(balloon);
+      }
+    }
+
+    updateCountdown();
     setInterval(updateCountdown, 1000);
   </script></body>
 </html>
