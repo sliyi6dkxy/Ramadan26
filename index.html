@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ar">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,112 +6,141 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: center;
       margin: 0;
       padding: 0;
-      text-align: center;
-      background-color: #fff;
+      background-color: #fffaf0;
     }
-    .countdown {
-      display: flex;
-      justify-content: center;
+    .container {
+      padding: 20px;
+    }
+    #countdown-label {
       font-size: 24px;
-      gap: 10px;
-      margin-top: 20px;
+      margin-bottom: 10px;
     }
-    .countdown div {
-      background-color: #eee;
-      padding: 10px 15px;
-      border-radius: 8px;
-      min-width: 50px;
+    #countdown {
+      font-size: 32px;
+      margin-bottom: 20px;
     }
-    .celebration {
-      margin-top: 30px;
-      font-size: 28px;
-      color: #d63384;
-      animation: pop 1s ease-out forwards;
+    #surprise {
+      display: none;
+      animation: fadeIn 2s ease-in-out;
+      margin-bottom: 30px;
     }
-    @keyframes pop {
-      0% { opacity: 0; transform: scale(0.5); }
-      100% { opacity: 1; transform: scale(1); }
+    #surprise img {
+      width: 80%;
+      max-width: 400px;
     }
     .balloons {
       position: fixed;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: -1;
-      background: url('https://i.ibb.co/Mn4ktTX/balloons.gif') center/cover no-repeat;
-      display: none;
+      z-index: 1;
     }
-    .duas-title {
-      margin-top: 40px;
-      font-size: 22px;
-      font-weight: bold;
+    .balloon {
+      position: absolute;
+      width: 50px;
+      height: 70px;
+      background-color: #ff69b4;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: float 6s infinite ease-in-out;
     }
-    .duas {
-      display: flex;
-      overflow-x: scroll;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+    @keyframes float {
+      0% {transform: translateY(100vh); opacity: 0;}
+      50% {opacity: 1;}
+      100% {transform: translateY(-200px); opacity: 0;}
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .duaa-section {
       margin-top: 20px;
     }
-    .duas img {
+    .duaa-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 10px;
+      padding: 10px;
+    }
+    .carousel img {
       scroll-snap-align: center;
-      width: 90vw;
-      max-width: 400px;
+      width: 90%;
+      max-width: 300px;
       height: auto;
-      margin: 0 auto;
-      border-radius: 12px;
+      border-radius: 10px;
     }
   </style>
 </head>
-<body>  <div id="countdown" class="countdown"></div>  <div id="surprise" style="display: none;">
-    <div class="celebration">عيدكم مبارك وكل عام وأنتم بخير!</div>
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="تهنئة العيد" style="width: 90vw; max-width: 400px; border-radius: 12px; margin-top: 20px;">
-    <div class="balloons" id="balloons"></div>
-  </div>  <div class="duas-title">كل يوم دعاء جديد، تابعنا وشاركه مع من تحب</div>
-  <div class="duas">
+<body>
+  <div class="container">
+    <div id="countdown-label">المفاجأة تظهر بعد:</div>
+    <div id="countdown"></div><div id="surprise">
+  <img src="countdownhttps://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="تهنئة العيد">
+</div>
+
+<div class="duaa-section">
+  <div class="duaa-title">كل يوم دعاء جديد</div>
+  <div class="carousel">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 1">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 2">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 3">
-  </div>  <script>
-    const targetDate = new Date("may 11, 2025 18:30:00").getTime();
-    const countdownEl = document.getElementById("countdown");
-    const surpriseEl = document.getElementById("surprise");
-    const balloons = document.getElementById("balloons");
+  </div>
+</div>
 
-    function updateCountdown() {
+  </div>  <div class="balloons" id="balloons"></div>  <script>
+    const countdownEl = document.getElementById('countdown');
+    const surpriseEl = document.getElementById('surprise');
+    const balloonContainer = document.getElementById('balloons');
+
+    const targetDate = new Date('2025-04-25T18:30:00').getTime();
+
+    const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
       if (distance <= 0) {
-        countdownEl.style.display = "none";
-        surpriseEl.style.display = "block";
-        balloons.style.display = "block";
-        return;
+        clearInterval(interval);
+        countdownEl.style.display = 'none';
+        document.getElementById('countdown-label').style.display = 'none';
+        surpriseEl.style.display = 'block';
+        startBalloons();
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownEl.textContent =
+          (days > 0 ? days + ' : ' : '') +
+          String(hours).padStart(2, '0') + ' : ' +
+          String(minutes).padStart(2, '0') + ' : ' +
+          String(seconds).padStart(2, '0');
       }
+    }, 1000);
 
-      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      countdownEl.innerHTML = '';
-
-      if (days > 0) {
-        countdownEl.innerHTML += `<div>${days}</div>`;
+    function startBalloons() {
+      for (let i = 0; i < 20; i++) {
+        const balloon = document.createElement('div');
+        balloon.classList.add('balloon');
+        balloon.style.left = Math.random() * 100 + '%';
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
+        balloon.style.animationDelay = `${Math.random() * 5}s`;
+        balloonContainer.appendChild(balloon);
       }
-      countdownEl.innerHTML += `<div>${hours}</div>`;
-      countdownEl.innerHTML += `<div>${minutes}</div>`;
-      countdownEl.innerHTML += `<div>${seconds}</div>`;
     }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
   </script></body>
 </html>
