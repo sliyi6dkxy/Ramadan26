@@ -1,179 +1,103 @@
-<!DOCTYPE html>
-<html lang="ar">
+<!DOCTYPE html><html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مفاجأة العيد</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مفاجأة العيد وأدعية رمضان</title>
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background-color: #111;
+      color: white;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
-      position: relative;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
     }
-
-    h1 {
-      font-size: 20px;
-      margin-top: 15px;
-    }
-
     .countdown {
-      font-size: 26px;
-      font-weight: bold;
-      color: #444;
-      margin: 10px 0 20px;
+      font-size: 20px;
+      margin: 20px 0;
     }
-
     #surprise {
       display: none;
-      animation: fadeIn 1s ease-in-out forwards;
-      z-index: 2;
+      animation: pop 1s ease-out;
     }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1); }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
-
-    .message {
-      font-size: 22px;
-      color: #2196f3;
-      margin-bottom: 15px;
-    }
-
-    .surprise-img {
-      max-width: 90%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    /* بالونات */
-    .balloon {
-      width: 40px;
-      height: 60px;
-      background: red;
-      border-radius: 50% 50% 50% 50%;
-      position: absolute;
-      bottom: -100px;
-      animation: float 6s ease-in infinite;
-      opacity: 0.8;
-      z-index: 1;
-    }
-
-    .balloon:nth-child(1) { left: 10%; background: red; animation-delay: 0s; }
-    .balloon:nth-child(2) { left: 30%; background: blue; animation-delay: 2s; }
-    .balloon:nth-child(3) { left: 50%; background: green; animation-delay: 1s; }
-    .balloon:nth-child(4) { left: 70%; background: orange; animation-delay: 3s; }
-    .balloon:nth-child(5) { left: 85%; background: purple; animation-delay: 4s; }
-
-    @keyframes float {
-      0% { transform: translateY(0); opacity: 0.8; }
-      50% { transform: translateY(-300px) scale(1.1); opacity: 1; }
-      100% { transform: translateY(-600px); opacity: 0; }
-    }
-
-    /* قسم الأدعية */
-    .duas-section {
-      margin-top: 30px;
-      width: 100%;
-    }
-
-    .duas-title {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .duas-container {
+    .duas {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 10px;
+      gap: 10px;
+      padding: 20px;
       box-sizing: border-box;
     }
-
-    .duas-container img {
-      scroll-snap-align: center;
-      flex: 0 0 80%;
-      max-width: 80%;
+    .duas img {
+      max-width: 90%;
       height: auto;
-      border-radius: 10px;
-      margin: 0 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      scroll-snap-align: center;
+      border-radius: 15px;
+    }
+    .duas-title {
+      font-size: 22px;
+      margin-top: 30px;
+      color: #ccc;
     }
   </style>
 </head>
-<body>
-
-  <h1>المفاجأة تظهر بعد:</h1>
-  <div class="countdown" id="countdown">00:00:00</div>
-
+<body>  <div class="countdown" id="countdown"></div>
   <div id="surprise">
-    <!-- بالونات -->
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
+    <h2 style="color: #66ccff;">عيدكم مبارك! أعاده الله عليكم بالفرح واليمن والبركات</h2>
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="مفاجأة العيد" width="80%">
+  </div>  <div class="duas-title">تابع أدعية رمضان كل يوم:</div>
+  <div class="duas">
+    <img src="https://via.placeholder.com/300x400.png?text=%D8%AF%D8%B9%D8%A7%D8%A1+1" alt="دعاء 1">
+    <img src="https://via.placeholder.com/300x400.png?text=%D8%AF%D8%B9%D8%A7%D8%A1+2" alt="دعاء 2">
+    <img src="https://via.placeholder.com/300x400.png?text=%D8%AF%D8%B9%D8%A7%D8%A1+3" alt="دعاء 3">
+  </div>  <script>
+    // توقيت المفاجأة: 11 أبريل الساعة 18:30
+    const targetDate = new Date('2025-04-23T15:30:00').getTime();
 
-    <!-- تهنئة -->
-    <div class="message">عيدكم مبارك! أعاده الله عليكم بالفرح واليُمن والبركات.</div>
-    <img class="surprise-img" src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="تهنئة العيد" />
+    const countdownEl = document.getElementById("countdown");
+    const surpriseEl = document.getElementById("surprise");
 
-    <!-- الأدعية -->
-    <div class="duas-section">
-      <div class="duas-title">تابع أدعية رمضان كل يوم:</div>
-      <div class="duas-container">
-        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua1.jpg" alt="دعاء 1" />
-        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua2.jpg" alt="دعاء 2" />
-        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/dua3.jpg" alt="دعاء 3" />
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const countdownElement = document.getElementById("countdown");
-    const surpriseElement = document.getElementById("surprise");
-
-    const targetDate = new Date("2025-04-22T20:50:00").getTime();
-
-    function updateCountdown() {
+    const timer = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
-
-      if (distance <= 0) {
-        countdownElement.style.display = "none";
-        surpriseElement.style.display = "block";
-        return;
-      }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      let display = "";
-      if (days > 0) {
-        display += `${days}ي `;
+      if (distance > 0) {
+        let display = "<strong>المفاجأة تظهر بعد:</strong><br>";
+        if (days > 0) display += days + " يوم ";
+        display += hours + " ساعة " + minutes + " دقيقة " + seconds + " ثانية";
+        countdownEl.innerHTML = display;
+      } else {
+        clearInterval(timer);
+        countdownEl.style.display = "none";
+        surpriseEl.style.display = "block";
+        // بالونات
+        confetti();
       }
-      display += `${hours.toString().padStart(2, '0')}:`;
-      display += `${minutes.toString().padStart(2, '0')}:`;
-      display += `${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 
-      countdownElement.innerHTML = display;
+    // تأثير بالونات بسيط باستخدام confetti.js (لو أردت لاحقًا إضافته فعليًا)
+    function confetti() {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js";
+      script.onload = () => {
+        setTimeout(() => {
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 }
+          });
+        }, 500);
+      };
+      document.body.appendChild(script);
     }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
-
-</body>
+  </script></body>
 </html>
