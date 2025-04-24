@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>مفاجأة العيد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
@@ -14,15 +15,15 @@
 
     h2 {
       font-size: 28px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     .countdown-container {
-      margin-top: 10px;
+      margin-top: 5px;
       font-size: 26px;
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 10px;
     }
 
     .countdown-item {
@@ -52,28 +53,27 @@
     }
 
     .duaa-title {
-      font-size: 24px;
-      margin: 40px 0 15px;
+      font-size: 22px;
+      margin: 35px 0 10px;
     }
 
     .duaa-carousel {
       display: flex;
-      overflow-x: scroll;
+      overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      margin: 0 auto;
-      padding: 0 5%;
-      gap: 10px;
-      max-width: 100%;
+      padding: 0 2%;
+      gap: 5px;
+      justify-content: flex-start;
     }
 
     .duaa-carousel img {
-      flex: 0 0 90%;
+      flex: 0 0 96%;
       scroll-snap-align: start;
-      max-width: 90%;
+      max-width: 96%;
       height: auto;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
   </style>
@@ -99,7 +99,7 @@
   </div>
 
   <script>
-    const targetDate = new Date("2025-04-24T12:20:00").getTime();
+    const targetDate = new Date("2025-04-24T12:30:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
 
