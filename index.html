@@ -133,13 +133,12 @@
       canvas.height = window.innerHeight;
 
       const balloons = [];
-      for (let i = 0; i < 10; i++) {  // تقليل عدد البالونات
+      for (let i = 0; i < 5; i++) {  // تقليل عدد البالونات
         balloons.push({
           x: Math.random() * canvas.width,
           y: canvas.height + Math.random() * 200,
-          width: 40 + Math.random() * 30, // عرض البالونات
-          height: 50 + Math.random() * 20, // ارتفاع البالونات
-          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+          r: 20 + Math.random() * 30,  // حجم البالونات
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`,  // ألوان عشوائية
           speed: 1 + Math.random() * 2
         });
       }
@@ -155,11 +154,11 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         balloons.forEach(b => {
           ctx.beginPath();
-          ctx.ellipse(b.x, b.y, b.width / 2, b.height / 2, 0, 0, Math.PI * 2);  // شكل بيضاوي (بالونة حقيقية)
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
           ctx.fillStyle = b.color;
           ctx.fill();
           b.y -= b.speed;
-          if (b.y + b.height / 2 < 0) {
+          if (b.y + b.r < 0) {
             b.y = canvas.height + Math.random() * 100;
           }
         });
