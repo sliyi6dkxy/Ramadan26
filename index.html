@@ -12,12 +12,17 @@
       text-align: center;
     }
 
-    .countdown-container {
+    h2 {
+      font-size: 28px;
       margin-top: 20px;
-      font-size: 22px;
+    }
+
+    .countdown-container {
+      margin-top: 10px;
+      font-size: 26px;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
     }
 
     .countdown-item {
@@ -47,8 +52,8 @@
     }
 
     .duaa-title {
-      font-size: 20px;
-      margin: 40px 0 10px;
+      font-size: 24px;
+      margin: 40px 0 15px;
     }
 
     .duaa-carousel {
@@ -57,16 +62,18 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       margin: 0 auto;
-      max-width: 95%;
+      padding: 0 5%;
+      gap: 10px;
+      max-width: 100%;
     }
 
     .duaa-carousel img {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      max-width: 100%;
+      flex: 0 0 90%;
+      scroll-snap-align: start;
+      max-width: 90%;
       height: auto;
-      border-radius: 10px;
-      margin-bottom: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
   </style>
@@ -92,7 +99,7 @@
   </div>
 
   <script>
-    const targetDate = new Date("2025-04-24T12:15:00").getTime();
+    const targetDate = new Date("2025-04-24T12:20:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
 
