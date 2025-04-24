@@ -1,97 +1,88 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مفاجأة العيد والأدعية</title>
+  <meta charset="UTF-8" />
+  <title>مفاجأة العيد</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
       margin: 0;
       padding: 0;
-      background-color: #fffaf0;
+      font-family: 'Arial', sans-serif;
+      background-color: #fdf6f6;
+      text-align: center;
     }
-    .container {
-      padding: 20px;
+
+    .countdown-container {
+      margin-top: 20px;
+      font-size: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
     }
-    #countdown-label {
-      font-size: 24px;
-      margin-bottom: 10px;
+
+    .countdown-item {
+      font-weight: bold;
+      min-width: 40px;
     }
-    #countdown {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    #surprise {
-      display: none;
-      animation: fadeIn 2s ease-in-out;
-      margin-bottom: 30px;
-    }
-    #surprise img {
-      width: 80%;
-      max-width: 400px;
-    }
-    .balloons {
+
+    #balloons {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 999;
     }
-    .balloon {
-      position: absolute;
-      width: 50px;
-      height: 70px;
-      background-color: #ff69b4;
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      animation: float 6s infinite ease-in-out;
-    }
-    @keyframes float {
-      0% {transform: translateY(100vh); opacity: 0;}
-      50% {opacity: 1;}
-      100% {transform: translateY(-200px); opacity: 0;}
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .duaa-section {
+
+    .surprise img {
+      max-width: 90%;
+      height: auto;
       margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
     }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
     .duaa-title {
       font-size: 20px;
-      margin-bottom: 10px;
+      margin: 40px 0 10px;
     }
-    .carousel {
+
+    .duaa-carousel {
       display: flex;
-      overflow-x: auto;
+      overflow-x: scroll;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      gap: 10px;
-      padding: 10px;
+      margin: 0 auto;
+      max-width: 95%;
     }
-    .carousel img {
+
+    .duaa-carousel img {
+      flex: 0 0 100%;
       scroll-snap-align: center;
-      width: 90%;
-      max-width: 300px;
+      max-width: 100%;
       height: auto;
       border-radius: 10px;
+      margin-bottom: 40px;
     }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="countdown-label">المفاجأة تظهر بعد:</div>
-    <div id="countdown"></div><div id="surprise">
-  <img src="countdownhttps://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
-" alt="تهنئة العيد">
-</div>
+  <h2>المفاجأة تظهر بعد:</h2>
+  <div id="countdown" class="countdown-container"></div>
 
-<div class="duaa-section">
+  <div id="surprise" class="surprise" style="display:none;">
+    <canvas id="balloons"></canvas>
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
+" alt="تهنئة العيد">
+  </div>
+
   <div class="duaa-title">كل يوم دعاء جديد</div>
-  <div class="carousel">
+  <div class="duaa-carousel">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 1">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
@@ -99,48 +90,73 @@
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A0%D9%A3%D9%A2%D9%A5_%D9%A2%D9%A3%D9%A3%D9%A1%D9%A0%D9%A0_%D9%A0%D9%A1.jpg
 " alt="دعاء 3">
   </div>
-</div>
 
-  </div>  <div class="balloons" id="balloons"></div>  <script>
-    const countdownEl = document.getElementById('countdown');
-    const surpriseEl = document.getElementById('surprise');
-    const balloonContainer = document.getElementById('balloons');
+  <script>
+    const targetDate = new Date("2025-04-24T12:15:00").getTime();
+    const countdown = document.getElementById("countdown");
+    const surprise = document.getElementById("surprise");
 
-    const targetDate = new Date('2025-04-25T18:30:00').getTime();
-
-    const interval = setInterval(() => {
+    function updateCountdown() {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      const diff = targetDate - now;
 
-      if (distance <= 0) {
-        clearInterval(interval);
-        countdownEl.style.display = 'none';
-        document.getElementById('countdown-label').style.display = 'none';
-        surpriseEl.style.display = 'block';
-        startBalloons();
-      } else {
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        countdownEl.textContent =
-          (days > 0 ? days + ' : ' : '') +
-          String(hours).padStart(2, '0') + ' : ' +
-          String(minutes).padStart(2, '0') + ' : ' +
-          String(seconds).padStart(2, '0');
+      if (diff <= 0) {
+        countdown.style.display = "none";
+        surprise.style.display = "block";
+        showBalloons();
+        clearInterval(timer);
+        return;
       }
-    }, 1000);
 
-    function startBalloons() {
-      for (let i = 0; i < 20; i++) {
-        const balloon = document.createElement('div');
-        balloon.classList.add('balloon');
-        balloon.style.left = Math.random() * 100 + '%';
-        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
-        balloon.style.animationDelay = `${Math.random() * 5}s`;
-        balloonContainer.appendChild(balloon);
-      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdown.innerHTML = `
+        ${seconds.toString().padStart(2, '0')} :
+        ${minutes.toString().padStart(2, '0')} :
+        ${hours.toString().padStart(2, '0')}
+        ${days > 0 ? `: ${days.toString().padStart(2, '0')}` : ""}
+      `;
     }
-  </script></body>
+
+    const timer = setInterval(updateCountdown, 1000);
+
+    function showBalloons() {
+      const canvas = document.getElementById("balloons");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const balloons = [];
+      for (let i = 0; i < 30; i++) {
+        balloons.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + Math.random() * 200,
+          r: 15 + Math.random() * 10,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+          speed: 1 + Math.random() * 2
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        balloons.forEach(b => {
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+          ctx.fillStyle = b.color;
+          ctx.fill();
+          b.y -= b.speed;
+          if (b.y + b.r < 0) {
+            b.y = canvas.height + Math.random() * 100;
+          }
+        });
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+  </script>
+</body>
 </html>
