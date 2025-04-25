@@ -1,134 +1,187 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <title>مفاجأة العيد</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: "Arial", sans-serif;
-        background-color: #fdf6f6;
-        text-align: center;
+<head>
+  <meta charset="UTF-8" />
+  <title>مفاجأة العيد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #fdf6f6;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-top: 10px;
+      transition: all 0.5s ease;
+    }
+
+    .countdown-container {
+      margin-top: 5px;
+      font-size: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .countdown-item {
+      font-weight: bold;
+      min-width: 40px;
+    }
+
+    .surprise img {
+      max-width: 90%;
+      height: auto;
+      margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .duaa-title {
+      font-size: 22px;
+      margin: 35px 0 10px;
+    }
+
+    .duaa-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 2%;
+      gap: 5px;
+      justify-content: flex-start;
+    }
+
+    .duaa-carousel img {
+      flex: 0 0 96%;
+      scroll-snap-align: start;
+      max-width: 96%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <h2 id="title">المفاجأة تظهر بعد:</h2>
+  <div id="countdown" class="countdown-container"></div>
+
+  <div id="surprise" class="surprise" style="display:none;">
+    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/%D9%82%D8%B5%D8%A9%20%D8%A7%D9%86%D8%B3%D8%AA%D9%82%D8%B1%D8%A7%D9%85%20%D8%B9%D9%8A%D8%AF%20%D9%85%D8%A8%D8%A7%D8%B1%D9%83%20%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B3%D9%8A%D8%B7%20%D9%84%D9%88%D9%86%20%D8%A7%D8%B3%D9%88%D8%AF%20%D9%88%D8%B1%D8%B5%D8%A7%D8%B5%D9%8A_20250325_202649_%D9%A0%D9%A0%D9%A0%D9%A0.png" alt="تهنئة العيد">
+  </div>
+
+  <canvas id="confettiCanvas" class="confetti"></canvas>
+
+  <div class="duaa-title">كل يوم دعاء جديد</div>
+  <div class="duaa-carousel">
+    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
+  </div>
+
+  <script>
+    const targetDate = new Date("2025-04-24T20:45:00").getTime();
+    const countdown = document.getElementById("countdown");
+    const surprise = document.getElementById("surprise");
+    const title = document.getElementById("title");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdown.style.display = "none";
+        surprise.style.display = "block";
+        title.textContent = "عيدكم مبارك!";
+        startConfetti();
+        clearInterval(timer);
+        return;
       }
 
-      h2 {
-        font-size: 28px;
-        margin-top: 10px;
-      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
-      .countdown-container {
-        margin-top: 5px;
-        font-size: 26px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .countdown-item {
-        font-weight: bold;
-        min-width: 40px;
-      }
-
-      .surprise img {
-        max-width: 90%;
-        height: auto;
-        margin-top: 20px;
-        animation: fadeIn 2s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      .duaa-title {
-        font-size: 22px;
-        margin: 35px 0 10px;
-      }
-
-      .duaa-carousel {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding: 0 2%;
-        gap: 5px;
-        justify-content: flex-start;
-      }
-
-      .duaa-carousel img {
-        flex: 0 0 96%;
-        scroll-snap-align: start;
-        max-width: 96%;
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      }
-    </style>
-  </head>
-  <body>
-    <h2>المفاجأة تظهر بعد:</h2>
-    <div id="countdown" class="countdown-container"></div>
-
-    <div id="surprise" class="surprise" style="display:none;">
-      <img
-        src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/%D9%82%D8%B5%D8%A9%20%D8%A7%D9%86%D8%B3%D8%AA%D9%82%D8%B1%D8%A7%D9%85%20%D8%B9%D9%8A%D8%AF%20%D9%85%D8%A8%D8%A7%D8%B1%D9%83%20%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B3%D9%8A%D8%B7%20%D9%84%D9%88%D9%86%20%D8%A7%D8%B3%D9%88%D8%AF%20%D9%88%D8%B1%D8%B5%D8%A7%D8%B5%D9%8A_20250325_202649_%D9%A0%D9%A0%D9%A0%D9%A0.png"
-        alt="تهنئة العيد"
-      />
-    </div>
-
-    <div class="duaa-title">كل يوم دعاء جديد</div>
-    <div class="duaa-carousel">
-      <img
-        src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg"
-        alt="دعاء 1"
-      />
-      <img
-        src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg"
-        alt="دعاء 2"
-      />
-      <img
-        src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg"
-        alt="دعاء 3"
-      />
-    </div>
-
-    <script>
-      const targetDate = new Date("2025-04-24T20:45:00").getTime();
-      const countdown = document.getElementById("countdown");
-      const surprise = document.getElementById("surprise");
-
-      function updateCountdown() {
-        const now = new Date().getTime();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-          countdown.style.display = "none";
-          surprise.style.display = "block";
-          clearInterval(timer);
-          return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        countdown.innerHTML = `
+      countdown.innerHTML = `
         ${seconds.toString().padStart(2, '0')} :
         ${minutes.toString().padStart(2, '0')} :
         ${hours.toString().padStart(2, '0')}
         ${days > 0 ? `: ${days.toString().padStart(2, '0')}` : ""}
       `;
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+
+    // confetti simple effect
+    function startConfetti() {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confetti = [];
+      for (let i = 0; i < 150; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 10 + 5,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+          tilt: Math.random() * 10 - 5,
+          tiltAngle: 0
+        });
       }
 
-      const timer = setInterval(updateCountdown, 1000);
-    </script>
-  </body>
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach(c => {
+          ctx.beginPath();
+          ctx.lineWidth = c.r / 2;
+          ctx.strokeStyle = c.color;
+          ctx.moveTo(c.x + c.tilt, c.y);
+          ctx.lineTo(c.x + c.tilt + c.r / 2, c.y + c.r);
+          ctx.stroke();
+        });
+        update();
+      }
+
+      function update() {
+        confetti.forEach(c => {
+          c.y += Math.cos(c.d / 2) + 1;
+          c.tiltAngle += 0.05;
+          c.tilt = Math.sin(c.tiltAngle) * 10;
+          if (c.y > canvas.height) {
+            c.y = -10;
+            c.x = Math.random() * canvas.width;
+          }
+        });
+      }
+
+      let confettiInterval = setInterval(draw, 30);
+      setTimeout(() => {
+        clearInterval(confettiInterval);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }, 10000); // confetti duration: 10 seconds
+    }
+  </script>
+</body>
 </html>
