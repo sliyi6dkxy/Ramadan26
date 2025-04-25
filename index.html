@@ -9,7 +9,8 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #fdf6f6;
+      background-color: #1b1a17;
+      color: white;
       text-align: center;
     }
 
@@ -36,10 +37,8 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
       pointer-events: none;
       z-index: 999;
-      display: none;
     }
 
     .surprise img {
@@ -91,13 +90,13 @@
 
   <div class="duaa-title">كل يوم دعاء جديد</div>
   <div class="duaa-carousel">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
   </div>
 
   <script>
-    const targetDate = new Date("2025-04-25T19:14:00").getTime();
+    const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
     const title = document.getElementById("title");
@@ -108,7 +107,7 @@
 
       if (diff <= 0) {
         countdown.style.display = "none";
-        title.textContent = "عيدكم مبارك!";
+        title.style.display = "none";
         surprise.style.display = "block";
         showBalloons();
         clearInterval(timer);
@@ -135,21 +134,19 @@
       const ctx = canvas.getContext("2d");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      canvas.style.display = "block";
 
       const balloons = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 30; i++) {
         balloons.push({
           x: Math.random() * canvas.width,
           y: canvas.height + Math.random() * 200,
           r: 10 + Math.random() * 10,
           color: `hsl(${Math.random() * 360}, 100%, 70%)`,
-          speed: 1 + Math.random() * 1.5
+          speed: 1 + Math.random() * 2
         });
       }
 
-      let animationFrame;
-
+      let animationId;
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         balloons.forEach(b => {
@@ -162,16 +159,15 @@
             b.y = canvas.height + Math.random() * 100;
           }
         });
-        animationFrame = requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
       }
 
       animate();
 
       setTimeout(() => {
-        cancelAnimationFrame(animationFrame);
+        cancelAnimationFrame(animationId);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.style.display = "none";
-      }, 15000); // مدة عرض البالونات 15 ثانية
+      }, 15000); // 15 ثانية ثم توقف
     }
   </script>
 </body>
