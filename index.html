@@ -5,7 +5,7 @@
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -13,6 +13,7 @@
     gtag('js', new Date());
     gtag('config', 'G-BME9NXNCFQ');
   </script>
+  <!-- End Google Analytics -->
 
   <style>
     body {
@@ -39,6 +40,16 @@
     .countdown-item {
       font-weight: bold;
       min-width: 40px;
+    }
+
+    #balloons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
     }
 
     .surprise img {
@@ -79,33 +90,37 @@
   </style>
 </head>
 <body>
-  <h2>المفاجأة تظهر بعد:</h2>
+  <h2 id="title-text">المفاجأة تظهر بعد:</h2>
   <div id="countdown" class="countdown-container"></div>
 
   <div id="surprise" class="surprise" style="display:none;">
+    <canvas id="balloons"></canvas>
+    <h2>عيدكم مبارك</h2>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
   </div>
 
   <div class="duaa-title">كل يوم دعاء جديد</div>
   <div class="duaa-carousel">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
   </div>
 
   <script>
     const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
+    const titleText = document.getElementById("title-text");
 
     function updateCountdown() {
       const now = new Date().getTime();
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        document.querySelector("h2").innerText = "عيدكم مبارك";
         countdown.style.display = "none";
         surprise.style.display = "block";
+        titleText.innerText = "عيدكم مبارك";
+        showBalloons();
         clearInterval(timer);
         return;
       }
@@ -124,6 +139,48 @@
     }
 
     const timer = setInterval(updateCountdown, 1000);
+
+    function showBalloons() {
+      const canvas = document.getElementById("balloons");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const balloons = [];
+      for (let i = 0; i < 20; i++) {
+        balloons.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + Math.random() * 200,
+          r: 10 + Math.random() * 8,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+          speed: 1 + Math.random() * 1.5
+        });
+      }
+
+      let animationId;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        balloons.forEach(b => {
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+          ctx.fillStyle = b.color;
+          ctx.fill();
+          b.y -= b.speed;
+          if (b.y + b.r < 0) {
+            b.y = canvas.height + Math.random() * 100;
+            b.x = Math.random() * canvas.width;
+          }
+        });
+        animationId = requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      setTimeout(() => {
+        cancelAnimationFrame(animationId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }, 15000);
+    }
   </script>
 </body>
 </html>
