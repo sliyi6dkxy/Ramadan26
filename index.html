@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -44,7 +43,6 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
       pointer-events: none;
       z-index: 999;
     }
@@ -85,30 +83,37 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
+    .greeting {
+      font-size: 30px;
+      margin-top: 20px;
+      color: #d12a2a;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
-  <h2 id="header-text">المفاجأة تظهر بعد:</h2>
+  <h2 id="headline">المفاجأة تظهر بعد:</h2>
   <div id="countdown" class="countdown-container"></div>
 
   <div id="surprise" class="surprise" style="display:none;">
     <canvas id="balloons"></canvas>
-    <h2 style="margin-top: 20px;">عيدكم مبارك</h2>
+    <div class="greeting">عيدكم مبارك</div>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
   </div>
 
   <div class="duaa-title">كل يوم دعاء جديد</div>
   <div class="duaa-carousel">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
-    <img src="https://raw.githubusercontent.com//sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
   </div>
 
   <script>
-    const targetDate = new Date("2025-05-04T21:10:00").getTime();
+    const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
-    const headerText = document.getElementById("header-text");
+    const headline = document.getElementById("headline");
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -116,8 +121,8 @@
 
       if (diff <= 0) {
         countdown.style.display = "none";
-        headerText.textContent = "عيدكم مبارك";
         surprise.style.display = "block";
+        headline.innerText = "عيدكم مبارك";
         showBalloons();
         clearInterval(timer);
         return;
@@ -145,17 +150,15 @@
       canvas.height = window.innerHeight;
 
       const balloons = [];
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 30; i++) {
         balloons.push({
           x: Math.random() * canvas.width,
-          y: canvas.height + Math.random() * 100,
+          y: canvas.height + Math.random() * 200,
           r: 10 + Math.random() * 10,
           color: `hsl(${Math.random() * 360}, 100%, 70%)`,
-          speed: 1 + Math.random() * 2
+          speed: 1 + Math.random()
         });
       }
-
-      let animationFrame;
 
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -165,17 +168,15 @@
           ctx.fillStyle = b.color;
           ctx.fill();
           b.y -= b.speed;
-          if (b.y + b.r < 0) {
-            b.y = canvas.height + Math.random() * 100;
-          }
         });
-        animationFrame = requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
       }
 
-      animate();
+      let animationId = requestAnimationFrame(animate);
 
+      // Stop animation after 15 seconds
       setTimeout(() => {
-        cancelAnimationFrame(animationFrame);
+        cancelAnimationFrame(animationId);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }, 15000);
     }
