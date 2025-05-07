@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BME9NXNCFQ');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BME9NXNCFQ');
+  </script>
   <style>
     body {
       margin: 0;
@@ -20,94 +18,135 @@
       background-color: #1b1a17;
       color: white;
       text-align: center;
-    }
+    }h2 {
+  font-size: 28px;
+  margin-top: 10px;
+}
 
-    h2 {
-      font-size: 28px;
-      margin-top: 10px;
-    }
+.countdown-container {
+  margin-top: 5px;
+  font-size: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
 
-    .countdown-container {
-      margin-top: 5px;
-      font-size: 26px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
+.countdown-item {
+  font-weight: bold;
+  min-width: 40px;
+}
 
-    .countdown-item {
-      font-weight: bold;
-      min-width: 40px;
-    }
+#balloons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
 
-    #balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
+.surprise img {
+  max-width: 90%;
+  height: auto;
+  margin-top: 20px;
+  animation: fadeIn 2s ease-in-out;
+}
 
-    .surprise img {
-      max-width: 90%;
-      height: auto;
-      margin-top: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
 
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
+.duaa-title {
+  font-size: 22px;
+  margin: 35px 0 10px;
+}
 
-    .duaa-title {
-      font-size: 22px;
-      margin: 35px 0 10px;
-    }
+.duaa-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 2%;
+  gap: 5px;
+  justify-content: flex-start;
+}
 
-    .duaa-carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 2%;
-      gap: 5px;
-      justify-content: flex-start;
-    }
+.duaa-carousel img {
+  flex: 0 0 96%;
+  scroll-snap-align: start;
+  max-width: 96%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
-    .duaa-carousel img {
-      flex: 0 0 96%;
-      scroll-snap-align: start;
-      max-width: 96%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+#nameForm {
+  margin-top: 15px;
+}
+
+#nameInput {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  width: 200px;
+  margin: 10px;
+}
+
+#submitName {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
   <h2 id="title">المفاجأة تظهر بعد:</h2>
-  <div id="countdown" class="countdown-container"></div>
-
-  <div id="surprise" class="surprise" style="display:none;">
+  <div id="countdown" class="countdown-container"></div>  <div id="nameForm">
+    <input type="text" id="nameInput" placeholder="أدخل اسمك">
+    <button id="submitName">تسجيل</button>
+  </div>  <div id="surprise" class="surprise" style="display:none;">
     <canvas id="balloons"></canvas>
-    <h2>عيدكم مبارك!</h2>
+    <h2 style="color:white">عيدكم مبارك!</h2>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
-  </div>
-
-  <div class="duaa-title">كل يوم دعاء جديد</div>
+  </div>  <div class="duaa-title">كل يوم دعاء جديد</div>
   <div class="duaa-carousel">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
-  </div>
-
-  <script>
+  </div>  <script>
     const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
     const title = document.getElementById("title");
+    const nameForm = document.getElementById("nameForm");
+
+    // Check for stored user ID
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      nameForm.style.display = "none";
+    }
+
+    document.getElementById("submitName").addEventListener("click", () => {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) return alert("الرجاء إدخال الاسم.");
+      const newId = Date.now() + Math.random().toString(36).substring(2);
+      localStorage.setItem("userId", newId);
+      localStorage.setItem("userName", name);
+      nameForm.style.display = "none";
+      fetch("https://script.google.com/macros/s/AKfycbxNrd5WcQmQbWRg0P9DgOXHT4ktIUSCZUphsbWZsn-Be6OSTVO3Kg7qazrLXrrOig2oMQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: newId,
+          name: name
+        })
+      });
+    });
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -175,8 +214,7 @@
       setTimeout(() => {
         cancelAnimationFrame(animationId);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }, 15000); // 15 ثانية ثم توقف
+      }, 15000);
     }
-  </script>
-</body>
+  </script></body>
 </html>
