@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google Analytics -->
@@ -12,101 +12,91 @@
     gtag('js', new Date());
     gtag('config', 'G-BME9NXNCFQ');
   </script>
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #1b1a17;
-      color: white;
-      text-align: center;
+    :root{
+      --bg:#1b1a17;
+      --card: rgba(255,255,255,0.06);
+      --accent: #ffd369;
+      --btn:#f7c04a;
+    }
+    body{
+      margin:0;
+      padding:0;
+      font-family: "Arial", sans-serif;
+      background:var(--bg);
+      color:#fff;
+      text-align:center;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    h2 {
-      font-size: 28px;
-      margin-top: 10px;
+    h2{ font-size:28px; margin-top:10px; }
+
+    /* العد */
+    .countdown-container{ margin-top:5px; font-size:26px; display:flex; justify-content:center; gap:12px; }
+
+    /* بالونات */
+    #balloons{ position:fixed; top:0; left:0; width:100%; pointer-events:none; z-index:999; display:block; }
+
+    .surprise img{ max-width:90%; height:auto; margin-top:20px; animation: fadeIn 2s ease-in-out; }
+    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+    .duaa-title{ font-size:22px; margin:35px 0 10px; }
+    .duaa-carousel{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:0 2%; gap:5px; justify-content:flex-start;}
+    .duaa-carousel img{ flex:0 0 96%; scroll-snap-align:start; max-width:96%; height:auto; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+
+    /* مربع التسجيل */
+    #registerBox{
+      background:var(--card);
+      padding:18px;
+      margin:18px auto;
+      border-radius:12px;
+      width:90%;
+      max-width:420px;
+      box-sizing:border-box;
+      transition: all .35s ease;
+    }
+    #registerBox p{ margin:6px 0 12px; color:#fff; }
+    #registerBox input{
+      padding:10px;
+      border-radius:8px;
+      border:none;
+      width:78%;
+      text-align:center;
+      font-size:16px;
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+    }
+    #registerBox button{
+      margin-top:10px;
+      padding:10px 16px;
+      background:var(--btn);
+      color:#000;
+      border:none;
+      border-radius:8px;
+      font-weight:bold;
+      cursor:pointer;
     }
 
-    .countdown-container {
-      margin-top: 5px;
-      font-size: 26px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
+    /* رسالة الترحيب مع fade-in */
+    #welcomeMsg{
+      font-size:20px;
+      margin:16px;
+      color:var(--accent);
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity .45s ease, transform .45s ease;
+    }
+    #welcomeMsg.show{
+      opacity:1;
+      transform: translateY(0);
     }
 
-    .countdown-item {
-      font-weight: bold;
-      min-width: 40px;
-    }
-
-    #balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    .surprise img {
-      max-width: 90%;
-      height: auto;
-      margin-top: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    .duaa-title {
-      font-size: 22px;
-      margin: 35px 0 10px;
-    }
-
-    .duaa-carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 2%;
-      gap: 5px;
-      justify-content: flex-start;
-    }
-
-    .duaa-carousel img {
-      flex: 0 0 96%;
-      scroll-snap-align: start;
-      max-width: 96%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    #nameForm {
-      margin-top: 20px;
-    }
-
-    input[type="text"] {
-      padding: 8px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: none;
-      margin-top: 10px;
-      width: 70%;
-    }
-
-    button {
-      padding: 8px 16px;
-      font-size: 16px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4caf50;
-      color: white;
-      cursor: pointer;
+    /* responsive */
+    @media (max-width:420px){
+      .countdown-container{ font-size:20px; gap:8px; }
+      #registerBox input{ width:70%; }
     }
   </style>
 </head>
@@ -114,124 +104,199 @@
   <h2 id="title">المفاجأة تظهر بعد:</h2>
   <div id="countdown" class="countdown-container"></div>
 
-  <div id="nameForm" style="display:none;">
-    <input type="text" id="userName" placeholder="اكتب اسمك هنا" />
-    <button onclick="submitName()">تسجيل</button>
+  <!-- مربع التسجيل (يظهر لمرة واحدة فقط إن لم يكن الاسم محفوظاً) -->
+  <div id="registerBox" aria-live="polite">
+    <p>من فضلك أدخل اسمك:</p>
+    <input id="username" type="text" placeholder="اكتب اسمك هنا" aria-label="اسم الزائر">
+    <br>
+    <button id="confirmBtn">تأكيد</button>
   </div>
 
+  <!-- رسالة الترحيب -->
+  <div id="welcomeMsg" aria-hidden="true" style="display:none;"></div>
+
+  <!-- المفاجأة -->
   <div id="surprise" class="surprise" style="display:none;">
     <canvas id="balloons"></canvas>
-    <h2 style="color: white;">عيدكم مبارك!</h2>
+    <h2>عيدكم مبارك!</h2>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
   </div>
 
   <div class="duaa-title">كل يوم دعاء جديد</div>
-  <div class="duaa-carousel">
+  <div class="duaa-carousel" aria-hidden="false">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
   </div>
 
-  <script>
-    const targetDate = new Date("2025-04-24T20:45:00").getTime();
-    const countdown = document.getElementById("countdown");
-    const surprise = document.getElementById("surprise");
-    const title = document.getElementById("title");
-    const nameForm = document.getElementById("nameForm");
-    const localUserId = localStorage.getItem("userId") || crypto.randomUUID();
-    localStorage.setItem("userId", localUserId);
+<script>
+/* ===========================
+   إعدادات — غيّر الرابط هنا إلى رابط Web App إن اختلف
+   =========================== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNrd5WcQmQbWRg0P9DgOXHT4ktIUSCZUphsbWZsn-Be6OSTVO3Kg7qazrLXrrOig2oMQ/exec";
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+/* ======= العد التنازلي (تنسيق أيام:ساعات:دقائق:ثواني) ======= */
+const targetDate = new Date("2025-04-24T20:45:00").getTime();
+const countdownEl = document.getElementById("countdown");
+const titleEl = document.getElementById("title");
+const surpriseEl = document.getElementById("surprise");
 
-      if (diff <= 0) {
-        countdown.style.display = "none";
-        title.style.display = "none";
-        surprise.style.display = "block";
-        showBalloons();
-        clearInterval(timer);
-        return;
-      }
+function formatCountdown(diff){
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return `${String(days).padStart(2,'0')} : ${String(hours).padStart(2,'0')} : ${String(minutes).padStart(2,'0')} : ${String(seconds).padStart(2,'0')}`;
+}
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+function updateCountdown(){
+  const now = Date.now();
+  const diff = targetDate - now;
+  if (diff <= 0){
+    countdownEl.style.display = "none";
+    titleEl.style.display = "none";
+    surpriseEl.style.display = "block";
+    showBalloons();
+    clearInterval(countdownTimer);
+    return;
+  }
+  countdownEl.textContent = formatCountdown(diff);
+}
+const countdownTimer = setInterval(updateCountdown, 1000);
+updateCountdown();
 
-      countdown.innerHTML = `
-        ${seconds.toString().padStart(2, '0')} :
-        ${minutes.toString().padStart(2, '0')} :
-        ${hours.toString().padStart(2, '0')}
-        ${days > 0 ? `: ${days.toString().padStart(2, '0')}` : ""}
-      `;
+/* ======= بالونات (Canvas) — تظهر عند انتهاء العد وتعمل 15 ثانية ======= */
+function showBalloons(){
+  const canvas = document.getElementById("balloons");
+  if (!canvas) return;
+  let ctx = null;
+  try { ctx = canvas.getContext("2d"); } catch(e){ return; }
+
+  function resize(){
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(window.innerWidth * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    if (ctx && ctx.setTransform) ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const count = Math.min(30, Math.max(8, Math.floor(window.innerWidth / 30)));
+  const balloons = [];
+  for (let i=0;i<count;i++){
+    balloons.push({
+      x: Math.random()*window.innerWidth,
+      y: window.innerHeight + Math.random()*200,
+      r: 6 + Math.random()*10,
+      color: `hsl(${Math.random()*360},70%,${50+Math.random()*20}%)`,
+      speed: 0.6 + Math.random()*1.6,
+      drift: (Math.random()-0.5)*0.6
+    });
+  }
+
+  let animationId = null;
+  const start = performance.now();
+
+  function animate(now){
+    const elapsed = now - start;
+    if (elapsed >= 15000){
+      if (animationId) cancelAnimationFrame(animationId);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      window.removeEventListener("resize", resize);
+      return;
     }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    balloons.forEach(b=>{
+      ctx.beginPath();
+      ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      ctx.fillStyle = b.color;
+      ctx.fill();
+      b.x += b.drift;
+      b.y -= b.speed;
+      if (b.y + b.r < -20) { b.y = window.innerHeight + Math.random()*80; b.x = Math.random()*window.innerWidth; }
+      if (b.x < -50) b.x = window.innerWidth + 50;
+      if (b.x > window.innerWidth + 50) b.x = -50;
+    });
+    animationId = requestAnimationFrame(animate);
+  }
 
-    const timer = setInterval(updateCountdown, 1000);
+  animationId = requestAnimationFrame(animate);
+}
 
-    function showBalloons() {
-      const canvas = document.getElementById("balloons");
-      const ctx = canvas.getContext("2d");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+/* ======= تسجيل الاسم — إظهار صندوق التسجيل مرة واحدة وحفظه بالمتصفح ======= */
+const registerBox = document.getElementById("registerBox");
+const confirmBtn = document.getElementById("confirmBtn");
+const welcomeMsg = document.getElementById("welcomeMsg");
+const usernameInput = document.getElementById("username");
 
-      const balloons = [];
-      for (let i = 0; i < 30; i++) {
-        balloons.push({
-          x: Math.random() * canvas.width,
-          y: canvas.height + Math.random() * 200,
-          r: 10 + Math.random() * 10,
-          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
-          speed: 1 + Math.random() * 2
-        });
-      }
+function fadeInWelcome(){
+  welcomeMsg.style.display = "block";
+  // force reflow for transition
+  setTimeout(()=> welcomeMsg.classList.add("show"), 30);
+}
 
-      let animationId;
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        balloons.forEach(b => {
-          ctx.beginPath();
-          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-          ctx.fillStyle = b.color;
-          ctx.fill();
-          b.y -= b.speed;
-          if (b.y + b.r < 0) {
-            b.y = canvas.height + Math.random() * 100;
-          }
-        });
-        animationId = requestAnimationFrame(animate);
-      }
+function showWelcome(name){
+  registerBox.style.display = "none";
+  welcomeMsg.innerHTML = `أهلًا وسهلًا بك يا <b>${escapeHtml(name)}</b> 🌸<br>نتمنى أن تطلع على كل جديد 🎉`;
+  fadeInWelcome();
+}
 
-      animate();
+/* توليد userId وحفظ البيانات محليًا */
+function generateUserId(){
+  return 'user-' + Math.random().toString(36).substr(2,9);
+}
 
-      setTimeout(() => {
-        cancelAnimationFrame(animationId);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }, 15000);
-    }
+/* إرسال البيانات إلى Google Apps Script (POST JSON) */
+function sendVisitToServer(name, userId){
+  // نرسل POST JSON أفضل من GET لعدم ظهور القيم في URL
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, userId: userId })
+  })
+  .then(r => r.text())
+  .then(text => console.log("Server response:", text))
+  .catch(err => console.warn("Failed to send visit:", err));
+}
 
-    // الاسم
-    const storedName = localStorage.getItem("userName");
-    if (!storedName) nameForm.style.display = "block";
+/* إداة مساعدة للسلامة - هروب HTML بسيط */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
 
-    function submitName() {
-      const name = document.getElementById("userName").value.trim();
-      if (!name) return alert("يرجى إدخال الاسم");
+/* حدث التأكيد */
+confirmBtn.addEventListener("click", ()=>{
+  const name = usernameInput.value.trim();
+  if (!name){ alert("يرجى إدخال الاسم أولاً 🌟"); usernameInput.focus(); return; }
 
-      localStorage.setItem("userName", name);
-      nameForm.style.display = "none";
+  let userId = localStorage.getItem("visitorUserId");
+  if (!userId){
+    userId = generateUserId();
+    localStorage.setItem("visitorUserId", userId);
+  }
+  localStorage.setItem("visitorName", name);
 
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxNrd5WcQmQbWRg0P9DgOXHT4ktIUSCZUphsbWZsn-Be6OSTVO3Kg7qazrLXrrOig2oMQ/exec";
-      fetch(scriptURL, {
-        method: 'POST',
-        body: new URLSearchParams({
-          name: name,
-          userId: localUserId,
-          points: "1",
-          lastVisit: new Date().toISOString()
-        })
-      });
-    }
-  </script>
+  // إظهار ترحيب
+  showWelcome(name);
+
+  // إرسال الزيارة للخادم
+  sendVisitToServer(name, userId);
+});
+
+/* عند تحميل الصفحة: إذا الاسم موجود في localStorage اعرض الترحيب وأرسل الزيارة */
+window.addEventListener("load", ()=>{
+  const savedName = localStorage.getItem("visitorName");
+  const savedId = localStorage.getItem("visitorUserId");
+  if (savedName && savedId){
+    showWelcome(savedName);
+    // إرسال تحديث الزيارة (ستقوم الخادم بتحديث lastVisit وعدد الزيارات)
+    sendVisitToServer(savedName, savedId);
+  }
+});
+</script>
 </body>
 </html>
