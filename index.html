@@ -5,15 +5,6 @@
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-BME9NXNCFQ');
-  </script>
-
   <style>
     body {
       margin: 0;
@@ -82,40 +73,32 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* خانة الاسم */
-    #nameSection {
+    #nameForm {
       margin-top: 20px;
     }
 
-    input[type="text"] {
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 10px;
+    input {
+      padding: 8px;
+      border-radius: 5px;
       border: none;
-      width: 60%;
-      text-align: center;
+      width: 200px;
     }
 
     button {
-      margin-top: 10px;
-      padding: 10px 25px;
-      font-size: 18px;
-      background-color: #ffcc00;
+      padding: 8px 15px;
       border: none;
-      border-radius: 10px;
+      background-color: #e1b12c;
+      color: #000;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
     }
 
-    button:hover {
-      background-color: #ffdb4d;
-    }
-
-    .welcome {
+    #welcome {
       margin-top: 20px;
-      font-size: 22px;
-      color: #ffcc00;
-      font-weight: bold;
+      font-size: 20px;
+      color: #f1c40f;
+      display: none;
     }
   </style>
 </head>
@@ -123,21 +106,18 @@
   <h2 id="title">المفاجأة تظهر بعد:</h2>
   <div id="countdown" class="countdown-container"></div>
 
-  <!-- خانة تسجيل الاسم -->
-  <div id="nameSection">
-    <input type="text" id="userName" placeholder="أدخل اسمك هنا">
-    <br>
-    <button onclick="saveName()">تأكيد</button>
-  </div>
-
-  <!-- رسالة ترحيب -->
-  <div id="welcomeMessage" class="welcome" style="display:none;"></div>
-
   <div id="surprise" class="surprise" style="display:none;">
     <canvas id="balloons"></canvas>
     <h2>عيدكم مبارك!</h2>
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
   </div>
+
+  <div id="nameForm">
+    <input type="text" id="username" placeholder="أدخل اسمك" />
+    <button onclick="saveName()">تسجيل</button>
+  </div>
+
+  <div id="welcome"></div>
 
   <div class="duaa-title">كل يوم دعاء جديد</div>
   <div class="duaa-carousel">
@@ -147,9 +127,32 @@
   </div>
 
   <script>
-    const url = "https://script.google.com/macros/s/AKfycbxOlOUEwCWlU9nefWkV8HSmmHkrYHzLwewgO0BPU8MaE2JskELkBV2E3wEhQgbgRGzU/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxK9MBsS4CTN6BwL5rGMeGlwh_cCDKih1ggXu8PlNe0jNWVqK7-kNQjqS6jCzGdmsMz/exec";
 
-    // عدّ تنازلي
+    function saveName() {
+      const name = document.getElementById("username").value.trim();
+      if (name === "") {
+        alert("الرجاء إدخال الاسم");
+        return;
+      }
+
+      const userId = localStorage.getItem("userId") || Math.random().toString(36).substring(2, 12);
+      localStorage.setItem("userId", userId);
+
+      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&userId=${userId}`)
+        .then(res => res.text())
+        .then(response => {
+          document.getElementById("nameForm").style.display = "none";
+          const welcome = document.getElementById("welcome");
+          welcome.innerText = `أهلًا وسهلًا بك يا ${name}! 🌸 نتمنى لك يومًا سعيدًا ومليئًا بالمفاجآت 🎉`;
+          welcome.style.display = "block";
+        })
+        .catch(err => {
+          alert("حدث خطأ أثناء الاتصال 😢");
+          console.error(err);
+        });
+    }
+
     const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
@@ -183,30 +186,6 @@
 
     const timer = setInterval(updateCountdown, 1000);
 
-    // حفظ الاسم وإرساله إلى Google Sheets
-    function saveName() {
-      const nameInput = document.getElementById("userName");
-      const name = nameInput.value.trim();
-      if (name === "") {
-        alert("الرجاء إدخال الاسم أولاً 😊");
-        return;
-      }
-
-      const userId = localStorage.getItem("userId") || Math.random().toString(36).substr(2, 9);
-      localStorage.setItem("userId", userId);
-
-      fetch(`${url}?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`)
-        .then(response => response.text())
-        .then(() => {
-          document.getElementById("nameSection").style.display = "none";
-          const msg = document.getElementById("welcomeMessage");
-          msg.innerText = `أهلاً وسهلاً بك يا ${name}! 🎉 نتمنى لك يوماً سعيداً ومليئاً بالمفاجآت 🌙`;
-          msg.style.display = "block";
-        })
-        .catch(() => alert("حدث خطأ أثناء الاتصال 😢"));
-    }
-
-    // بالونات العيد
     function showBalloons() {
       const canvas = document.getElementById("balloons");
       const ctx = canvas.getContext("2d");
@@ -233,15 +212,12 @@
           ctx.fillStyle = b.color;
           ctx.fill();
           b.y -= b.speed;
-          if (b.y + b.r < 0) {
-            b.y = canvas.height + Math.random() * 100;
-          }
+          if (b.y + b.r < 0) b.y = canvas.height + Math.random() * 100;
         });
         animationId = requestAnimationFrame(animate);
       }
 
       animate();
-
       setTimeout(() => {
         cancelAnimationFrame(animationId);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
