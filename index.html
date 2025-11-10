@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>مفاجأة العيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BME9NXNCFQ"></script>
   <script>
@@ -34,11 +35,6 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-    }
-
-    .countdown-item {
-      font-weight: bold;
-      min-width: 40px;
     }
 
     #balloons {
@@ -86,31 +82,40 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    #nameForm {
+    /* خانة الاسم */
+    #nameSection {
       margin-top: 20px;
     }
 
     input[type="text"] {
       padding: 10px;
       font-size: 18px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
-      outline: none;
+      width: 60%;
+      text-align: center;
     }
 
     button {
-      padding: 10px 18px;
+      margin-top: 10px;
+      padding: 10px 25px;
       font-size: 18px;
       background-color: #ffcc00;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      margin-right: 10px;
+      font-weight: bold;
     }
 
-    #welcome {
-      font-size: 22px;
+    button:hover {
+      background-color: #ffdb4d;
+    }
+
+    .welcome {
       margin-top: 20px;
+      font-size: 22px;
+      color: #ffcc00;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -118,13 +123,15 @@
   <h2 id="title">المفاجأة تظهر بعد:</h2>
   <div id="countdown" class="countdown-container"></div>
 
-  <!-- إدخال الاسم -->
-  <div id="nameForm">
-    <input type="text" id="username" placeholder="اكتب اسمك هنا">
+  <!-- خانة تسجيل الاسم -->
+  <div id="nameSection">
+    <input type="text" id="userName" placeholder="أدخل اسمك هنا">
+    <br>
     <button onclick="saveName()">تأكيد</button>
   </div>
 
-  <div id="welcome"></div>
+  <!-- رسالة ترحيب -->
+  <div id="welcomeMessage" class="welcome" style="display:none;"></div>
 
   <div id="surprise" class="surprise" style="display:none;">
     <canvas id="balloons"></canvas>
@@ -140,6 +147,9 @@
   </div>
 
   <script>
+    const url = "https://script.google.com/macros/s/AKfycbxOlOUEwCWlU9nefWkV8HSmmHkrYHzLwewgO0BPU8MaE2JskELkBV2E3wEhQgbgRGzU/exec";
+
+    // عدّ تنازلي
     const targetDate = new Date("2025-04-24T20:45:00").getTime();
     const countdown = document.getElementById("countdown");
     const surprise = document.getElementById("surprise");
@@ -173,6 +183,30 @@
 
     const timer = setInterval(updateCountdown, 1000);
 
+    // حفظ الاسم وإرساله إلى Google Sheets
+    function saveName() {
+      const nameInput = document.getElementById("userName");
+      const name = nameInput.value.trim();
+      if (name === "") {
+        alert("الرجاء إدخال الاسم أولاً 😊");
+        return;
+      }
+
+      const userId = localStorage.getItem("userId") || Math.random().toString(36).substr(2, 9);
+      localStorage.setItem("userId", userId);
+
+      fetch(`${url}?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`)
+        .then(response => response.text())
+        .then(() => {
+          document.getElementById("nameSection").style.display = "none";
+          const msg = document.getElementById("welcomeMessage");
+          msg.innerText = `أهلاً وسهلاً بك يا ${name}! 🎉 نتمنى لك يوماً سعيداً ومليئاً بالمفاجآت 🌙`;
+          msg.style.display = "block";
+        })
+        .catch(() => alert("حدث خطأ أثناء الاتصال 😢"));
+    }
+
+    // بالونات العيد
     function showBalloons() {
       const canvas = document.getElementById("balloons");
       const ctx = canvas.getContext("2d");
@@ -212,28 +246,6 @@
         cancelAnimationFrame(animationId);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }, 15000);
-    }
-
-    // 🔹 حفظ الاسم وإرسال البيانات إلى Google Sheets
-    function saveName() {
-      const name = document.getElementById("username").value.trim();
-      if (name === "") {
-        alert("الرجاء إدخال الاسم أولاً");
-        return;
-      }
-
-      const userId = localStorage.getItem("userId") || Math.random().toString(36).substring(2);
-      localStorage.setItem("userId", userId);
-
-      const url = "https://script.google.com/macros/s/AKfycbxECiLUrmPnlYioPkZiq67tsbPee-g_wiljW_fq-fzRK8BqOfRkTm_GvCbldOAXOos/exec";
-
-      fetch(`${url}?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`)
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById("nameForm").style.display = "none";
-          document.getElementById("welcome").innerHTML = `🌟 أهلاً وسهلاً بك يا <strong>${name}</strong>! نتمنى أن تطلع على كل جديد 🎉`;
-        })
-        .catch(err => alert("حدث خطأ أثناء الاتصال، حاول مرة أخرى."));
     }
   </script>
 </body>
