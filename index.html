@@ -1,228 +1,118 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>مفاجأة العيد</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>تهنئة العيد 🎉</title>
   <style>
     body {
+      background: radial-gradient(circle at top, #222, #000);
+      color: #fff;
+      font-family: "Tajawal", sans-serif;
+      text-align: center;
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #1b1a17;
-      color: white;
-      text-align: center;
     }
-
-    h2 {
-      font-size: 28px;
-      margin-top: 10px;
+    .container {
+      margin-top: 100px;
     }
-
-    .countdown-container {
-      margin-top: 5px;
-      font-size: 26px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    #balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    .surprise img {
-      max-width: 90%;
-      height: auto;
-      margin-top: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    .duaa-title {
-      font-size: 22px;
-      margin: 35px 0 10px;
-    }
-
-    .duaa-carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 2%;
-      gap: 5px;
-      justify-content: flex-start;
-    }
-
-    .duaa-carousel img {
-      flex: 0 0 96%;
-      scroll-snap-align: start;
-      max-width: 96%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    #nameForm {
-      margin-top: 20px;
-    }
-
     input {
-      padding: 8px;
-      border-radius: 5px;
+      padding: 10px;
+      border-radius: 10px;
       border: none;
-      width: 200px;
+      width: 220px;
+      text-align: center;
+      font-size: 18px;
     }
-
     button {
-      padding: 8px 15px;
+      padding: 10px 25px;
+      margin-top: 10px;
+      border-radius: 10px;
       border: none;
-      background-color: #e1b12c;
-      color: #000;
-      border-radius: 5px;
+      background-color: #ff9800;
+      color: white;
+      font-size: 18px;
       cursor: pointer;
-      font-weight: bold;
     }
-
-    #welcome {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #f1c40f;
+    button:hover {
+      background-color: #ffa726;
+    }
+    .hidden {
       display: none;
     }
   </style>
 </head>
 <body>
-  <h2 id="title">المفاجأة تظهر بعد:</h2>
-  <div id="countdown" class="countdown-container"></div>
+  <div class="container">
+    <h1>🎊 تهنئة العيد 🎊</h1>
+    <div id="registerSection">
+      <h3>أدخل اسمك لتبدأ</h3>
+      <input type="text" id="username" placeholder="اكتب اسمك هنا">
+      <br>
+      <button onclick="registerUser()">تسجيل</button>
+      <p id="error" style="color: #f44336;"></p>
+    </div>
 
-  <div id="surprise" class="surprise" style="display:none;">
-    <canvas id="balloons"></canvas>
-    <h2>عيدكم مبارك!</h2>
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="تهنئة العيد">
-  </div>
-
-  <div id="nameForm">
-    <input type="text" id="username" placeholder="أدخل اسمك" />
-    <button onclick="saveName()">تسجيل</button>
-  </div>
-
-  <div id="welcome"></div>
-
-  <div class="duaa-title">كل يوم دعاء جديد</div>
-  <div class="duaa-carousel">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 1">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 2">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg" alt="دعاء 3">
+    <div id="welcomeSection" class="hidden">
+      <h2>عيدك مبارك يا <span id="displayName"></span> 🌙</h2>
+      <p>تم تسجيلك بنجاح ✅</p>
+    </div>
   </div>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbxK9MBsS4CTN6BwL5rGMeGlwh_cCDKih1ggXu8PlNe0jNWVqK7-kNQjqS6jCzGdmsMz/exec";
 
-    function saveName() {
+    // إنشاء أو جلب الـ User ID
+    function generateUserID() {
+      let userID = localStorage.getItem("userID");
+      if (!userID) {
+        userID = "user_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("userID", userID);
+      }
+      return userID;
+    }
+
+    // تسجيل المستخدم
+    function registerUser() {
       const name = document.getElementById("username").value.trim();
-      if (name === "") {
-        alert("الرجاء إدخال الاسم");
+      const errorMsg = document.getElementById("error");
+      if (!name) {
+        errorMsg.textContent = "❌ الرجاء إدخال الاسم أولاً.";
         return;
       }
 
-      const userId = localStorage.getItem("userId") || Math.random().toString(36).substring(2, 12);
-      localStorage.setItem("userId", userId);
+      const userID = generateUserID();
+      const data = new FormData();
+      data.append("name", name);
+      data.append("userID", userID);
 
-      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&userId=${userId}`)
-        .then(res => res.text())
-        .then(response => {
-          document.getElementById("nameForm").style.display = "none";
-          const welcome = document.getElementById("welcome");
-          welcome.innerText = `أهلًا وسهلًا بك يا ${name}! 🌸 نتمنى لك يومًا سعيدًا ومليئًا بالمفاجآت 🎉`;
-          welcome.style.display = "block";
+      fetch(scriptURL, { method: "POST", body: data })
+        .then(response => response.text())
+        .then(result => {
+          console.log("تم الإرسال:", result);
+          localStorage.setItem("username", name);
+          showWelcome(name);
         })
-        .catch(err => {
-          alert("حدث خطأ أثناء الاتصال 😢");
-          console.error(err);
+        .catch(error => {
+          console.error("حدث خطأ:", error);
+          errorMsg.textContent = "⚠️ حدث خطأ أثناء الاتصال، حاول لاحقًا.";
         });
     }
 
-    const targetDate = new Date("2025-04-24T20:45:00").getTime();
-    const countdown = document.getElementById("countdown");
-    const surprise = document.getElementById("surprise");
-    const title = document.getElementById("title");
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        countdown.style.display = "none";
-        title.style.display = "none";
-        surprise.style.display = "block";
-        showBalloons();
-        clearInterval(timer);
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      countdown.innerHTML = `
-        ${seconds.toString().padStart(2, '0')} :
-        ${minutes.toString().padStart(2, '0')} :
-        ${hours.toString().padStart(2, '0')}
-        ${days > 0 ? `: ${days.toString().padStart(2, '0')}` : ""}
-      `;
+    // عرض رسالة الترحيب
+    function showWelcome(name) {
+      document.getElementById("registerSection").classList.add("hidden");
+      document.getElementById("welcomeSection").classList.remove("hidden");
+      document.getElementById("displayName").textContent = name;
     }
 
-    const timer = setInterval(updateCountdown, 1000);
-
-    function showBalloons() {
-      const canvas = document.getElementById("balloons");
-      const ctx = canvas.getContext("2d");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const balloons = [];
-      for (let i = 0; i < 30; i++) {
-        balloons.push({
-          x: Math.random() * canvas.width,
-          y: canvas.height + Math.random() * 200,
-          r: 10 + Math.random() * 10,
-          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
-          speed: 1 + Math.random() * 2
-        });
+    // عند فتح الصفحة
+    window.onload = () => {
+      const savedName = localStorage.getItem("username");
+      if (savedName) {
+        showWelcome(savedName);
       }
-
-      let animationId;
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        balloons.forEach(b => {
-          ctx.beginPath();
-          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-          ctx.fillStyle = b.color;
-          ctx.fill();
-          b.y -= b.speed;
-          if (b.y + b.r < 0) b.y = canvas.height + Math.random() * 100;
-        });
-        animationId = requestAnimationFrame(animate);
-      }
-
-      animate();
-      setTimeout(() => {
-        cancelAnimationFrame(animationId);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }, 15000);
-    }
+    };
   </script>
 </body>
 </html>
