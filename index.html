@@ -1,226 +1,122 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>مفاجأة العيد</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>رمضانك اليوم</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #1b1a17;
-      color: white;
-      text-align: center;
-    }
-    h2 { font-size: 28px; margin-top: 10px; }
-
-    /* صندوق تسجيل الاسم */
-    #nameBox {
-      background: #fff;
-      color: #000;
-      padding: 20px;
-      margin: 20px auto;
-      width: 85%;
-      border-radius: 12px;
-      font-size: 20px;
-      display: none;
-    }
-    #nameInput {
-      width: 90%;
-      padding: 10px;
-      font-size: 18px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-    }
-    #saveName {
-      margin-top: 15px;
-      font-size: 20px;
-      padding: 10px 20px;
-      background: #008cff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-    }
-
-    .countdown-container {
-      margin-top: 5px;
-      font-size: 26px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    #balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    .surprise img {
-      max-width: 90%;
-      height: auto;
-      margin-top: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-
-    .duaa-title { font-size: 22px; margin: 35px 0 10px; }
-    .duaa-carousel {
-      display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-      gap: 5px; padding: 0 2%;
-    }
-    .duaa-carousel img {
-      flex: 0 0 96%; scroll-snap-align: start;
-      max-width: 96%; border-radius: 10px;
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f7f1dc;
+  color:#3b2f1c;
+  text-align:center;
+}
+.container{padding:15px}
+.ayah{font-size:20px;margin:20px 0}
+.duaa img{width:90%;border-radius:10px;margin:10px 0}
+button{
+  padding:10px 20px;
+  font-size:16px;
+  background:#7c9a6d;
+  border:none;
+  border-radius:8px;
+  color:white;
+}
+button:disabled{background:#aaa}
+.timer{font-size:18px;margin:15px 0}
+.small{font-size:14px;color:#555}
+</style>
 </head>
 
 <body>
+<div class="container">
 
-  <!-- نموذج تسجيل الاسم -->
-  <div id="nameBox">
-    أدخل اسمك مرة واحدة فقط:
-    <br>
-    <input id="nameInput" type="text" placeholder="اكتب اسمك هنا">
-    <br>
-    <button id="saveName">تسجيل</button>
-  </div>
+<h2>🌙 رمضانك اليوم</h2>
 
-  <h2 id="title">المفاجأة تظهر بعد:</h2>
-  <div id="countdown" class="countdown-container"></div>
+<div class="timer" id="prayerTimer"></div>
 
-  <div id="surprise" class="surprise" style="display:none;">
-    <canvas id="balloons"></canvas>
-    <h2>عيدكم مبارك!</h2>
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png">
-  </div>
+<div class="ayah">
+﴿ وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا ۝ وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ ﴾
+</div>
 
-  <div class="duaa-title">كل يوم دعاء جديد</div>
-  <div class="duaa-carousel">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-  </div>
+<div class="duaa">
+<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
+<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
+<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
+</div>
+
+<p class="small">اللهم تقبّل منا ومنكم</p>
+
+<button id="doneBtn">✔️ أنجزت ورد اليوم</button>
+
+<p class="small">نقاطك: <span id="points">0</span></p>
+
+<br>
+<a href="#" onclick="history.back()">🔙 الرجوع للإمساكية</a>
+
+</div>
 
 <script>
-/* ================================
-   1) نظام تسجيل الاسم + اليوزر آيدي
-================================ */
-const scriptURL = "https://script.google.com/macros/s/AKfycbzWZEPEeEmiOie0f9go7ukiiHHJolAk30dQr8WuUjyHTTz19x_LCY7cMsST-lWSaBzF/exec";
-
-function generateUserId() {
-    return "user-" + Math.random().toString(36).substr(2, 9);
+// User ID
+if(!localStorage.uid){
+  localStorage.uid = Date.now()+"-"+Math.random();
 }
 
-function registerVisit() {
-    let userName = localStorage.getItem("userName");
-    let userId = localStorage.getItem("userId");
+// Points
+let points = Number(localStorage.points || 0);
+const today = new Date().toLocaleDateString("en-CA");
+document.getElementById("points").textContent = points;
 
-    if (!userId) {
-        userId = generateUserId();
-        localStorage.setItem("userId", userId);
-    }
-
-    if (!userName) {
-        document.getElementById("nameBox").style.display = "block";
-        return;
-    }
-
-    // إرسال البيانات للسكربت
-    fetch(scriptURL + "?name=" + encodeURIComponent(userName) + "&userId=" + encodeURIComponent(userId))
-    .then(res => res.text())
-    .then(t => console.log("Response:", t))
-    .catch(err => console.log("ERROR:", err));
+// Daily visit
+if(localStorage.lastVisit !== today){
+  points++;
+  localStorage.points = points;
+  localStorage.lastVisit = today;
 }
 
-document.getElementById("saveName").addEventListener("click", () => {
-    const nameValue = document.getElementById("nameInput").value.trim();
-    if (nameValue.length < 2) {
-        alert("الرجاء إدخال اسم صحيح");
-        return;
-    }
-    localStorage.setItem("userName", nameValue);
-    document.getElementById("nameBox").style.display = "none";
-    registerVisit();
-});
+// Done button
+const btn = document.getElementById("doneBtn");
+if(localStorage.doneDate === today){
+  btn.disabled = true;
+}
+btn.onclick = ()=>{
+  localStorage.doneDate = today;
+  btn.disabled = true;
+};
 
-/* تشغيل النظام عند فتح الصفحة */
-registerVisit();
+// Prayer countdown (example times)
+const maghrib = "19:20";
+const fajr = "05:00";
 
-/* ================================
-     2) العد التنازلي + المفاجأة
-================================ */
-const targetDate = new Date("2025-04-24T20:45:00").getTime();
-const countdown = document.getElementById("countdown");
-const surprise = document.getElementById("surprise");
-const title = document.getElementById("title");
+function updateTimer(){
+  const now = new Date();
+  const [mh,mm]=maghrib.split(":");
+  const [fh,fm]=fajr.split(":");
 
-function updateCountdown() {
-  const now = Date.now();
-  const diff = targetDate - now;
+  let target = new Date();
+  let label="";
 
-  if (diff <= 0) {
-    countdown.style.display = "none";
-    title.style.display = "none";
-    surprise.style.display = "block";
-    showBalloons();
-    clearInterval(timer);
-    return;
+  if(now.getHours()<mh){
+    target.setHours(mh,mm,0);
+    label="⏳ المتبقي للمغرب";
+  }else{
+    target.setDate(target.getDate()+1);
+    target.setHours(fh,fm,0);
+    label="⏳ المتبقي للفجر";
   }
 
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-  const seconds = Math.floor((diff % 60000) / 1000);
+  const diff = target-now;
+  const h = Math.floor(diff/3600000);
+  const m = Math.floor(diff%3600000/60000);
+  const s = Math.floor(diff%60000/1000);
 
-  countdown.innerHTML = `${seconds} : ${minutes} : ${hours} ${days ? ": " + days : ""}`;
+  document.getElementById("prayerTimer").textContent =
+    `${label}: ${h}:${m}:${s}`;
 }
-
-const timer = setInterval(updateCountdown, 1000);
-
-/* ================================
-     3) البالونات
-================================ */
-function showBalloons() {
-  const canvas = document.getElementById("balloons");
-  const ctx = canvas.getContext("2d");
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-
-  const balloons = [];
-  for (let i = 0; i < 30; i++) {
-    balloons.push({
-      x: Math.random() * canvas.width,
-      y: canvas.height + Math.random() * 200,
-      r: 10 + Math.random() * 10,
-      color: `hsl(${Math.random() * 360}, 100%, 70%)`,
-      speed: 1 + Math.random() * 2
-    });
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    balloons.forEach(b => {
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.fillStyle = b.color;
-      ctx.fill();
-      b.y -= b.speed;
-      if (b.y < -20) b.y = canvas.height + 50;
-    });
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-}
+setInterval(updateTimer,1000);
+updateTimer();
 </script>
 
 </body>
