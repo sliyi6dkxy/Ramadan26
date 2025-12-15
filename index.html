@@ -2,121 +2,117 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>رمضانك اليوم</title>
+<title>إمساكية رمضان</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root{
+  --bg-main:#FBF7ED;
+  --card-bg:#FFFFFF;
+  --primary:#7C9A6D;
+  --secondary:#D9C9A3;
+  --text-main:#3F3A2E;
+  --border-soft:#E6DEC9;
+}
+
 body{
   margin:0;
-  font-family:Arial;
-  background:#f7f1dc;
-  color:#3b2f1c;
+  font-family: Arial, sans-serif;
+  background:var(--bg-main);
+  color:var(--text-main);
   text-align:center;
 }
-.container{padding:15px}
-.ayah{font-size:20px;margin:20px 0}
-.duaa img{width:90%;border-radius:10px;margin:10px 0}
-button{
-  padding:10px 20px;
-  font-size:16px;
-  background:#7c9a6d;
-  border:none;
-  border-radius:8px;
-  color:white;
+
+.container{
+  padding:30px 15px;
+  max-width:420px;
+  margin:auto;
 }
-button:disabled{background:#aaa}
-.timer{font-size:18px;margin:15px 0}
-.small{font-size:14px;color:#555}
+
+h1{
+  color:var(--primary);
+  margin-bottom:20px;
+}
+
+.card{
+  background:var(--card-bg);
+  padding:22px;
+  border-radius:16px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.08);
+  border:1px solid var(--border-soft);
+}
+
+input{
+  width:100%;
+  padding:12px;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid var(--border-soft);
+  margin-top:12px;
+}
+
+button{
+  margin-top:16px;
+  padding:12px;
+  width:100%;
+  font-size:16px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:10px;
+}
+button:hover{opacity:0.9}
+
+.welcome{
+  font-size:18px;
+  line-height:1.8;
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
+  <h1>🌙 مرحبًا بك</h1>
 
-<h2>🌙 رمضانك اليوم</h2>
+  <!-- تسجيل الاسم -->
+  <div id="registerBox" class="card">
+    <p>سجّل اسمك لتكون هذه الإمساكية خاصة بك 🤍</p>
+    <input id="nameInput" placeholder="اسمك">
+    <button onclick="saveName()">تأكيد</button>
+  </div>
 
-<div class="timer" id="prayerTimer"></div>
-
-<div class="ayah">
-﴿ وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا ۝ وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ ﴾
-</div>
-
-<div class="duaa">
-<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-<img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/IMG_20250422_172723_104.jpg">
-</div>
-
-<p class="small">اللهم تقبّل منا ومنكم</p>
-
-<button id="doneBtn">✔️ أنجزت ورد اليوم</button>
-
-<p class="small">نقاطك: <span id="points">0</span></p>
-
-<br>
-<a href="#" onclick="history.back()">🔙 الرجوع للإمساكية</a>
-
+  <!-- الترحيب -->
+  <div id="welcomeBox" class="card" style="display:none;">
+    <p class="welcome" id="welcomeText"></p>
+  </div>
 </div>
 
 <script>
-// User ID
-if(!localStorage.uid){
-  localStorage.uid = Date.now()+"-"+Math.random();
+const registerBox = document.getElementById("registerBox");
+const welcomeBox  = document.getElementById("welcomeBox");
+const welcomeText = document.getElementById("welcomeText");
+
+const storedName = localStorage.getItem("userName");
+
+if(storedName){
+  showWelcome(storedName,false);
 }
 
-// Points
-let points = Number(localStorage.points || 0);
-const today = new Date().toLocaleDateString("en-CA");
-document.getElementById("points").textContent = points;
-
-// Daily visit
-if(localStorage.lastVisit !== today){
-  points++;
-  localStorage.points = points;
-  localStorage.lastVisit = today;
+function saveName(){
+  const name = document.getElementById("nameInput").value.trim();
+  if(!name) return;
+  localStorage.setItem("userName",name);
+  showWelcome(name,true);
 }
 
-// Done button
-const btn = document.getElementById("doneBtn");
-if(localStorage.doneDate === today){
-  btn.disabled = true;
+function showWelcome(name,first){
+  registerBox.style.display="none";
+  welcomeBox.style.display="block";
+  welcomeText.innerHTML = first
+    ? `أهلًا بك يا <b>${name}</b> 🌿<br>نسأل الله أن يجعل هذا الشهر بداية خير لك`
+    : `مرحبًا بعودتك يا <b>${name}</b> 🌙<br>تقبّل الله طاعاتك`;
 }
-btn.onclick = ()=>{
-  localStorage.doneDate = today;
-  btn.disabled = true;
-};
-
-// Prayer countdown (example times)
-const maghrib = "19:20";
-const fajr = "05:00";
-
-function updateTimer(){
-  const now = new Date();
-  const [mh,mm]=maghrib.split(":");
-  const [fh,fm]=fajr.split(":");
-
-  let target = new Date();
-  let label="";
-
-  if(now.getHours()<mh){
-    target.setHours(mh,mm,0);
-    label="⏳ المتبقي للمغرب";
-  }else{
-    target.setDate(target.getDate()+1);
-    target.setHours(fh,fm,0);
-    label="⏳ المتبقي للفجر";
-  }
-
-  const diff = target-now;
-  const h = Math.floor(diff/3600000);
-  const m = Math.floor(diff%3600000/60000);
-  const s = Math.floor(diff%60000/1000);
-
-  document.getElementById("prayerTimer").textContent =
-    `${label}: ${h}:${m}:${s}`;
-}
-setInterval(updateTimer,1000);
-updateTimer();
 </script>
 
 </body>
