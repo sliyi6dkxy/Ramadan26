@@ -23,103 +23,144 @@ body{
   max-width:460px;
   margin:auto;
   padding:50px 18px;
+}
+
+/* ===== شاشة التسجيل ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(251,247,237,0.96);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+
+.register-box{
   text-align:center;
-}
-
-/* التسجيل */
-.register p{
-  font-size:19px;
-  line-height:1.8;
-}
-
-input{
   width:100%;
-  padding:15px;
-  font-size:17px;
-  border-radius:14px;
-  border:1px solid #ddd;
-  margin-top:18px;
+  max-width:360px;
 }
 
-button{
-  margin-top:20px;
-  padding:15px;
-  width:100%;
+.register-box p{
   font-size:18px;
+  line-height:1.9;
+  margin-bottom:20px;
+}
+
+/* حقل + زر */
+.input-group{
+  display:flex;
+  gap:8px;
+}
+
+.input-group input{
+  flex:1;
+  padding:14px 16px;
+  font-size:16px;
+  border-radius:30px;
+  border:1px solid #ddd;
+}
+
+.input-group button{
+  padding:14px 20px;
+  border-radius:30px;
+  border:none;
   background:var(--primary);
   color:white;
-  border:none;
-  border-radius:14px;
+  font-size:16px;
 }
 
-/* الترحيب */
+/* ===== الترحيب ===== */
 .welcome{
+  text-align:center;
   font-size:26px;
   line-height:2;
   opacity:0;
-  transform:translateY(25px);
-  animation:welcomeAnim 1.2s ease forwards;
+  transform:scale(0.96);
+  animation:welcome 1.2s ease forwards;
 }
 
-@keyframes welcomeAnim{
+@keyframes welcome{
   to{
     opacity:1;
-    transform:translateY(0);
+    transform:scale(1);
   }
+}
+
+/* محتوى تجريبي */
+.content{
+  filter:blur(6px);
+  transition:0.6s;
+}
+
+.content.active{
+  filter:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <!-- تسجيل الاسم -->
-  <div id="registerBox" class="register">
+<!-- شاشة التسجيل -->
+<div id="overlay" class="overlay">
+  <div class="register-box">
     <p>
-      ✨ هذه الإمساكية صُممت لترافقك طوال شهر رمضان  
+      ادخل اسمك لتصلك التذكيرات اليومية  
       <br>
-      بإدخال اسمك، ستصبح الأدعية والتنبيهات موجهة لك شخصيًا  
-      <br>
-      🌙 اجعلها إمساكيتك أنت
+      رمضان كريم 🌙
     </p>
 
-    <input id="nameInput" placeholder="اكتب اسمك هنا">
-    <button onclick="saveName()">بدء الرحلة</button>
+    <div class="input-group">
+      <input id="nameInput" placeholder="اسمك">
+      <button onclick="saveName()">متابعة</button>
+    </div>
   </div>
+</div>
+
+<div class="container">
 
   <!-- الترحيب -->
-  <div id="welcomeBox" style="display:none;">
-    <div id="welcomeText" class="welcome"></div>
+  <div id="welcomeBox"></div>
+
+  <!-- محتوى تجريبي -->
+  <div id="content" class="content">
+    <p style="text-align:center; margin-top:40px;">
+      (محتوى الإمساكية سيظهر هنا لاحقًا)
+    </p>
   </div>
 
 </div>
 
 <script>
-const registerBox = document.getElementById("registerBox");
-const welcomeBox  = document.getElementById("welcomeBox");
-const welcomeText = document.getElementById("welcomeText");
+const overlay = document.getElementById("overlay");
+const welcomeBox = document.getElementById("welcomeBox");
+const content = document.getElementById("content");
 
 const storedName = localStorage.getItem("ramadan_name");
 
 if(storedName){
-  showWelcome(storedName,false);
+  startApp(storedName);
 }
 
 function saveName(){
   const name = document.getElementById("nameInput").value.trim();
   if(!name) return;
   localStorage.setItem("ramadan_name",name);
-  showWelcome(name,true);
+  startApp(name,true);
 }
 
-function showWelcome(name,first){
-  registerBox.style.display="none";
-  welcomeBox.style.display="block";
+function startApp(name,first){
+  overlay.style.display="none";
+  content.classList.add("active");
 
-  welcomeText.innerHTML = first
-    ? `أهلًا بك يا ${name} 🌿<br>نسأل الله أن يجعل هذا الشهر نورًا لقلبك وقبولًا لأعمالك`
-    : `مرحبًا بعودتك يا ${name} 🌙<br>تقبّل الله منك صالح الأعمال`;
+  welcomeBox.innerHTML = `
+    <div class="welcome">
+      أهلًا بك ${name} 🌿  
+      <br>
+      نسأل الله أن يبارك لك في هذا الشهر
+    </div>
+  `;
 }
 </script>
 
