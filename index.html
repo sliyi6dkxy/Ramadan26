@@ -7,65 +7,65 @@
 
 <style>
 :root{
-  --bg-main:#FBF7ED;
-  --card-bg:#FFFFFF;
+  --bg:#FBF7ED;
   --primary:#7C9A6D;
-  --secondary:#D9C9A3;
-  --text-main:#3F3A2E;
-  --border-soft:#E6DEC9;
+  --text:#3F3A2E;
 }
 
 body{
   margin:0;
   font-family: Arial, sans-serif;
-  background:var(--bg-main);
-  color:var(--text-main);
-  text-align:center;
+  background:var(--bg);
+  color:var(--text);
 }
 
 .container{
-  padding:30px 15px;
-  max-width:420px;
+  max-width:460px;
   margin:auto;
+  padding:50px 18px;
+  text-align:center;
 }
 
-h1{
-  color:var(--primary);
-  margin-bottom:20px;
-}
-
-.card{
-  background:var(--card-bg);
-  padding:22px;
-  border-radius:16px;
-  box-shadow:0 6px 14px rgba(0,0,0,0.08);
-  border:1px solid var(--border-soft);
+/* التسجيل */
+.register p{
+  font-size:19px;
+  line-height:1.8;
 }
 
 input{
   width:100%;
-  padding:12px;
-  font-size:16px;
-  border-radius:10px;
-  border:1px solid var(--border-soft);
-  margin-top:12px;
+  padding:15px;
+  font-size:17px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  margin-top:18px;
 }
 
 button{
-  margin-top:16px;
-  padding:12px;
+  margin-top:20px;
+  padding:15px;
   width:100%;
-  font-size:16px;
+  font-size:18px;
   background:var(--primary);
   color:white;
   border:none;
-  border-radius:10px;
+  border-radius:14px;
 }
-button:hover{opacity:0.9}
 
+/* الترحيب */
 .welcome{
-  font-size:18px;
-  line-height:1.8;
+  font-size:26px;
+  line-height:2;
+  opacity:0;
+  transform:translateY(25px);
+  animation:welcomeAnim 1.2s ease forwards;
+}
+
+@keyframes welcomeAnim{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 </style>
 </head>
@@ -73,19 +73,26 @@ button:hover{opacity:0.9}
 <body>
 
 <div class="container">
-  <h1>🌙 مرحبًا بك</h1>
 
   <!-- تسجيل الاسم -->
-  <div id="registerBox" class="card">
-    <p>سجّل اسمك لتكون هذه الإمساكية خاصة بك 🤍</p>
-    <input id="nameInput" placeholder="اسمك">
-    <button onclick="saveName()">تأكيد</button>
+  <div id="registerBox" class="register">
+    <p>
+      ✨ هذه الإمساكية صُممت لترافقك طوال شهر رمضان  
+      <br>
+      بإدخال اسمك، ستصبح الأدعية والتنبيهات موجهة لك شخصيًا  
+      <br>
+      🌙 اجعلها إمساكيتك أنت
+    </p>
+
+    <input id="nameInput" placeholder="اكتب اسمك هنا">
+    <button onclick="saveName()">بدء الرحلة</button>
   </div>
 
   <!-- الترحيب -->
-  <div id="welcomeBox" class="card" style="display:none;">
-    <p class="welcome" id="welcomeText"></p>
+  <div id="welcomeBox" style="display:none;">
+    <div id="welcomeText" class="welcome"></div>
   </div>
+
 </div>
 
 <script>
@@ -93,7 +100,7 @@ const registerBox = document.getElementById("registerBox");
 const welcomeBox  = document.getElementById("welcomeBox");
 const welcomeText = document.getElementById("welcomeText");
 
-const storedName = localStorage.getItem("userName");
+const storedName = localStorage.getItem("ramadan_name");
 
 if(storedName){
   showWelcome(storedName,false);
@@ -102,16 +109,17 @@ if(storedName){
 function saveName(){
   const name = document.getElementById("nameInput").value.trim();
   if(!name) return;
-  localStorage.setItem("userName",name);
+  localStorage.setItem("ramadan_name",name);
   showWelcome(name,true);
 }
 
 function showWelcome(name,first){
   registerBox.style.display="none";
   welcomeBox.style.display="block";
+
   welcomeText.innerHTML = first
-    ? `أهلًا بك يا <b>${name}</b> 🌿<br>نسأل الله أن يجعل هذا الشهر بداية خير لك`
-    : `مرحبًا بعودتك يا <b>${name}</b> 🌙<br>تقبّل الله طاعاتك`;
+    ? `أهلًا بك يا ${name} 🌿<br>نسأل الله أن يجعل هذا الشهر نورًا لقلبك وقبولًا لأعمالك`
+    : `مرحبًا بعودتك يا ${name} 🌙<br>تقبّل الله منك صالح الأعمال`;
 }
 </script>
 
