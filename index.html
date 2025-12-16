@@ -1,160 +1,152 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إمساكية رمضان</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رمضان كريم</title>
 
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
 
-    .container {
-      width: 90%;
-      max-width: 500px;
-    }
+body{
+  margin:0;
+  font-family:'Cairo', sans-serif;
+  background:
+    linear-gradient(rgba(255,248,230,0.92), rgba(255,248,230,0.92)),
+    url("https://i.imgur.com/7QZ4F1R.png");
+  background-size: cover;
+  background-position: center;
+  color:#4b3b2a;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
 
-    .fade-in {
-      animation: fadeSlide 1.2s ease forwards;
-    }
+.container{
+  width:100%;
+  max-width:420px;
+  padding:30px 20px;
+}
 
-    @keyframes fadeSlide {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+h1{
+  font-size:30px;
+  margin-bottom:10px;
+  font-weight:700;
+}
 
-    .welcome-text {
-      font-size: 22px;
-      line-height: 1.8;
-      margin-bottom: 25px;
-    }
+.subtitle{
+  font-size:17px;
+  line-height:1.8;
+  margin-bottom:30px;
+}
 
-    .name-input {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 30px;
-      border: none;
-      outline: none;
-      text-align: center;
-    }
+.input-group{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
 
-    .save-btn {
-      margin-top: 15px;
-      padding: 12px 30px;
-      border-radius: 30px;
-      border: none;
-      background-color: #f1c27d;
-      color: #000;
-      font-size: 16px;
-      cursor: pointer;
-    }
+input{
+  padding:12px 16px;
+  font-size:16px;
+  border-radius:25px;
+  border:1px solid #d6c6a5;
+  outline:none;
+  width:65%;
+  font-family:'Cairo', sans-serif;
+}
 
-    .save-btn:hover {
-      background-color: #e0b468;
-    }
+button{
+  padding:12px 20px;
+  border-radius:25px;
+  border:none;
+  background:#7a9b7e;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  font-family:'Cairo', sans-serif;
+}
 
-    .hidden {
-      display: none;
-    }
+button:hover{
+  background:#688c6d;
+}
 
-    .date {
-      margin-top: 10px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-  </style>
+.welcome{
+  font-size:28px;
+  line-height:1.9;
+  font-weight:600;
+  opacity:0;
+  transform:translateY(20px);
+  animation:welcomeAnim 1.2s ease forwards;
+}
+
+@keyframes welcomeAnim{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.hidden{display:none;}
+
+.daily{
+  font-size:26px;
+  line-height:1.8;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <!-- تسجيل الاسم -->
-  <div id="registerBox" class="fade-in">
-    <div class="welcome-text">
-      أهلاً بك 🌙  
-      <br>
-      أدخل اسمك لتصلك تذكرة يومية خفيفة ترافقك في رمضان
+  <!-- شاشة أول دخول -->
+  <div id="registerBox">
+    <h1>🌙 أهلاً بك في رحلتك الرمضانية</h1>
+    <div class="subtitle">
+      أدخل اسمك لنبدأ أيامًا عامرة بالطمأنينة  
+      <br>رمضان كريم عليك 🤍
     </div>
-    <input id="nameInput" class="name-input" type="text" placeholder="اسمك كما تحب">
-    <br>
-    <button class="save-btn" onclick="saveName()">متابعة</button>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="اسمك الكريم">
+      <button onclick="saveName()">دخول</button>
+    </div>
   </div>
 
-  <!-- رسالة الترحيب -->
-  <div id="welcomeBox" class="hidden">
-    <div id="welcomeMessage" class="welcome-text fade-in"></div>
-    <div class="date">اليوم: تاريخ هجري (سيُفعل لاحقًا)</div>
-  </div>
+  <!-- رسالة ترحيب -->
+  <div id="welcomeBox" class="hidden"></div>
 
 </div>
 
 <script>
-  const registerBox = document.getElementById("registerBox");
-  const welcomeBox = document.getElementById("welcomeBox");
-  const welcomeMessage = document.getElementById("welcomeMessage");
+const nameKey = "ramadan_username";
 
-  const storedName = localStorage.getItem("ramadan_name");
-  const userId = localStorage.getItem("ramadan_uid");
+function saveName(){
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+  localStorage.setItem(nameKey, name);
+  showWelcome(name, true);
+}
 
-  if (storedName && userId) {
-    showWelcome(storedName);
+function showWelcome(name, first){
+  document.getElementById("registerBox").classList.add("hidden");
+  const box = document.getElementById("welcomeBox");
+  box.classList.remove("hidden");
+
+  box.innerHTML = first
+  ? `<div class="welcome">🌙 مرحبًا بك يا ${name}<br>تقبّل الله منك وجعل رمضانك نورًا</div>`
+  : `<div class="daily">🌙 مرحبًا بعودتك يا ${name}<br>نسأل الله أن يكتب لك الأجر اليوم</div>`;
+}
+
+window.onload = () => {
+  const savedName = localStorage.getItem(nameKey);
+  if(savedName){
+    showWelcome(savedName, false);
   }
-
-  function saveName() {
-    const name = document.getElementById("nameInput").value.trim();
-    if (!name) return;
-
-    const uid = "U-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
-
-    localStorage.setItem("ramadan_name", name);
-    localStorage.setItem("ramadan_uid", uid);
-
-    // ⬇️ هنا لاحقًا نربط Google Sheets
-    // sendToSheet(name, uid);
-
-    showWelcome(name);
-  }
-
-  function showWelcome(name) {
-    registerBox.classList.add("hidden");
-    welcomeBox.classList.remove("hidden");
-
-    welcomeMessage.innerHTML = `
-      مرحبًا يا ${name} 🤍  
-      <br>
-      نسأل الله أن يجعل هذا اليوم لك قُربًا وطمأنينة
-    `;
-  }
-
-  // مثال جاهز للربط لاحقًا
-  /*
-  function sendToSheet(name, uid) {
-    fetch("PUT_YOUR_GOOGLE_SCRIPT_URL_HERE", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        uid: uid,
-        type: "first_login"
-      })
-    });
-  }
-  */
+};
 </script>
 
 </body>
