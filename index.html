@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رمضان كريم</title>
+<title>إمساكية رمضان</title>
+
+<!-- خط Tajawal -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
 body{
   margin:0;
-  font-family:'Cairo', sans-serif;
-  background:#fbf6e8; /* كريمي قريب جدًا من الإمساكية */
+  font-family:'Tajawal', sans-serif;
+  background:#fbf6e8;
   color:#4b3b2a;
   min-height:100vh;
 }
@@ -19,19 +20,32 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:40px 20px 20px;
-  text-align:center;
+  padding:30px 16px 20px;
 }
 
-/* الرسائل */
-.welcome,
-.daily{
-  font-size:20px;
-  line-height:1.7;
+/* ===== الرسائل ===== */
+.message{
+  text-align:center;
+  margin-bottom:22px;
+  animation:fadeDown .7s ease forwards;
+}
+
+.message .moon{
+  font-size:24px;
+  margin-bottom:6px;
+}
+
+.message h1{
+  font-size:19px;
   font-weight:600;
-  margin-bottom:25px;
-  opacity:0;
-  animation:fadeDown 0.8s ease forwards;
+  margin:4px 0;
+}
+
+.message p{
+  font-size:14.5px;
+  line-height:1.7;
+  margin:0;
+  opacity:.9;
 }
 
 @keyframes fadeDown{
@@ -39,12 +53,16 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
-/* شاشة التسجيل */
-.subtitle{
-  font-size:16px;
+/* ===== التسجيل ===== */
+.register-box{
+  text-align:center;
+  margin-top:10px;
+}
+
+.register-box .subtitle{
+  font-size:15px;
   line-height:1.8;
-  margin-bottom:20px;
-  color:#5c4a36;
+  margin-bottom:16px;
 }
 
 .input-group{
@@ -54,24 +72,24 @@ body{
 }
 
 input{
+  flex:1;
   padding:10px 14px;
-  font-size:15px;
-  border-radius:20px;
+  font-size:14px;
+  border-radius:18px;
   border:1px solid #d6c6a5;
   outline:none;
-  width:60%;
-  font-family:'Cairo', sans-serif;
+  font-family:'Tajawal', sans-serif;
 }
 
 button{
   padding:10px 16px;
-  border-radius:20px;
+  font-size:14px;
+  border-radius:18px;
   border:none;
   background:#7a9b7e;
   color:white;
-  font-size:14px;
   cursor:pointer;
-  font-family:'Cairo', sans-serif;
+  font-family:'Tajawal', sans-serif;
 }
 
 button:hover{
@@ -86,50 +104,62 @@ button:hover{
 
 <div class="container">
 
-  <!-- تسجيل الاسم -->
+  <!-- ===== شاشة التسجيل ===== -->
   <div id="registerBox">
-    <div class="welcome" style="animation:none; opacity:1;">
-      🌙 رمضان كريم
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>رمضان كريم</h1>
+      <p>أدخل اسمك ليصلك كل جديد يوميًا خلال الشهر المبارك</p>
     </div>
 
-    <div class="subtitle">
-      أدخل اسمك لتصلك تذكيرات يومية خفيفة  
-      <br>ترافقك طوال الشهر
-    </div>
+    <div class="register-box">
+      <div class="subtitle">
+        متابعة خفيفة • تذكير • أجر بإذن الله
+      </div>
 
-    <div class="input-group">
-      <input type="text" id="username" placeholder="اسمك">
-      <button onclick="saveName()">متابعة</button>
+      <div class="input-group">
+        <input type="text" id="username" placeholder="اسمك">
+        <button onclick="saveName()">متابعة</button>
+      </div>
     </div>
   </div>
 
-  <!-- رسالة الترحيب -->
+  <!-- ===== رسالة الترحيب ===== -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
 
 <script>
-const nameKey = "ramadan_username";
+const STORAGE_KEY = "ramadan_user_name";
 
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
-  localStorage.setItem(nameKey, name);
+
+  localStorage.setItem(STORAGE_KEY, name);
   showWelcome(name, true);
 }
 
-function showWelcome(name, first){
+function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
 
-  box.innerHTML = first
-  ? `<div class="welcome">🌙 مرحبًا بك يا ${name}<br>نسأل الله أن يبارك لك في هذا الشهر</div>`
-  : `<div class="daily">🌙 مرحبًا بعودتك يا ${name}<br>نسأل الله أن يكتب لك الأجر اليوم</div>`;
+  box.innerHTML = `
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>مرحبًا ${name}</h1>
+      <p>
+        ${firstTime 
+          ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه"
+          : "نسأل الله أن يكتب لك الأجر اليوم"}
+      </p>
+    </div>
+  `;
 }
 
 window.onload = () => {
-  const savedName = localStorage.getItem(nameKey);
+  const savedName = localStorage.getItem(STORAGE_KEY);
   if(savedName){
     showWelcome(savedName, false);
   }
