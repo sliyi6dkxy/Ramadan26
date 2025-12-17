@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إمساكية رمضان</title>
 
-<!-- خط Tajawal -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -23,7 +22,6 @@ body{
   padding:34px 18px 24px;
 }
 
-/* ===== الرسائل ===== */
 .message{
   text-align:center;
   margin-bottom:26px;
@@ -31,18 +29,18 @@ body{
 }
 
 .message .moon{
-  font-size:28px;        /* كان 24 */
+  font-size:28px;
   margin-bottom:8px;
 }
 
 .message h1{
-  font-size:23px;        /* كان 19 */
+  font-size:23px;
   font-weight:600;
   margin:6px 0;
 }
 
 .message p{
-  font-size:17px;        /* كان 14.5 */
+  font-size:17px;
   line-height:1.8;
   margin:0;
   opacity:.9;
@@ -53,14 +51,13 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
-/* ===== التسجيل ===== */
 .register-box{
   text-align:center;
   margin-top:14px;
 }
 
 .register-box .subtitle{
-  font-size:16.5px;      /* كان 15 */
+  font-size:16.5px;
   line-height:1.9;
   margin-bottom:18px;
 }
@@ -74,7 +71,7 @@ body{
 input{
   flex:1;
   padding:12px 16px;
-  font-size:16px;        /* كان 14 */
+  font-size:16px;
   border-radius:20px;
   border:1px solid #d6c6a5;
   outline:none;
@@ -83,7 +80,7 @@ input{
 
 button{
   padding:12px 18px;
-  font-size:16px;        /* كان 14 */
+  font-size:16px;
   border-radius:20px;
   border:none;
   background:#7a9b7e;
@@ -104,7 +101,7 @@ button:hover{
 
 <div class="container">
 
-  <!-- ===== شاشة التسجيل ===== -->
+  <!-- شاشة التسجيل -->
   <div id="registerBox">
     <div class="message">
       <div class="moon">🌙</div>
@@ -124,20 +121,47 @@ button:hover{
     </div>
   </div>
 
-  <!-- ===== رسالة الترحيب ===== -->
+  <!-- رسالة الترحيب -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
 
 <script>
 const STORAGE_KEY = "ramadan_user_name";
+const USER_ID_KEY = "ramadan_user_id";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIJ_T_bSA4ik7mVcnrPSEJCrrdXtZLs58rYzc9KpnaD40V1eD38wYTEolic6nqCxAeYw/exec";
+
+function generateUserId(){
+  return 'u_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+}
+
+function sendToSheet(name, userId){
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      name: name,
+      user_id: userId
+    })
+  }).catch(err => console.error(err));
+}
 
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
 
+  let userId = localStorage.getItem(USER_ID_KEY);
+  let firstTime = false;
+
+  if(!userId){
+    userId = generateUserId();
+    localStorage.setItem(USER_ID_KEY, userId);
+    firstTime = true;
+  }
+
   localStorage.setItem(STORAGE_KEY, name);
-  showWelcome(name, true);
+  sendToSheet(name, userId);
+  showWelcome(name, firstTime);
 }
 
 function showWelcome(name, firstTime){
@@ -160,7 +184,10 @@ function showWelcome(name, firstTime){
 
 window.onload = () => {
   const savedName = localStorage.getItem(STORAGE_KEY);
-  if(savedName){
+  const userId = localStorage.getItem(USER_ID_KEY);
+
+  if(savedName && userId){
+    sendToSheet(savedName, userId);
     showWelcome(savedName, false);
   }
 };
