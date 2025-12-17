@@ -3,104 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إمساكية رمضان</title>
-
+<title>رمضان كريم</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 body{
   margin:0;
   font-family:'Tajawal', sans-serif;
   background:#fbf6e8;
   color:#4b3b2a;
-  min-height:100vh;
 }
-
 .container{
   max-width:420px;
-  margin:0 auto;
-  padding:34px 18px 24px;
+  margin:auto;
+  padding:30px 16px;
 }
-
-/* الرسائل */
 .message{
   text-align:center;
-  margin-bottom:26px;
-  animation:fadeDown .7s ease forwards;
+  margin-bottom:25px;
+  animation:fade .8s ease;
 }
-
-.message .moon{
-  font-size:28px;
-  margin-bottom:8px;
-}
-
-.message h1{
-  font-size:23px;
-  font-weight:600;
-  margin:6px 0;
-}
-
-.message p{
-  font-size:17px;
-  line-height:1.8;
-  margin:0;
-  opacity:.9;
-}
-
-@keyframes fadeDown{
-  from{opacity:0; transform:translateY(-10px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-/* التسجيل */
-.register-box{
-  text-align:center;
-  margin-top:14px;
-}
-
-.register-box .subtitle{
-  font-size:16.5px;
-  line-height:1.9;
-  margin-bottom:18px;
-}
-
-.input-group{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-
-input{
-  flex:1;
-  padding:12px 16px;
+.moon{font-size:32px;}
+h1{font-size:22px;margin:6px 0;}
+p{font-size:17px;line-height:1.8;}
+input,button{
+  width:100%;
+  padding:14px;
   font-size:16px;
-  border-radius:20px;
+  border-radius:18px;
   border:1px solid #d6c6a5;
-  outline:none;
+  margin-top:12px;
   font-family:'Tajawal', sans-serif;
 }
-
 button{
-  padding:12px 18px;
-  font-size:16px;
-  border-radius:20px;
-  border:none;
   background:#7a9b7e;
-  color:white;
-  cursor:pointer;
-  font-family:'Tajawal', sans-serif;
+  color:#fff;
+  border:none;
 }
-
-button:hover{
-  background:#688c6d;
-}
-
+button:active{transform:scale(.98);}
 .hidden{display:none;}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;}
+}
 </style>
 </head>
-
 <body>
-
 <div class="container">
 
   <!-- شاشة التسجيل -->
@@ -108,97 +55,71 @@ button:hover{
     <div class="message">
       <div class="moon">🌙</div>
       <h1>رمضان كريم</h1>
-      <p>ادخل اسمك لتصلك كل جديد يوميًا خلال الشهر المبارك</p>
+      <p>اكتب اسمك لتصلك التذكيرات اليومية والأجر بإذن الله</p>
     </div>
-
-    <div class="register-box">
-      <div class="subtitle">
-        متابعة خفيفة • تذكير • أجر بإذن الله
-      </div>
-
-      <div class="input-group">
-        <input type="text" id="username" placeholder="اسمك">
-        <button onclick="saveName()">متابعة</button>
-      </div>
-    </div>
+    <input id="nameInput" placeholder="اسمك">
+    <button onclick="start()">متابعة</button>
   </div>
 
-  <!-- رسالة الترحيب -->
-  <div id="welcomeBox" class="hidden"></div>
+  <!-- رسالة الترحيب بعد التسجيل -->
+  <div id="welcomeBox" class="hidden">
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1 id="welcomeText"></h1>
+      <p>نسأل الله أن يكتب لك الأجر اليوم</p>
+    </div>
+
+    <button onclick="completeDay()">أنجزت ورد اليوم ✔</button>
+  </div>
 
 </div>
 
 <script>
-// رابط Web App الخاص بك
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG73YLmMiYfYgQESvKyx-GBCbZuu_QIPnOvMKGTPMrsmyEjoqaL0MUYWwswCr9JxFxsA/exec";
+// ضع هنا رابط Web App من Google Apps Script
+const API = "https://script.google.com/macros/s/AKfycbzxp5nFg85gSiQWHeYNFXltGvqhkSHgaSXGLmSOIyjpdjN-JZxYydXgww9rwt4bQsjB4A/exec";
 
-const STORAGE_KEY = "ramadan_user_name";
+let userId = null; // معرف فريد لكل مستخدم
 
-function generateUserId(){
-  return 'uid-' + Math.random().toString(36).substr(2, 9);
-}
-
-function saveName(){
-  const name = document.getElementById("username").value.trim();
+// عند الضغط على متابعة
+function start(){
+  const name = document.getElementById("nameInput").value.trim();
   if(!name) return;
 
-  let userId = localStorage.getItem("ramadan_user_id");
-  const firstTime = !userId;
+  userId = Date.now().toString(); // يمكن تحسينه لاحقاً لتوليد معرف دائم
 
-  if(firstTime){
-    userId = generateUserId();
-    localStorage.setItem("ramadan_user_id", userId);
-  }
+  sendToSheet({
+    الاسم: name,
+    user_id: userId
+  });
 
-  localStorage.setItem(STORAGE_KEY, name);
-  showWelcome(name, firstTime);
-
-  // إرسال البيانات إلى Google Sheets
-  sendToSheet(name, userId, firstTime);
+  showWelcome(name);
 }
 
-function showWelcome(name, firstTime){
+// عرض الترحيب
+function showWelcome(name){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
-
-  box.innerHTML = `
-    <div class="message">
-      <div class="moon">🌙</div>
-      <h1>مرحبًا ${name}</h1>
-      <p>
-        ${firstTime ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه" : "نسأل الله أن يكتب لك الأجر اليوم"}
-      </p>
-    </div>
-  `;
+  document.getElementById("welcomeText").innerText = `مرحبًا ${name}`;
 }
 
-function sendToSheet(name, userId, firstTime){
-  const data = {
-    name: name,
+// عند ضغط زر إنهاء اليوم
+function completeDay(){
+  if(!userId) return;
+
+  sendToSheet({
     user_id: userId,
-    firstTime: firstTime
-  };
-
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => console.log("تم الإرسال", res))
-  .catch(err => console.error("خطأ في الإرسال:", err));
+    action: "complete"
+  });
 }
 
-window.onload = () => {
-  const savedName = localStorage.getItem(STORAGE_KEY);
-  if(savedName){
-    const userId = localStorage.getItem("ramadan_user_id") || generateUserId();
-    showWelcome(savedName, false);
-    sendToSheet(savedName, userId, false);
-  }
-};
+// إرسال البيانات للـ Google Sheets
+function sendToSheet(data){
+  fetch(API,{
+    method:"POST",
+    body: JSON.stringify(data)
+  }).catch(err=>console.log("خطأ في الإرسال:", err));
+}
 </script>
-
 </body>
 </html>
