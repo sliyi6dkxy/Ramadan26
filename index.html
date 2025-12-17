@@ -22,6 +22,7 @@ body{
   padding:34px 18px 24px;
 }
 
+/* الرسائل */
 .message{
   text-align:center;
   margin-bottom:26px;
@@ -51,6 +52,7 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
+/* التسجيل */
 .register-box{
   text-align:center;
   margin-top:14px;
@@ -106,7 +108,7 @@ button:hover{
     <div class="message">
       <div class="moon">🌙</div>
       <h1>رمضان كريم</h1>
-      <p>أدخل اسمك ليصلك كل جديد يوميًا خلال الشهر المبارك</p>
+      <p>ادخل اسمك لتصلك كل جديد يوميًا خلال الشهر المبارك</p>
     </div>
 
     <div class="register-box">
@@ -127,41 +129,32 @@ button:hover{
 </div>
 
 <script>
+// رابط Web App الخاص بك
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG73YLmMiYfYgQESvKyx-GBCbZuu_QIPnOvMKGTPMrsmyEjoqaL0MUYWwswCr9JxFxsA/exec";
+
 const STORAGE_KEY = "ramadan_user_name";
-const USER_ID_KEY = "ramadan_user_id";
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG73YLmMiYfYgQESvKyx-GBCbZuu_QIPnOvMKGTPMrsmyEjoqaL0MUYWwswCr9JxFxsA/exec"
 
 function generateUserId(){
-  return 'u_' + Date.now() + '_' + Math.floor(Math.random()*1000);
-}
-
-function sendToSheet(name, userId){
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      name: name,
-      user_id: userId
-    })
-  }).catch(err => console.error(err));
+  return 'uid-' + Math.random().toString(36).substr(2, 9);
 }
 
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
 
-  let userId = localStorage.getItem(USER_ID_KEY);
-  let firstTime = false;
+  let userId = localStorage.getItem("ramadan_user_id");
+  const firstTime = !userId;
 
-  if(!userId){
+  if(firstTime){
     userId = generateUserId();
-    localStorage.setItem(USER_ID_KEY, userId);
-    firstTime = true;
+    localStorage.setItem("ramadan_user_id", userId);
   }
 
   localStorage.setItem(STORAGE_KEY, name);
-  sendToSheet(name, userId);
   showWelcome(name, firstTime);
+
+  // إرسال البيانات إلى Google Sheets
+  sendToSheet(name, userId, firstTime);
 }
 
 function showWelcome(name, firstTime){
@@ -174,21 +167,35 @@ function showWelcome(name, firstTime){
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
       <p>
-        ${firstTime 
-          ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه"
-          : "نسأل الله أن يكتب لك الأجر اليوم"}
+        ${firstTime ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه" : "نسأل الله أن يكتب لك الأجر اليوم"}
       </p>
     </div>
   `;
 }
 
+function sendToSheet(name, userId, firstTime){
+  const data = {
+    name: name,
+    user_id: userId,
+    firstTime: firstTime
+  };
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => console.log("تم الإرسال", res))
+  .catch(err => console.error("خطأ في الإرسال:", err));
+}
+
 window.onload = () => {
   const savedName = localStorage.getItem(STORAGE_KEY);
-  const userId = localStorage.getItem(USER_ID_KEY);
-
-  if(savedName && userId){
-    sendToSheet(savedName, userId);
+  if(savedName){
+    const userId = localStorage.getItem("ramadan_user_id") || generateUserId();
     showWelcome(savedName, false);
+    sendToSheet(savedName, userId, false);
   }
 };
 </script>
