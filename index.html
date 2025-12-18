@@ -130,7 +130,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxRhvWI8OWMtbfNH8Oz6Sp_
 const NAME_KEY = "ramadan_user_name";
 const ID_KEY   = "ramadan_user_id";
 
-/* توليد user_id ثابت */
+/* user_id ثابت */
 function getUserId(){
   let id = localStorage.getItem(ID_KEY);
   if(!id){
@@ -140,28 +140,30 @@ function getUserId(){
   return id;
 }
 
-/* حفظ الاسم + إرسال للشيت */
+/* حفظ الاسم */
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
 
   localStorage.setItem(NAME_KEY, name);
-
   sendToSheet(name, "visit");
   showWelcome(name, true);
 }
 
-/* إرسال البيانات */
+/* إرسال البيانات (تم الإصلاح هنا) */
 function sendToSheet(name, action){
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       name: name,
       user_id: getUserId(),
       action: action
     })
-  }).catch(err => console.error(err));
+  });
 }
 
 /* رسالة الترحيب */
