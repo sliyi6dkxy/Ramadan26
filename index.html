@@ -75,7 +75,6 @@ input{
   border-radius:20px;
   border:1px solid #d6c6a5;
   outline:none;
-  font-family:'Tajawal', sans-serif;
 }
 
 button{
@@ -86,7 +85,6 @@ button{
   background:#7a9b7e;
   color:white;
   cursor:pointer;
-  font-family:'Tajawal', sans-serif;
 }
 
 button:hover{
@@ -101,6 +99,7 @@ button:hover{
 
 <div class="container">
 
+  <!-- شاشة التسجيل -->
   <div id="registerBox">
     <div class="message">
       <div class="moon">🌙</div>
@@ -120,51 +119,52 @@ button:hover{
     </div>
   </div>
 
+  <!-- رسالة الترحيب -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRhvWI8OWMtbfNH8Oz6Sp_1VgCeajOy2D_vhG4Rx66Sz1PBi077QBOVAPh78o2cHzq/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxRhvWI8OWMtbfNH8Oz6Sp_1VgCeajOy2D_vhG4Rx66Sz1PBi077QBOVAPh78o2cHzq/exec";
 
 const NAME_KEY = "ramadan_user_name";
-const ID_KEY = "ramadan_user_id";
+const ID_KEY   = "ramadan_user_id";
 
-function generateUserId(){
-  return "u_" + Date.now() + "_" + Math.random().toString(36).substring(2,8);
+/* توليد user_id ثابت */
+function getUserId(){
+  let id = localStorage.getItem(ID_KEY);
+  if(!id){
+    id = "u_" + Date.now() + "_" + Math.random().toString(36).substr(2,5);
+    localStorage.setItem(ID_KEY, id);
+  }
+  return id;
 }
 
-function sendToSheet(payload){
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).catch(err => console.error(err));
-}
-
+/* حفظ الاسم + إرسال للشيت */
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
 
-  let userId = localStorage.getItem(ID_KEY);
-  if(!userId){
-    userId = generateUserId();
-    localStorage.setItem(ID_KEY, userId);
-  }
-
   localStorage.setItem(NAME_KEY, name);
 
-  sendToSheet({
-    name: name,
-    user_id: userId,
-    action: "visit"
-  });
-
+  sendToSheet(name, "visit");
   showWelcome(name, true);
 }
 
+/* إرسال البيانات */
+function sendToSheet(name, action){
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name,
+      user_id: getUserId(),
+      action: action
+    })
+  }).catch(err => console.error(err));
+}
+
+/* رسالة الترحيب */
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
@@ -175,7 +175,7 @@ function showWelcome(name, firstTime){
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
       <p>
-        ${firstTime 
+        ${firstTime
           ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه"
           : "نسأل الله أن يكتب لك الأجر اليوم"}
       </p>
@@ -183,17 +183,11 @@ function showWelcome(name, firstTime){
   `;
 }
 
+/* عند الدخول */
 window.onload = () => {
   const name = localStorage.getItem(NAME_KEY);
-  const userId = localStorage.getItem(ID_KEY);
-
-  if(name && userId){
-    sendToSheet({
-      name: name,
-      user_id: userId,
-      action: "visit"
-    });
-
+  if(name){
+    sendToSheet(name, "visit");
     showWelcome(name, false);
   }
 };
