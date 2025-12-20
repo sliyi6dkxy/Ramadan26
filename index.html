@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إمساكية رمضان</title>
 
+<!-- خط Tajawal -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -22,6 +23,7 @@ body{
   padding:34px 18px 24px;
 }
 
+/* ===== الرسائل ===== */
 .message{
   text-align:center;
   margin-bottom:26px;
@@ -29,12 +31,12 @@ body{
 }
 
 .message .moon{
-  font-size:28px;
+  font-size:30px;
   margin-bottom:8px;
 }
 
 .message h1{
-  font-size:23px;
+  font-size:24px;
   font-weight:600;
   margin:6px 0;
 }
@@ -51,20 +53,20 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
+/* ===== التسجيل ===== */
 .register-box{
   text-align:center;
-  margin-top:14px;
+  margin-top:16px;
 }
 
 .register-box .subtitle{
-  font-size:16.5px;
+  font-size:16px;
   line-height:1.9;
   margin-bottom:18px;
 }
 
 .input-group{
   display:flex;
-  justify-content:center;
   gap:10px;
 }
 
@@ -109,7 +111,7 @@ button:hover{
 
     <div class="register-box">
       <div class="subtitle">
-        متابعة خفيفة • تذكير • أجر بإذن الله
+        تذكير • متابعة • أجر بإذن الله
       </div>
 
       <div class="input-group">
@@ -125,16 +127,17 @@ button:hover{
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxRhvWI8OWMtbfNH8Oz6Sp_1VgCeajOy2D_vhG4Rx66Sz1PBi077QBOVAPh78o2cHzq/exec";
+/* 🔗 رابط Google Apps Script */
+const API_URL = "https://script.google.com/macros/s/AKfycbx3RS-hPuifQMO0Fpkz5iYrausYEDlmMbw8thMg12QxpmAs_BJxLhJ0wN7gU7tBlsKvng/exec";
 
 const NAME_KEY = "ramadan_user_name";
 const ID_KEY   = "ramadan_user_id";
 
-/* user_id ثابت */
+/* إنشاء user_id ثابت */
 function getUserId(){
   let id = localStorage.getItem(ID_KEY);
   if(!id){
-    id = "u_" + Date.now() + "_" + Math.random().toString(36).substr(2,5);
+    id = "u_" + Date.now();
     localStorage.setItem(ID_KEY, id);
   }
   return id;
@@ -150,19 +153,16 @@ function saveName(){
   showWelcome(name, true);
 }
 
-/* إرسال البيانات (تم الإصلاح هنا) */
+/* الإرسال إلى Google Sheet (الطريقة الصحيحة) */
 function sendToSheet(name, action){
+  const data = new URLSearchParams();
+  data.append("name", name);
+  data.append("user_id", getUserId());
+  data.append("action", action);
+
   fetch(API_URL, {
     method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      name: name,
-      user_id: getUserId(),
-      action: action
-    })
+    body: data
   });
 }
 
