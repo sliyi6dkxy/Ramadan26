@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إمساكية رمضان</title>
+<title>عيدك مبارك</title>
 
-<!-- خط Tajawal -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -20,80 +19,90 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:34px 18px 24px;
+  padding:32px 18px 28px;
 }
 
-/* ===== الرسائل ===== */
-.message{
+/* ===== ترحيب العيد ===== */
+.eid-welcome{
   text-align:center;
   margin-bottom:26px;
-  animation:fadeDown .7s ease forwards;
+  animation:fadeUp .9s ease forwards;
 }
 
-.message .moon{
-  font-size:30px;
+.eid-welcome h1{
+  font-size:24px;
+  font-weight:600;
+  margin:0 0 8px;
+}
+
+.eid-welcome p{
+  font-size:17px;
+  opacity:.9;
+  margin:0;
+}
+
+/* ===== صورة العيد ===== */
+.eid-image{
+  text-align:center;
+  margin:24px 0;
+}
+
+.eid-image img{
+  max-width:160px;
+  border-radius:14px;
+}
+
+/* ===== رسالة المستخدم ===== */
+.message-box{
+  margin-bottom:26px;
+}
+
+.message-box textarea{
+  width:100%;
+  min-height:90px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid #d6c6a5;
+  font-family:'Tajawal', sans-serif;
+  font-size:15px;
+  resize:none;
+}
+
+/* ===== الإحصائيات ===== */
+.stats{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:26px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.stats h3{
+  margin:0 0 12px;
+  font-size:17px;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  font-size:15px;
   margin-bottom:8px;
 }
 
-.message h1{
-  font-size:24px;
-  font-weight:600;
-  margin:6px 0;
+.stat:last-child{margin-bottom:0}
+
+/* ===== وداع ===== */
+.goodbye{
+  text-align:center;
+  font-size:15px;
+  opacity:.85;
 }
 
-.message p{
-  font-size:17px;
-  line-height:1.8;
-  margin:0;
-  opacity:.9;
-}
-
-@keyframes fadeDown{
-  from{opacity:0; transform:translateY(-10px);}
+/* ===== أنيميشن ===== */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(12px);}
   to{opacity:1; transform:translateY(0);}
 }
-
-/* ===== التسجيل ===== */
-.register-box{
-  text-align:center;
-  margin-top:16px;
-}
-
-.register-box .subtitle{
-  font-size:16px;
-  line-height:1.9;
-  margin-bottom:18px;
-}
-
-.input-group{
-  display:flex;
-  gap:10px;
-}
-
-input{
-  flex:1;
-  padding:12px 16px;
-  font-size:16px;
-  border-radius:20px;
-  border:1px solid #d6c6a5;
-  outline:none;
-}
-
-button{
-  padding:12px 18px;
-  font-size:16px;
-  border-radius:20px;
-  border:none;
-  background:#7a9b7e;
-  color:white;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#688c6d;
-}
-
-.hidden{display:none;}
 </style>
 </head>
 
@@ -101,97 +110,76 @@ button:hover{
 
 <div class="container">
 
-  <!-- شاشة التسجيل -->
-  <div id="registerBox">
-    <div class="message">
-      <div class="moon">🌙</div>
-      <h1>رمضان كريم</h1>
-      <p>أدخل اسمك ليصلك كل جديد يوميًا خلال الشهر المبارك</p>
+  <!-- ترحيب -->
+  <div class="eid-welcome">
+    <h1 id="welcomeText">عيدك مبارك 🌙</h1>
+    <p>تقبل الله طاعتكم وأعاد الله عليكم العيد بالخير</p>
+  </div>
+
+  <!-- صورة العيد -->
+  <div class="eid-image">
+    <!-- ضع صورتك أنت -->
+    <img src="eid.png" alt="عيد فطر مبارك">
+  </div>
+
+  <!-- رسالة -->
+  <div class="message-box">
+    <textarea id="eidMessage" placeholder="اكتب رسالة تحب أن تتركها لنا 🌸"></textarea>
+  </div>
+
+  <!-- إحصائيات -->
+  <div class="stats">
+    <h3>إحصائياتك</h3>
+
+    <div class="stat">
+      <span>⭐ نقاط الدخول</span>
+      <span id="visitPoints">0</span>
     </div>
 
-    <div class="register-box">
-      <div class="subtitle">
-        تذكير • متابعة • أجر بإذن الله
-      </div>
+    <div class="stat">
+      <span>🎯 نقاط الإنجاز</span>
+      <span id="achievementPoints">0</span>
+    </div>
 
-      <div class="input-group">
-        <input type="text" id="username" placeholder="اسمك">
-        <button onclick="saveName()">متابعة</button>
-      </div>
+    <div class="stat">
+      <span>🟢 أيام الإنجاز</span>
+      <span id="achievementDays">0</span>
+    </div>
+
+    <div class="stat">
+      <span>🕰️ أول زيارة</span>
+      <span id="firstVisit">—</span>
     </div>
   </div>
 
-  <!-- رسالة الترحيب -->
-  <div id="welcomeBox" class="hidden"></div>
+  <!-- وداع -->
+  <div class="goodbye">
+    نسعد بوجودك معنا، وكل عام وأنت بخير 🤍
+  </div>
 
 </div>
 
 <script>
-/* 🔗 رابط Google Apps Script */
-const API_URL = "https://script.google.com/macros/s/AKfycbyjkXiZaD2yJCzVHh2d16mbHR19rTXSYJ0pGdjxXYI5pLM41w3P_Psj2hNpLjEgVVU36w/exec";
-
+// ===== مفاتيح التخزين =====
 const NAME_KEY = "ramadan_user_name";
-const ID_KEY   = "ramadan_user_id";
+const FIRST_VISIT_KEY = "first_visit_date";
 
-/* إنشاء user_id ثابت */
-function getUserId(){
-  let id = localStorage.getItem(ID_KEY);
-  if(!id){
-    id = "u_" + Date.now();
-    localStorage.setItem(ID_KEY, id);
-  }
-  return id;
-}
-
-/* حفظ الاسم */
-function saveName(){
-  const name = document.getElementById("username").value.trim();
-  if(!name) return;
-
-  localStorage.setItem(NAME_KEY, name);
-  sendToSheet(name, "visit");
-  showWelcome(name, true);
-}
-
-/* الإرسال إلى Google Sheet (الطريقة الصحيحة) */
-function sendToSheet(name, action){
-  const data = new URLSearchParams();
-  data.append("name", name);
-  data.append("user_id", getUserId());
-  data.append("action", action);
-
-  fetch(API_URL, {
-    method: "POST",
-    body: data
-  });
-}
-
-/* رسالة الترحيب */
-function showWelcome(name, firstTime){
-  document.getElementById("registerBox").classList.add("hidden");
-  const box = document.getElementById("welcomeBox");
-  box.classList.remove("hidden");
-
-  box.innerHTML = `
-    <div class="message">
-      <div class="moon">🌙</div>
-      <h1>مرحبًا ${name}</h1>
-      <p>
-        ${firstTime
-          ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه"
-          : "نسأل الله أن يكتب لك الأجر اليوم"}
-      </p>
-    </div>
-  `;
-}
-
-/* عند الدخول */
+// ===== تحميل البيانات =====
 window.onload = () => {
-  const name = localStorage.getItem(NAME_KEY);
-  if(name){
-    sendToSheet(name, "visit");
-    showWelcome(name, false);
+  const name = localStorage.getItem(NAME_KEY) || "ضيفنا الكريم";
+  document.getElementById("welcomeText").textContent = `عيدك مبارك يا ${name} 🌙`;
+
+  let firstVisit = localStorage.getItem(FIRST_VISIT_KEY);
+  if(!firstVisit){
+    firstVisit = new Date().toLocaleDateString("ar-EG");
+    localStorage.setItem(FIRST_VISIT_KEY, firstVisit);
   }
+  document.getElementById("firstVisit").textContent = firstVisit;
+
+  // قيم مؤقتة (ستأتي من Google Sheets لاحقًا)
+  document.getElementById("visitPoints").textContent = 0;
+  document.getElementById("achievementPoints").textContent = 0;
+  document.getElementById("achievementDays").textContent = 0;
 };
 </script>
 
