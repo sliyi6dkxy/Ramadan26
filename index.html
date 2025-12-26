@@ -20,7 +20,7 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:34px 18px 42px;
+  padding:26px 18px 32px;
   position:relative;
   z-index:2;
 }
@@ -28,60 +28,60 @@ body{
 /* ===== ترحيب ===== */
 .eid-welcome{
   text-align:center;
-  margin-bottom:26px;
+  margin-bottom:18px;
   animation:fadeUp .8s ease forwards;
 }
 
 .eid-welcome h1{
-  font-size:24px;
+  font-size:23px;
   font-weight:600;
-  margin:0 0 6px;
+  margin:0 0 4px;
 }
 
 .moon{
-  font-size:22px;
-  margin-bottom:8px;
+  font-size:20px;
+  margin-bottom:6px;
 }
 
 .eid-welcome p{
-  font-size:16px;
+  font-size:15.5px;
   opacity:.9;
-  line-height:1.7;
+  line-height:1.6;
 }
 
 /* ===== صورة ===== */
 .eid-image{
   text-align:center;
-  margin:30px 0 34px;
+  margin:20px 0 22px;
 }
 
 .eid-image img{
-  width:220px;
+  width:210px;
   max-width:90%;
-  border-radius:18px;
+  border-radius:16px;
 }
 
 /* ===== رسالة ===== */
 .message-box{
-  margin-bottom:38px;
+  margin-bottom:24px;
 }
 
 .message-row{
   display:flex;
-  gap:10px;
+  gap:8px;
 }
 
 .message-row input{
   flex:1;
-  padding:12px 15px;
-  font-size:15px;
+  padding:11px 14px;
+  font-size:14.5px;
   border-radius:14px;
   border:1px solid #d6c6a5;
 }
 
 .send-btn{
-  padding:0 18px;
-  font-size:15px;
+  padding:0 16px;
+  font-size:14.5px;
   border-radius:14px;
   border:none;
   background:#7a9b7e;
@@ -93,66 +93,61 @@ body{
 
 .thanks{
   text-align:center;
-  font-size:19px;
+  font-size:17.5px;
   font-weight:600;
-  margin-top:14px;
+  margin-top:10px;
   animation:fadeUp .6s ease forwards;
 }
 
 /* ===== إحصائيات ===== */
 .stats{
   background:#fff;
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:30px;
-  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  border-radius:15px;
+  padding:12px 14px;
+  margin-bottom:22px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
 .stats h3{
   text-align:center;
-  font-size:16.5px;
-  margin-bottom:12px;
+  font-size:15.8px;
+  margin-bottom:10px;
 }
 
 .stat{
   display:flex;
   justify-content:space-between;
-  font-size:14.5px;
-  margin-bottom:8px;
+  font-size:14px;
+  margin-bottom:6px;
 }
 
 /* ===== وداع ===== */
 .goodbye{
   text-align:center;
-  font-size:15.5px;
+  font-size:15px;
   opacity:.85;
-  margin-top:16px;
+  margin-top:10px;
 }
 
-/* ===== بالونات ===== */
-.balloon{
+/* ===== بالونات قديمة (دوائر) ===== */
+#balloons{
   position:fixed;
-  bottom:-60px;
-  font-size:24px;
-  animation:floatUp linear forwards;
+  inset:0;
   z-index:1;
+  pointer-events:none;
 }
 
-@keyframes floatUp{
-  to{
-    transform:translateY(-120vh);
-    opacity:0;
-  }
-}
-
+/* ===== أنيميشن ===== */
 @keyframes fadeUp{
-  from{opacity:0; transform:translateY(12px);}
+  from{opacity:0; transform:translateY(10px);}
   to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
+
+<canvas id="balloons"></canvas>
 
 <div class="container">
 
@@ -183,12 +178,14 @@ body{
 </div>
 
 <script>
+/* ===== الاسم ===== */
 const NAME_KEY = "ramadan_user_name";
 const MESSAGE_SENT_KEY = "eid_message_sent";
 
 const name = localStorage.getItem(NAME_KEY) || "ضيفنا الكريم";
 document.getElementById("welcomeText").textContent = `عيدك مبارك يا ${name}`;
 
+/* ===== الرسالة ===== */
 const box = document.getElementById("messageBox");
 
 function renderMessageBox(){
@@ -213,17 +210,40 @@ function sendMessage(){
 
 renderMessageBox();
 
-/* ===== بالونات ملونة ===== */
-const emojis = ["🎈","🎈","🎈"];
-for(let i=0;i<18;i++){
-  const b=document.createElement("div");
-  b.className="balloon";
-  b.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-  b.style.left=Math.random()*100+"%";
-  b.style.animationDuration=10+Math.random()*8+"s";
-  document.body.appendChild(b);
-  setTimeout(()=>b.remove(),20000);
+/* ===== بالونات قديمة (دوائر ملوّنة) ===== */
+const canvas = document.getElementById("balloons");
+const ctx = canvas.getContext("2d");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let circles = Array.from({length:22},()=>({
+  x:Math.random()*canvas.width,
+  y:canvas.height+Math.random()*200,
+  r:6+Math.random()*8,
+  s:0.6+Math.random()*1.2,
+  c:`hsl(${Math.random()*360},70%,70%)`
+}));
+
+let anim;
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  circles.forEach(c=>{
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+    ctx.fillStyle=c.c;
+    ctx.fill();
+    c.y-=c.s;
+    if(c.y<-20) c.y=canvas.height+40;
+  });
+  anim=requestAnimationFrame(animate);
 }
+animate();
+
+setTimeout(()=>{
+  cancelAnimationFrame(anim);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+},20000);
 </script>
 
 </body>
