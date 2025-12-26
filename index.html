@@ -25,22 +25,11 @@ body{
   z-index:2;
 }
 
-/* ===== تأثير دخول موحد ===== */
-.section{
-  opacity:0;
-  transform:translateY(14px);
-  animation:fadeUp .7s ease forwards;
-}
-
-.section.delay1{animation-delay:.1s}
-.section.delay2{animation-delay:.2s}
-.section.delay3{animation-delay:.3s}
-.section.delay4{animation-delay:.4s}
-
 /* ===== ترحيب ===== */
 .eid-welcome{
   text-align:center;
   margin-bottom:18px;
+  animation:fadeUp .8s ease forwards;
 }
 
 .eid-welcome h1{
@@ -60,7 +49,7 @@ body{
   line-height:1.6;
 }
 
-/* ===== صورة (ثابتة بدون تحريك) ===== */
+/* ===== صورة ===== */
 .eid-image{
   text-align:center;
   margin:20px 0 22px;
@@ -88,7 +77,6 @@ body{
   font-size:14.5px;
   border-radius:14px;
   border:1px solid #d6c6a5;
-  font-family:'Tajawal', sans-serif;
 }
 
 .send-btn{
@@ -99,7 +87,6 @@ body{
   background:#7a9b7e;
   color:white;
   cursor:pointer;
-  font-family:'Tajawal', sans-serif;
 }
 
 .send-btn:hover{background:#688c6d}
@@ -109,6 +96,7 @@ body{
   font-size:17.5px;
   font-weight:600;
   margin-top:10px;
+  animation:fadeUp .6s ease forwards;
 }
 
 /* ===== إحصائيات ===== */
@@ -141,7 +129,7 @@ body{
   margin-top:10px;
 }
 
-/* ===== بالونات ===== */
+/* ===== بالونات قديمة (دوائر) ===== */
 #balloons{
   position:fixed;
   inset:0;
@@ -149,12 +137,10 @@ body{
   pointer-events:none;
 }
 
-/* ===== أنيميشن الدخول ===== */
+/* ===== أنيميشن ===== */
 @keyframes fadeUp{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
@@ -165,19 +151,19 @@ body{
 
 <div class="container">
 
-  <div class="eid-welcome section delay1">
+  <div class="eid-welcome">
     <h1 id="welcomeText">عيدك مبارك</h1>
     <div class="moon">🌙</div>
     <p>تقبل الله طاعتكم وأعاد الله عليكم العيد بالخير</p>
   </div>
 
-  <div class="eid-image section delay2">
+  <div class="eid-image">
     <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png">
   </div>
 
-  <div class="message-box section delay3" id="messageBox"></div>
+  <div class="message-box" id="messageBox"></div>
 
-  <div class="stats section delay4">
+  <div class="stats">
     <h3>إحصائياتك</h3>
     <div class="stat"><span>⭐ نقاط الدخول</span><span>—</span></div>
     <div class="stat"><span>🎯 نقاط الإنجاز</span><span>—</span></div>
@@ -185,7 +171,7 @@ body{
     <div class="stat"><span>🕰️ أول زيارة</span><span>—</span></div>
   </div>
 
-  <div class="goodbye section delay4">
+  <div class="goodbye">
     نسعد بوجودك معنا، وكل عام وأنت بخير 🤍
   </div>
 
