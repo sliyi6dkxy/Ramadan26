@@ -214,21 +214,26 @@ function startCounter(){
     const [fh, fm] = FAJR_TIME.split(":").map(Number);
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
-    const fajr = new Date();
-    fajr.setHours(fh, fm, 0);
+    // الفجر والمغرب اليوم
+    const fajrToday = new Date();
+    fajrToday.setHours(fh, fm, 0, 0);
 
-    const maghrib = new Date();
-    maghrib.setHours(mh, mm, 0);
+    const maghribToday = new Date();
+    maghribToday.setHours(mh, mm, 0, 0);
 
     let target, mode;
 
-    if(now < maghrib){
-      target = maghrib;
-      mode = "maghrib";
-    }else{
-      target = fajr;
-      if(now > fajr) target.setDate(target.getDate()+1);
-      mode = "fajr";
+    if(now < fajrToday){
+        target = fajrToday;
+        mode = "fajr";
+    } else if(now < maghribToday){
+        target = maghribToday;
+        mode = "maghrib";
+    } else {
+        // بعد المغرب → الفجر غدًا
+        target = new Date(fajrToday);
+        target.setDate(target.getDate()+1);
+        mode = "fajr";
     }
 
     const diff = target - now;
