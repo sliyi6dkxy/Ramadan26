@@ -20,125 +20,127 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:26px 18px 34px;
+  padding:30px 18px 40px;
   position:relative;
   z-index:2;
 }
 
-/* ===== ترحيب العيد ===== */
+/* ===== ترحيب ===== */
 .eid-welcome{
   text-align:center;
-  margin-bottom:24px;
+  margin-bottom:30px;
   animation:fadeUp .8s ease forwards;
 }
 
 .eid-welcome h1{
-  font-size:23px;
+  font-size:24px;
   font-weight:600;
-  margin:0 0 8px;
+  margin-bottom:10px;
 }
 
 .eid-welcome p{
-  font-size:16.5px;
+  font-size:17px;
   opacity:.9;
-  margin:0;
 }
 
-/* ===== صورة العيد ===== */
+/* ===== صورة ===== */
 .eid-image{
   text-align:center;
-  margin:18px 0 26px;
+  margin:26px 0 32px;
 }
 
 .eid-image img{
-  max-width:150px;
-  border-radius:14px;
+  max-width:170px;
+  border-radius:16px;
 }
 
-/* ===== رسالة المستخدم ===== */
+/* ===== رسالة ===== */
 .message-box{
-  margin-bottom:30px;
+  margin-bottom:36px;
 }
 
 .message-row{
   display:flex;
-  gap:8px;
+  gap:10px;
 }
 
 .message-row input{
   flex:1;
-  padding:12px 14px;
-  font-size:14.5px;
-  border-radius:14px;
+  padding:13px 16px;
+  font-size:15px;
+  border-radius:16px;
   border:1px solid #d6c6a5;
-  font-family:'Tajawal', sans-serif;
 }
 
 .send-btn{
-  padding:0 18px;
-  font-size:14.5px;
-  border-radius:14px;
+  padding:0 20px;
+  font-size:15px;
+  border-radius:16px;
   border:none;
   background:#7a9b7e;
   color:white;
   cursor:pointer;
-  font-family:'Tajawal', sans-serif;
 }
 
-.send-btn:hover{
-  background:#688c6d;
-}
+.send-btn:hover{background:#688c6d}
 
 /* رسالة الشكر */
 .thanks{
   text-align:center;
-  font-size:15.5px;
-  margin-top:10px;
-  opacity:0;
+  font-size:18px;
+  font-weight:600;
+  margin-top:16px;
   animation:fadeUp .6s ease forwards;
 }
 
-/* ===== الإحصائيات ===== */
+/* ===== إحصائيات ===== */
 .stats{
   background:#fff;
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:26px;
-  box-shadow:0 4px 12px rgba(0,0,0,.05);
-  text-align:center;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:34px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
 }
 
 .stats h3{
-  margin:0 0 14px;
-  font-size:16.5px;
+  text-align:center;
+  font-size:17.5px;
+  margin-bottom:16px;
 }
 
 .stat{
   display:flex;
   justify-content:space-between;
-  font-size:14.5px;
-  margin-bottom:8px;
+  font-size:15px;
+  margin-bottom:10px;
 }
 
 /* ===== وداع ===== */
 .goodbye{
   text-align:center;
-  font-size:15.5px;
+  font-size:16px;
   opacity:.85;
-  margin-top:10px;
+  margin-top:12px;
 }
 
 /* ===== بالونات ===== */
-#balloons{
+.balloon{
   position:fixed;
-  inset:0;
-  pointer-events:none;
+  bottom:-60px;
+  font-size:26px;
+  animation:floatUp linear forwards;
   z-index:1;
 }
 
-/* ===== أنيميشن ===== */
+@keyframes floatUp{
+  to{
+    transform:translateY(-120vh);
+    opacity:0;
+  }
+}
+
 @keyframes fadeUp{
-  from{opacity:0; transform:translateY(10px);}
+  from{opacity:0; transform:translateY(12px);}
   to{opacity:1; transform:translateY(0);}
 }
 </style>
@@ -146,30 +148,19 @@ body{
 
 <body>
 
-<canvas id="balloons"></canvas>
-
 <div class="container">
 
-  <!-- ترحيب -->
   <div class="eid-welcome">
     <h1 id="welcomeText">عيدك مبارك 🌙</h1>
     <p>تقبل الله طاعتكم وأعاد الله عليكم العيد بالخير</p>
   </div>
 
-  <!-- صورة -->
   <div class="eid-image">
-    <img src="eid.png" alt="عيد فطر مبارك">
+    <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png">
   </div>
 
-  <!-- رسالة -->
-  <div class="message-box" id="messageBox">
-    <div class="message-row">
-      <input id="userMessage" type="text" placeholder="ضع رسالتك لنا 🌸">
-      <button class="send-btn" onclick="sendMessage()">إرسال</button>
-    </div>
-  </div>
+  <div class="message-box" id="messageBox"></div>
 
-  <!-- إحصائيات -->
   <div class="stats">
     <h3>إحصائياتك</h3>
     <div class="stat"><span>⭐ نقاط الدخول</span><span>—</span></div>
@@ -178,7 +169,6 @@ body{
     <div class="stat"><span>🕰️ أول زيارة</span><span>—</span></div>
   </div>
 
-  <!-- وداع -->
   <div class="goodbye">
     نسعد بوجودك معنا، وكل عام وأنت بخير 🤍
   </div>
@@ -186,49 +176,47 @@ body{
 </div>
 
 <script>
-/* ===== الاسم ===== */
 const NAME_KEY = "ramadan_user_name";
+const MESSAGE_SENT_KEY = "eid_message_sent";
+
 const name = localStorage.getItem(NAME_KEY) || "ضيفنا الكريم";
 document.getElementById("welcomeText").textContent = `عيدك مبارك يا ${name} 🌙`;
 
-/* ===== إرسال الرسالة ===== */
+const box = document.getElementById("messageBox");
+
+function renderMessageBox(){
+  if(localStorage.getItem(MESSAGE_SENT_KEY)){
+    box.innerHTML = `<div class="thanks">شكرًا لك على رسالتك 🤍</div>`;
+  }else{
+    box.innerHTML = `
+      <div class="message-row">
+        <input id="userMessage" placeholder="ضع رسالتك لنا 🌸">
+        <button class="send-btn" onclick="sendMessage()">إرسال</button>
+      </div>
+    `;
+  }
+}
+
 function sendMessage(){
   const input = document.getElementById("userMessage");
   if(!input.value.trim()) return;
 
-  const box = document.getElementById("messageBox");
-  box.innerHTML = `<div class="thanks">شكرًا لك على رسالتك 🤍</div>`;
+  localStorage.setItem(MESSAGE_SENT_KEY,"1");
+  renderMessageBox();
 }
+
+renderMessageBox();
 
 /* ===== بالونات ===== */
-const canvas = document.getElementById("balloons");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-let balloons = Array.from({length:25},()=>({
-  x:Math.random()*canvas.width,
-  y:canvas.height+Math.random()*200,
-  r:8+Math.random()*8,
-  s:1+Math.random()*1.5,
-  c:`hsl(${Math.random()*360},80%,70%)`
-}));
-
-let anim;
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  balloons.forEach(b=>{
-    ctx.beginPath();
-    ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    ctx.fillStyle=b.c;
-    ctx.fill();
-    b.y-=b.s;
-    if(b.y<-20) b.y=canvas.height+50;
-  });
-  anim=requestAnimationFrame(animate);
+for(let i=0;i<18;i++){
+  const b=document.createElement("div");
+  b.className="balloon";
+  b.textContent="🎈";
+  b.style.left=Math.random()*100+"%";
+  b.style.animationDuration=12+Math.random()*8+"s";
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),20000);
 }
-animate();
-setTimeout(()=>cancelAnimationFrame(anim),20000);
 </script>
 
 </body>
