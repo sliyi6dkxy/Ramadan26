@@ -60,7 +60,7 @@ body{
   line-height:1.6;
 }
 
-/* ===== صورة (تحريك خفيف) ===== */
+/* ===== صورة (ثابتة بدون تحريك) ===== */
 .eid-image{
   text-align:center;
   margin:20px 0 22px;
@@ -70,7 +70,6 @@ body{
   width:210px;
   max-width:90%;
   border-radius:16px;
-  animation:float 4s ease-in-out infinite;
 }
 
 /* ===== رسالة ===== */
@@ -89,6 +88,7 @@ body{
   font-size:14.5px;
   border-radius:14px;
   border:1px solid #d6c6a5;
+  font-family:'Tajawal', sans-serif;
 }
 
 .send-btn{
@@ -99,6 +99,7 @@ body{
   background:#7a9b7e;
   color:white;
   cursor:pointer;
+  font-family:'Tajawal', sans-serif;
 }
 
 .send-btn:hover{background:#688c6d}
@@ -148,17 +149,12 @@ body{
   pointer-events:none;
 }
 
-/* ===== أنيميشن ===== */
+/* ===== أنيميشن الدخول ===== */
 @keyframes fadeUp{
   to{
     opacity:1;
     transform:translateY(0);
   }
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-8px)}
 }
 </style>
 </head>
@@ -228,7 +224,7 @@ function sendMessage(){
 
 renderMessageBox();
 
-/* ===== بالونات ===== */
+/* ===== بالونات قديمة (دوائر ملوّنة) ===== */
 const canvas = document.getElementById("balloons");
 const ctx = canvas.getContext("2d");
 
