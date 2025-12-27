@@ -66,7 +66,6 @@ body{
 
 .input-group{
   display:flex;
-  justify-content:center;
   gap:10px;
 }
 
@@ -92,13 +91,13 @@ button{
 button:hover{background:#688c6d}
 .hidden{display:none}
 
-/* ===== عداد الصلاة ===== */
+/* ===== العداد ===== */
 .counter-box{
   background:#fff;
   border-radius:16px;
   padding:14px 12px;
   text-align:center;
-  margin:8px 0 22px;
+  margin:10px 0 22px;
   box-shadow:0 5px 12px rgba(0,0,0,.06);
   animation:fadeUp .6s ease forwards;
 }
@@ -106,7 +105,6 @@ button:hover{background:#688c6d}
 .counter-title{
   font-size:15.5px;
   margin-bottom:4px;
-  text-align:center;
 }
 
 .counter-time{
@@ -114,50 +112,11 @@ button:hover{background:#688c6d}
   font-weight:600;
   letter-spacing:2px;
   margin:6px 0;
-  text-align:center;
 }
 
 .counter-note{
-  font-size:14px;
-  opacity:.85;
-  text-align:center;
-}
-
-/* ===== تذكير ورد يومي ===== */
-.daily-reminder{
-  background:#fff;
-  border-radius:12px;
-  padding:14px 16px;
-  margin:22px 0 16px;
-  text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-  font-size:16px;
-  line-height:1.6;
-}
-
-/* ===== الصور الكبيرة ===== */
-.image-section{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  margin-bottom:16px;
-}
-
-.image-section img{
-  width:48%;
-  border-radius:12px;
-}
-
-/* ===== حديث أو نصيحة ===== */
-.daily-hadith{
-  background:#fff;
-  border-radius:12px;
-  padding:14px 16px;
-  margin-bottom:22px;
-  text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-  font-size:16px;
-  line-height:1.6;
+  font-size:14.5px;
+  opacity:.9;
 }
 
 @keyframes fadeUp{
@@ -171,7 +130,6 @@ button:hover{background:#688c6d}
 
 <div class="container">
 
-  <!-- شاشة التسجيل -->
   <div id="registerBox">
     <div class="message">
       <div class="moon">🌙</div>
@@ -180,10 +138,7 @@ button:hover{background:#688c6d}
     </div>
 
     <div class="register-box">
-      <div class="subtitle">
-        متابعة خفيفة • تذكير • أجر بإذن الله
-      </div>
-
+      <div class="subtitle">متابعة خفيفة • تذكير • أجر بإذن الله</div>
       <div class="input-group">
         <input type="text" id="username" placeholder="اسمك">
         <button onclick="saveName()">متابعة</button>
@@ -191,19 +146,16 @@ button:hover{background:#688c6d}
     </div>
   </div>
 
-  <!-- الترحيب + العداد + ورد يومي + الصور + حديث -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
 
 <script>
-/* ===== الإعدادات ===== */
 const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:12";
 const MAGHRIB_TIME = "18:47";
 const TIME_OFFSET_MINUTES = 0;
 
-/* ===== حفظ الاسم ===== */
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
@@ -211,7 +163,6 @@ function saveName(){
   showWelcome(name, true);
 }
 
-/* ===== الترحيب + العداد + ورد يومي + صور + حديث ===== */
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
@@ -221,7 +172,7 @@ function showWelcome(name, firstTime){
     <div class="message">
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
-      <p>${firstTime ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه" : "نسأل الله أن يكتب لك الأجر اليوم"}</p>
+      <p>${firstTime ? "نسأل الله أن يبارك لك في هذا الشهر" : "نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
 
     <div class="counter-box">
@@ -229,27 +180,10 @@ function showWelcome(name, firstTime){
       <div class="counter-time" id="counterTime">-- : -- : --</div>
       <div class="counter-note" id="counterNote"></div>
     </div>
-
-    <!-- تذكير ورد يومي -->
-    <div class="daily-reminder">
-      🌿 تذكيرك بالورد اليومي: اقرأ سورة الكهف أو الجزء المخصص اليوم، وادعُ لنفسك وللأهل.
-    </div>
-
-    <!-- الصور الكبيرة -->
-    <div class="image-section">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="دعاء">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="دعاء">
-    </div>
-
-    <!-- حديث أو نصيحة -->
-    <div class="daily-hadith">
-      📖 حديث اليوم: "من صام رمضان إيمانًا واحتسابًا غُفر له ما تقدم من ذنبه." [متفق عليه]
-    </div>
   `;
   startCounter();
 }
 
-/* ===== منطق العداد ===== */
 function startCounter(){
   const title = document.getElementById("counterTitle");
   const timeEl = document.getElementById("counterTime");
@@ -263,35 +197,39 @@ function startCounter(){
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
     const today = new Date();
-    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm, 0, 0);
-    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm, 0, 0);
+    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm);
+    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm);
 
-    let target, mode;
+    let target;
     if(now < fajr){
       target = fajr;
-      mode = "fajr";
+      title.textContent = "🌙 متبقي على أذان الفجر";
     } else if(now < maghrib){
       target = maghrib;
-      mode = "maghrib";
+      title.textContent = "⏳ متبقي على أذان المغرب";
     } else {
-      target = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm, 0, 0);
-      mode = "fajr";
+      target = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm);
+      title.textContent = "🌙 متبقي على أذان الفجر";
     }
 
     const diff = target - now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+    timeEl.textContent = `${s} : ${m} : ${h}`;
 
-    const hours = String(Math.floor(diff/3600000)).padStart(2,"0");
-    const minutes = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
-    const seconds = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+    const hour = now.getHours() + now.getMinutes()/60;
 
-    timeEl.textContent = `${seconds} : ${minutes} : ${hours}`;
-
-    if(mode==="maghrib"){
-      title.textContent = "⏳ متبقي على أذان المغرب";
-      note.textContent = "اقترب الإفطار… لا تنسَ الدعاء 🤍";
-    }else{
-      title.textContent = "🌙 متبقي على أذان الفجر";
-      note.textContent = "نِيّة صادقة وسحور مبارك";
+    if(hour >= mh && hour < 24){
+      note.textContent = "صحة فطورك 🤍 تقبّل الله صيامك";
+    } else if(hour >= 0 && hour < 4.5){
+      note.textContent = "الليل فرصة… قيام وذكر واستغفار";
+    } else if(hour >= 4.5 && now < fajr){
+      note.textContent = "اقترب الفجر… نية صادقة وسحور مبارك";
+    } else if(now >= fajr && hour < 12){
+      note.textContent = "صباح مبارك 🌿 تقبّل الله طاعتك";
+    } else {
+      note.textContent = "سل صيامك بذكر الله… لم يتبقَ إلا القليل";
     }
   }
 
@@ -299,12 +237,9 @@ function startCounter(){
   setInterval(update,1000);
 }
 
-/* ===== تحميل الصفحة ===== */
 window.onload = ()=>{
   const savedName = localStorage.getItem(STORAGE_KEY);
-  if(savedName){
-    showWelcome(savedName, false);
-  }
+  if(savedName) showWelcome(savedName,false);
 };
 </script>
 
