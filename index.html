@@ -59,7 +59,7 @@ body{
 }
 
 .register-box .subtitle{
-  font-size:16px;
+  font-size:16.5px;
   line-height:1.8;
   margin-bottom:18px;
 }
@@ -106,18 +106,21 @@ button:hover{background:#688c6d}
 .counter-title{
   font-size:15.5px;
   margin-bottom:4px;
+  text-align:center;
 }
 
 .counter-time{
-  font-size:22px;       /* أصغر ومتناسق */
+  font-size:22px;
   font-weight:600;
   letter-spacing:2px;
   margin:6px 0;
+  text-align:center;
 }
 
 .counter-note{
   font-size:14px;
   opacity:.85;
+  text-align:center;
 }
 
 @keyframes fadeUp{
@@ -159,13 +162,11 @@ button:hover{background:#688c6d}
 <script>
 /* ===== الإعدادات ===== */
 const STORAGE_KEY = "ramadan_user_name";
-
-/* ⏰ مواقيت مدينتك */
 const FAJR_TIME = "05:12";
-const MAGHRIB_TIME = "18:33";
+const MAGHRIB_TIME = "18:47";
 
-/* 🛠️ تعويض الدقائق (لو التطبيق أدق بدقيقتين) */
-const TIME_OFFSET_MINUTES = 2;
+/* 🛠️ يمكن تعديل التعويض لو أحتاج */
+const TIME_OFFSET_MINUTES = 0;
 
 /* ===== حفظ الاسم ===== */
 function saveName(){
@@ -185,11 +186,7 @@ function showWelcome(name, firstTime){
     <div class="message">
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
-      <p>
-        ${firstTime 
-          ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه"
-          : "نسأل الله أن يكتب لك الأجر اليوم"}
-      </p>
+      <p>${firstTime ? "نسأل الله أن يبارك لك في هذا الشهر ويعينك على اغتنامه" : "نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
 
     <div class="counter-box">
@@ -214,33 +211,30 @@ function startCounter(){
     const [fh, fm] = FAJR_TIME.split(":").map(Number);
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
-    const fajrToday = new Date();
-    fajrToday.setHours(fh, fm, 0, 0);
-
-    const maghribToday = new Date();
-    maghribToday.setHours(mh, mm, 0, 0);
+    // تحديد الوقت بالضبط لليوم الحالي
+    const today = new Date();
+    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm, 0, 0);
+    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm, 0, 0);
 
     let target, mode;
-
-    if(now < fajrToday){
-      target = fajrToday;
+    if(now < fajr){
+      target = fajr;
       mode = "fajr";
-    }else if(now < maghribToday){
-      target = maghribToday;
+    } else if(now < maghrib){
+      target = maghrib;
       mode = "maghrib";
-    }else{
-      target = new Date(fajrToday);
-      target.setDate(target.getDate()+1);
+    } else {
+      // بعد المغرب → الفجر غدًا
+      target = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm, 0, 0);
       mode = "fajr";
     }
 
     const diff = target - now;
 
     const hours = String(Math.floor(diff/3600000)).padStart(2,"0");
-    const minutes = String(Math.floor(diff%3600000/60000)).padStart(2,"0");
-    const seconds = String(Math.floor(diff%60000/1000)).padStart(2,"0");
+    const minutes = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const seconds = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
 
-    /* ⏱️ الترتيب المطلوب: ثواني - دقائق - ساعات */
     timeEl.textContent = `${seconds} : ${minutes} : ${hours}`;
 
     if(mode==="maghrib"){
