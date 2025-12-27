@@ -25,24 +25,24 @@ body{
 /* ===== الرسائل ===== */
 .message{
   text-align:center;
-  margin-bottom:26px;
+  margin-bottom:22px;
   animation:fadeDown .7s ease forwards;
 }
 
 .message .moon{
-  font-size:28px;
-  margin-bottom:8px;
+  font-size:26px;
+  margin-bottom:6px;
 }
 
 .message h1{
-  font-size:23px;
+  font-size:22px;
   font-weight:600;
   margin:6px 0;
 }
 
 .message p{
-  font-size:17px;
-  line-height:1.8;
+  font-size:16.5px;
+  line-height:1.7;
   margin:0;
   opacity:.9;
 }
@@ -59,8 +59,8 @@ body{
 }
 
 .register-box .subtitle{
-  font-size:16.5px;
-  line-height:1.9;
+  font-size:16px;
+  line-height:1.8;
   margin-bottom:18px;
 }
 
@@ -73,22 +73,20 @@ body{
 input{
   flex:1;
   padding:12px 16px;
-  font-size:16px;
+  font-size:15.5px;
   border-radius:20px;
   border:1px solid #d6c6a5;
   outline:none;
-  font-family:'Tajawal', sans-serif;
 }
 
 button{
   padding:12px 18px;
-  font-size:16px;
+  font-size:15.5px;
   border-radius:20px;
   border:none;
   background:#7a9b7e;
   color:white;
   cursor:pointer;
-  font-family:'Tajawal', sans-serif;
 }
 
 button:hover{background:#688c6d}
@@ -97,33 +95,33 @@ button:hover{background:#688c6d}
 /* ===== عداد الصلاة ===== */
 .counter-box{
   background:#fff;
-  border-radius:18px;
-  padding:18px 14px;
+  border-radius:16px;
+  padding:14px 12px;
   text-align:center;
-  margin:10px 0 26px;
-  box-shadow:0 6px 14px rgba(0,0,0,.06);
-  animation:fadeUp .7s ease forwards;
+  margin:8px 0 22px;
+  box-shadow:0 5px 12px rgba(0,0,0,.06);
+  animation:fadeUp .6s ease forwards;
 }
 
 .counter-title{
-  font-size:16.5px;
-  margin-bottom:6px;
+  font-size:15.5px;
+  margin-bottom:4px;
 }
 
 .counter-time{
-  font-size:28px;
+  font-size:22px;       /* أصغر ومتناسق */
   font-weight:600;
-  letter-spacing:1px;
+  letter-spacing:2px;
   margin:6px 0;
 }
 
 .counter-note{
-  font-size:14.5px;
+  font-size:14px;
   opacity:.85;
 }
 
 @keyframes fadeUp{
-  from{opacity:0; transform:translateY(12px);}
+  from{opacity:0; transform:translateY(10px);}
   to{opacity:1; transform:translateY(0);}
 }
 </style>
@@ -133,7 +131,7 @@ button:hover{background:#688c6d}
 
 <div class="container">
 
-  <!-- ===== شاشة التسجيل ===== -->
+  <!-- شاشة التسجيل -->
   <div id="registerBox">
     <div class="message">
       <div class="moon">🌙</div>
@@ -153,7 +151,7 @@ button:hover{background:#688c6d}
     </div>
   </div>
 
-  <!-- ===== الترحيب + العداد ===== -->
+  <!-- الترحيب + العداد -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
@@ -162,20 +160,22 @@ button:hover{background:#688c6d}
 /* ===== الإعدادات ===== */
 const STORAGE_KEY = "ramadan_user_name";
 
-/* ⏰ عدل الوقت حسب مدينتك */
+/* ⏰ مواقيت مدينتك */
 const FAJR_TIME = "05:12";
-const MAGHRIB_TIME = "18:47";
+const MAGHRIB_TIME = "18:33";
+
+/* 🛠️ تعويض الدقائق (لو التطبيق أدق بدقيقتين) */
+const TIME_OFFSET_MINUTES = 2;
 
 /* ===== حفظ الاسم ===== */
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
-
   localStorage.setItem(STORAGE_KEY, name);
   showWelcome(name, true);
 }
 
-/* ===== عرض الترحيب ===== */
+/* ===== الترحيب ===== */
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
@@ -198,7 +198,6 @@ function showWelcome(name, firstTime){
       <div class="counter-note" id="counterNote"></div>
     </div>
   `;
-
   startCounter();
 }
 
@@ -210,11 +209,11 @@ function startCounter(){
 
   function update(){
     const now = new Date();
+    now.setMinutes(now.getMinutes() + TIME_OFFSET_MINUTES);
 
     const [fh, fm] = FAJR_TIME.split(":").map(Number);
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
-    // الفجر والمغرب اليوم
     const fajrToday = new Date();
     fajrToday.setHours(fh, fm, 0, 0);
 
@@ -224,24 +223,25 @@ function startCounter(){
     let target, mode;
 
     if(now < fajrToday){
-        target = fajrToday;
-        mode = "fajr";
-    } else if(now < maghribToday){
-        target = maghribToday;
-        mode = "maghrib";
-    } else {
-        // بعد المغرب → الفجر غدًا
-        target = new Date(fajrToday);
-        target.setDate(target.getDate()+1);
-        mode = "fajr";
+      target = fajrToday;
+      mode = "fajr";
+    }else if(now < maghribToday){
+      target = maghribToday;
+      mode = "maghrib";
+    }else{
+      target = new Date(fajrToday);
+      target.setDate(target.getDate()+1);
+      mode = "fajr";
     }
 
     const diff = target - now;
-    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
-    const m = String(Math.floor(diff%3600000/60000)).padStart(2,"0");
-    const s = String(Math.floor(diff%60000/1000)).padStart(2,"0");
 
-    timeEl.textContent = `${h} : ${m} : ${s}`;
+    const hours = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const minutes = String(Math.floor(diff%3600000/60000)).padStart(2,"0");
+    const seconds = String(Math.floor(diff%60000/1000)).padStart(2,"0");
+
+    /* ⏱️ الترتيب المطلوب: ثواني - دقائق - ساعات */
+    timeEl.textContent = `${seconds} : ${minutes} : ${hours}`;
 
     if(mode==="maghrib"){
       title.textContent = "⏳ متبقي على أذان المغرب";
