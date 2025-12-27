@@ -123,6 +123,44 @@ button:hover{background:#688c6d}
   text-align:center;
 }
 
+/* ===== الصور التفاعلية ===== */
+.image-section{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:16px 0;
+}
+
+.image-section img{
+  width:48%;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+/* ===== تذكير ورد يومي ===== */
+.daily-reminder{
+  background:#fff;
+  border-radius:12px;
+  padding:12px 14px;
+  margin:14px 0;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+  font-size:15.5px;
+  line-height:1.6;
+}
+
+/* ===== حديث أو فائدة ===== */
+.daily-hadith{
+  background:#fff;
+  border-radius:12px;
+  padding:12px 14px;
+  margin:14px 0 22px;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+  font-size:15.5px;
+  line-height:1.6;
+}
+
 @keyframes fadeUp{
   from{opacity:0; transform:translateY(10px);}
   to{opacity:1; transform:translateY(0);}
@@ -154,7 +192,7 @@ button:hover{background:#688c6d}
     </div>
   </div>
 
-  <!-- الترحيب + العداد -->
+  <!-- الترحيب + العداد + الصور + التذكير + حديث -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
@@ -176,7 +214,7 @@ function saveName(){
   showWelcome(name, true);
 }
 
-/* ===== الترحيب ===== */
+/* ===== الترحيب + الصور + تذكير ورد يومي + حديث ===== */
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
@@ -194,8 +232,31 @@ function showWelcome(name, firstTime){
       <div class="counter-time" id="counterTime">-- : -- : --</div>
       <div class="counter-note" id="counterNote"></div>
     </div>
+
+    <!-- الصور التفاعلية -->
+    <div class="image-section">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" 
+           alt="دعاء" onclick="showImageAlert('دعاء')">
+      <img src="https://via.placeholder.com/300x200.png?text=ذكر+الله" 
+           alt="ذكر الله" onclick="showImageAlert('ذكر الله')">
+    </div>
+
+    <!-- تذكير ورد يومي -->
+    <div class="daily-reminder">
+      🌿 تذكيرك بالورد اليومي: اقرأ سورة الكهف أو الجزء المخصص اليوم، وادعُ لنفسك وللأهل.
+    </div>
+
+    <!-- حديث قصير أو فائدة -->
+    <div class="daily-hadith">
+      📖 حديث اليوم: "من صام رمضان إيمانًا واحتسابًا غُفر له ما تقدم من ذنبه." [متفق عليه]
+    </div>
   `;
   startCounter();
+}
+
+/* ===== الصور تفاعلية ===== */
+function showImageAlert(type){
+  alert("هذا القسم مخصص لـ " + type);
 }
 
 /* ===== منطق العداد ===== */
@@ -211,7 +272,6 @@ function startCounter(){
     const [fh, fm] = FAJR_TIME.split(":").map(Number);
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
-    // تحديد الوقت بالضبط لليوم الحالي
     const today = new Date();
     const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm, 0, 0);
     const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm, 0, 0);
@@ -224,7 +284,6 @@ function startCounter(){
       target = maghrib;
       mode = "maghrib";
     } else {
-      // بعد المغرب → الفجر غدًا
       target = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm, 0, 0);
       mode = "fajr";
     }
