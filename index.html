@@ -220,7 +220,7 @@ function startCounter(){
 
     const hour = now.getHours() + now.getMinutes()/60;
 
-    if(hour >= mh && hour < 24){
+    if(hour >= mh && hour < 24 && now >= maghrib){
       note.textContent = "صحة فطورك 🤍 تقبّل الله صيامك";
     } else if(hour >= 0 && hour < 4.5){
       note.textContent = "الليل فرصة… قيام وذكر واستغفار";
