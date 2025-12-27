@@ -30,18 +30,18 @@ body{
 }
 
 .message .moon{
-  font-size:32px; /* تكبير أيقونة الهلال */
+  font-size:28px; /* أكبر قليلاً */
   margin-bottom:8px;
 }
 
 .message h1{
-  font-size:26px; /* تكبير عنوان الترحيب */
-  font-weight:700;
+  font-size:26px;  /* تكبير قليل عن السابق */
+  font-weight:600;
   margin:8px 0;
 }
 
 .message p{
-  font-size:18px; /* تكبير نص الترحيب */
+  font-size:18px;  /* تكبير قليل عن السابق */
   line-height:1.8;
   margin:0;
   opacity:.95;
@@ -163,7 +163,7 @@ button:hover{background:#688c6d}
 /* ===== الإعدادات ===== */
 const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:12";
-const MAGHRIB_TIME = "18:47";
+const MAGHRIB_TIME = "18:33";
 const TIME_OFFSET_MINUTES = 0;
 
 /* ===== حفظ الاسم ===== */
@@ -226,6 +226,7 @@ function startCounter(){
     }
 
     const diff = target - now;
+
     const hours = String(Math.floor(diff/3600000)).padStart(2,"0");
     const minutes = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
     const seconds = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
