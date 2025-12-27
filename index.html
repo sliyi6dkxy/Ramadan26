@@ -30,21 +30,21 @@ body{
 }
 
 .message .moon{
-  font-size:28px; /* أكبر قليلاً */
-  margin-bottom:8px;
+  font-size:27px; /* تكبير قليل جدًا */
+  margin-bottom:6px;
 }
 
 .message h1{
-  font-size:26px;  /* تكبير قليل عن السابق */
+  font-size:24px;  /* تكبير بسيط */
   font-weight:600;
-  margin:8px 0;
+  margin:6px 0;
 }
 
 .message p{
-  font-size:18px;  /* تكبير قليل عن السابق */
-  line-height:1.8;
+  font-size:17px;  /* تكبير قليل جدًا */
+  line-height:1.7;
   margin:0;
-  opacity:.95;
+  opacity:.9;
 }
 
 @keyframes fadeDown{
@@ -163,7 +163,9 @@ button:hover{background:#688c6d}
 /* ===== الإعدادات ===== */
 const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:12";
-const MAGHRIB_TIME = "18:33";
+const MAGHRIB_TIME = "18:47";
+
+/* 🛠️ يمكن تعديل التعويض لو أحتاج */
 const TIME_OFFSET_MINUTES = 0;
 
 /* ===== حفظ الاسم ===== */
@@ -209,6 +211,7 @@ function startCounter(){
     const [fh, fm] = FAJR_TIME.split(":").map(Number);
     const [mh, mm] = MAGHRIB_TIME.split(":").map(Number);
 
+    // تحديد الوقت بالضبط لليوم الحالي
     const today = new Date();
     const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm, 0, 0);
     const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm, 0, 0);
@@ -221,6 +224,7 @@ function startCounter(){
       target = maghrib;
       mode = "maghrib";
     } else {
+      // بعد المغرب → الفجر غدًا
       target = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm, 0, 0);
       mode = "fajr";
     }
