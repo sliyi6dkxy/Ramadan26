@@ -30,18 +30,18 @@ body{
 }
 
 .message .moon{
-  font-size:27px; /* تكبير قليل جدًا */
+  font-size:27px;
   margin-bottom:6px;
 }
 
 .message h1{
-  font-size:24px;  /* تكبير بسيط */
+  font-size:24px;
   font-weight:600;
   margin:6px 0;
 }
 
 .message p{
-  font-size:17px;  /* تكبير قليل جدًا */
+  font-size:17px;
   line-height:1.7;
   margin:0;
   opacity:.9;
@@ -123,41 +123,40 @@ button:hover{background:#688c6d}
   text-align:center;
 }
 
-/* ===== الصور التفاعلية ===== */
+/* ===== تذكير ورد يومي ===== */
+.daily-reminder{
+  background:#fff;
+  border-radius:12px;
+  padding:14px 16px;
+  margin:22px 0 16px;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+  font-size:16px;
+  line-height:1.6;
+}
+
+/* ===== الصور الكبيرة ===== */
 .image-section{
   display:flex;
   justify-content:center;
   gap:12px;
-  margin:16px 0;
+  margin-bottom:16px;
 }
 
 .image-section img{
   width:48%;
   border-radius:12px;
-  cursor:pointer;
 }
 
-/* ===== تذكير ورد يومي ===== */
-.daily-reminder{
-  background:#fff;
-  border-radius:12px;
-  padding:12px 14px;
-  margin:14px 0;
-  text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-  font-size:15.5px;
-  line-height:1.6;
-}
-
-/* ===== حديث أو فائدة ===== */
+/* ===== حديث أو نصيحة ===== */
 .daily-hadith{
   background:#fff;
   border-radius:12px;
-  padding:12px 14px;
-  margin:14px 0 22px;
+  padding:14px 16px;
+  margin-bottom:22px;
   text-align:center;
   box-shadow:0 3px 8px rgba(0,0,0,.05);
-  font-size:15.5px;
+  font-size:16px;
   line-height:1.6;
 }
 
@@ -192,7 +191,7 @@ button:hover{background:#688c6d}
     </div>
   </div>
 
-  <!-- الترحيب + العداد + الصور + التذكير + حديث -->
+  <!-- الترحيب + العداد + ورد يومي + الصور + حديث -->
   <div id="welcomeBox" class="hidden"></div>
 
 </div>
@@ -202,8 +201,6 @@ button:hover{background:#688c6d}
 const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:12";
 const MAGHRIB_TIME = "18:47";
-
-/* 🛠️ يمكن تعديل التعويض لو أحتاج */
 const TIME_OFFSET_MINUTES = 0;
 
 /* ===== حفظ الاسم ===== */
@@ -214,7 +211,7 @@ function saveName(){
   showWelcome(name, true);
 }
 
-/* ===== الترحيب + الصور + تذكير ورد يومي + حديث ===== */
+/* ===== الترحيب + العداد + ورد يومي + صور + حديث ===== */
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
@@ -233,30 +230,23 @@ function showWelcome(name, firstTime){
       <div class="counter-note" id="counterNote"></div>
     </div>
 
-    <!-- الصور التفاعلية -->
-    <div class="image-section">
-      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" 
-           alt="دعاء" onclick="showImageAlert('دعاء')">
-      <img src="https://via.placeholder.com/300x200.png?text=ذكر+الله" 
-           alt="ذكر الله" onclick="showImageAlert('ذكر الله')">
-    </div>
-
     <!-- تذكير ورد يومي -->
     <div class="daily-reminder">
       🌿 تذكيرك بالورد اليومي: اقرأ سورة الكهف أو الجزء المخصص اليوم، وادعُ لنفسك وللأهل.
     </div>
 
-    <!-- حديث قصير أو فائدة -->
+    <!-- الصور الكبيرة -->
+    <div class="image-section">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="دعاء">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="دعاء">
+    </div>
+
+    <!-- حديث أو نصيحة -->
     <div class="daily-hadith">
       📖 حديث اليوم: "من صام رمضان إيمانًا واحتسابًا غُفر له ما تقدم من ذنبه." [متفق عليه]
     </div>
   `;
   startCounter();
-}
-
-/* ===== الصور تفاعلية ===== */
-function showImageAlert(type){
-  alert("هذا القسم مخصص لـ " + type);
 }
 
 /* ===== منطق العداد ===== */
