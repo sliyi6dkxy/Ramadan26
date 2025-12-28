@@ -129,13 +129,14 @@ button:hover{background:#688c6d}
   box-shadow:0 6px 12px rgba(0,0,0,0.08);
   font-size:16px;
   font-weight:500;
+  color:#4b3b2a;
 }
 
-/* ===== الصور والحديث ===== */
+/* ===== الصور ===== */
 .image-row{
   display:flex;
   gap:12px;
-  margin-bottom:25px;
+  margin-bottom:15px;
   flex-wrap:wrap;
 }
 
@@ -157,6 +158,19 @@ button:hover{background:#688c6d}
   font-size:14px;
   opacity:.85;
   margin-top:6px;
+}
+
+/* ===== مربع الحديث أسفل الصور ===== */
+.hadith-box{
+  background: linear-gradient(135deg,#fff7e0,#f9f3e7);
+  padding:14px 16px;
+  border-radius:18px;
+  text-align:center;
+  font-size:15px;
+  margin-top:12px;
+  box-shadow:0 6px 12px rgba(0,0,0,0.08);
+  line-height:1.6;
+  color:#4b3b2a;
 }
 </style>
 </head>
@@ -218,19 +232,24 @@ function showWelcome(name, firstTime){
 
     <!-- تذكير الورد اليومي -->
     <div class="daily-verse">
-      📖 تذكير: اقرأ وردك اليومي الآن
+      📖 لا تنسَ قراءة وردك اليومي لتقرب قلبك إلى الله وزيادة الأجر 🌿
     </div>
 
-    <!-- الصور والحديث -->
+    <!-- الصور مباشرة -->
     <div class="image-row">
       <div class="image-card">
         <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png alt="صورة1">
-        <div class="caption">حديث أو فائدة 1</div>
+        <div class="caption">حديث قصير أو فائدة مهمة 1</div>
       </div>
       <div class="image-card">
         <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png alt="صورة2">
-        <div class="caption">حديث أو فائدة 2</div>
+        <div class="caption">حديث قصير أو فائدة مهمة 2</div>
       </div>
+    </div>
+
+    <!-- مربع الحديث أسفل الصور -->
+    <div class="hadith-box">
+      "من قرأ ورده اليومي كان قلبه مطمئنًا، وزاد الله له نورًا وبركة في يومه" 🌙
     </div>
   `;
   startCounter();
