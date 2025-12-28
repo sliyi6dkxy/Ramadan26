@@ -119,9 +119,63 @@ button:hover{background:#688c6d}
   opacity:.9;
 }
 
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(10px);}
-  to{opacity:1; transform:translateY(0);}
+/* ===== تذكير الورد اليومي ===== */
+.daily-verse{
+  background:#fff;
+  padding:12px 16px;
+  border-radius:16px;
+  margin-bottom:16px;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+  animation:fadeUp .6s ease forwards;
+}
+
+/* ===== معرض الصور ===== */
+.image-gallery{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.image-card{
+  min-width:200px;
+  flex-shrink:0;
+  background:#fff;
+  border-radius:16px;
+  padding:8px;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+  cursor:pointer;
+  transition:transform .3s;
+}
+
+.image-card:hover{
+  transform:scale(1.05);
+}
+
+.image-card img{
+  width:100%;
+  border-radius:12px;
+  display:block;
+  margin-bottom:6px;
+}
+
+.image-card .caption{
+  font-size:14px;
+  opacity:.85;
+}
+
+/* ===== الدعاء ===== */
+.prayer-box{
+  background:#fff;
+  border-radius:16px;
+  padding:14px 12px;
+  margin-bottom:22px;
+  text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.06);
+  display:none;
+  animation:fadeUp .6s ease forwards;
 }
 </style>
 </head>
@@ -153,8 +207,22 @@ button:hover{background:#688c6d}
 <script>
 const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:12";
-const MAGHRIB_TIME = "18:11";
+const MAGHRIB_TIME = "18:47";
 const TIME_OFFSET_MINUTES = 0;
+
+/* أمثلة على الورد اليومي */
+const dailyVerses = [
+  "اقرأ اليوم سورة الفاتحة 🌿",
+  "تأمل في آية الكرسي 💫",
+  "ذكر الله أوقات الفراغ 🌙",
+];
+
+/* أمثلة على الصور */
+const galleryImages = [
+  {src:"https://via.placeholder.com/200x120?text=صورة+1", prayer:"اللهم بلغنا رمضان وصيامه وقيامه"},
+  {src:"https://via.placeholder.com/200x120?text=صورة+2", prayer:"اللهم اجعلنا من المقبولين"},
+  {src:"https://via.placeholder.com/200x120?text=صورة+3", prayer:"اللهم تقبل صيامنا وقيامنا"}
+];
 
 function saveName(){
   const name = document.getElementById("username").value.trim();
@@ -168,6 +236,15 @@ function showWelcome(name, firstTime){
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
 
+  let versesHTML = dailyVerses.map(v=>`<div class="daily-verse">${v}</div>`).join("");
+
+  let galleryHTML = galleryImages.map((img,i)=>`
+    <div class="image-card" onclick="showPrayer(${i})">
+      <img src="${img.src}" alt="صورة ${i+1}">
+      <div class="caption">اضغط على الدعاء لرؤية المحتوى</div>
+    </div>
+  `).join("");
+
   box.innerHTML = `
     <div class="message">
       <div class="moon">🌙</div>
@@ -180,8 +257,18 @@ function showWelcome(name, firstTime){
       <div class="counter-time" id="counterTime">-- : -- : --</div>
       <div class="counter-note" id="counterNote"></div>
     </div>
+
+    ${versesHTML}
+    <div class="image-gallery">${galleryHTML}</div>
+    <div class="prayer-box" id="prayerBox"></div>
   `;
   startCounter();
+}
+
+function showPrayer(index){
+  const box = document.getElementById("prayerBox");
+  box.textContent = galleryImages[index].prayer;
+  box.style.display="block";
 }
 
 function startCounter(){
@@ -220,7 +307,7 @@ function startCounter(){
 
     const hour = now.getHours() + now.getMinutes()/60;
 
-    if(hour >= mh && hour < 24 && now >= maghrib){
+    if(hour >= mh && now >= maghrib){
       note.textContent = "صحة فطورك 🤍 تقبّل الله صيامك";
     } else if(hour >= 0 && hour < 4.5){
       note.textContent = "الليل فرصة… قيام وذكر واستغفار";
