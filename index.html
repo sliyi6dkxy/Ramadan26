@@ -119,63 +119,44 @@ button:hover{background:#688c6d}
   opacity:.9;
 }
 
-/* ===== تذكير الورد اليومي ===== */
+/* ===== الورد اليومي ===== */
 .daily-verse{
-  background:#fff;
-  padding:12px 16px;
-  border-radius:16px;
-  margin-bottom:16px;
+  background: linear-gradient(135deg,#f9f3e7,#fff7e0);
+  padding:16px 18px;
+  border-radius:18px;
   text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-  animation:fadeUp .6s ease forwards;
+  margin-bottom:20px;
+  box-shadow:0 6px 12px rgba(0,0,0,0.08);
+  font-size:16px;
+  font-weight:500;
 }
 
-/* ===== معرض الصور ===== */
-.image-gallery{
+/* ===== الصور والحديث ===== */
+.image-row{
   display:flex;
-  overflow-x:auto;
-  gap:10px;
-  margin-bottom:16px;
+  gap:12px;
+  margin-bottom:25px;
+  flex-wrap:wrap;
 }
 
 .image-card{
-  min-width:200px;
-  flex-shrink:0;
-  background:#fff;
-  border-radius:16px;
-  padding:8px;
+  flex:1 1 45%;
   text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-  cursor:pointer;
-  transition:transform .3s;
-}
-
-.image-card:hover{
-  transform:scale(1.05);
+  background:#fff;
+  padding:6px;
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
 }
 
 .image-card img{
   width:100%;
   border-radius:12px;
-  display:block;
-  margin-bottom:6px;
 }
 
-.image-card .caption{
+.caption{
   font-size:14px;
   opacity:.85;
-}
-
-/* ===== الدعاء ===== */
-.prayer-box{
-  background:#fff;
-  border-radius:16px;
-  padding:14px 12px;
-  margin-bottom:22px;
-  text-align:center;
-  box-shadow:0 3px 10px rgba(0,0,0,.06);
-  display:none;
-  animation:fadeUp .6s ease forwards;
+  margin-top:6px;
 }
 </style>
 </head>
@@ -210,20 +191,6 @@ const FAJR_TIME = "05:12";
 const MAGHRIB_TIME = "18:47";
 const TIME_OFFSET_MINUTES = 0;
 
-/* أمثلة على الورد اليومي */
-const dailyVerses = [
-  "اقرأ اليوم سورة الفاتحة 🌿",
-  "تأمل في آية الكرسي 💫",
-  "ذكر الله أوقات الفراغ 🌙",
-];
-
-/* أمثلة على الصور */
-const galleryImages = [
-  {src:"https://via.placeholder.com/200x120?text=صورة+1", prayer:"اللهم بلغنا رمضان وصيامه وقيامه"},
-  {src:"https://via.placeholder.com/200x120?text=صورة+2", prayer:"اللهم اجعلنا من المقبولين"},
-  {src:"https://via.placeholder.com/200x120?text=صورة+3", prayer:"اللهم تقبل صيامنا وقيامنا"}
-];
-
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
@@ -235,15 +202,6 @@ function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
-
-  let versesHTML = dailyVerses.map(v=>`<div class="daily-verse">${v}</div>`).join("");
-
-  let galleryHTML = galleryImages.map((img,i)=>`
-    <div class="image-card" onclick="showPrayer(${i})">
-      <img src="${img.src}" alt="صورة ${i+1}">
-      <div class="caption">اضغط على الدعاء لرؤية المحتوى</div>
-    </div>
-  `).join("");
 
   box.innerHTML = `
     <div class="message">
@@ -258,17 +216,24 @@ function showWelcome(name, firstTime){
       <div class="counter-note" id="counterNote"></div>
     </div>
 
-    ${versesHTML}
-    <div class="image-gallery">${galleryHTML}</div>
-    <div class="prayer-box" id="prayerBox"></div>
+    <!-- تذكير الورد اليومي -->
+    <div class="daily-verse">
+      📖 تذكير: اقرأ وردك اليومي الآن
+    </div>
+
+    <!-- الصور والحديث -->
+    <div class="image-row">
+      <div class="image-card">
+        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png alt="صورة1">
+        <div class="caption">حديث أو فائدة 1</div>
+      </div>
+      <div class="image-card">
+        <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png alt="صورة2">
+        <div class="caption">حديث أو فائدة 2</div>
+      </div>
+    </div>
   `;
   startCounter();
-}
-
-function showPrayer(index){
-  const box = document.getElementById("prayerBox");
-  box.textContent = galleryImages[index].prayer;
-  box.style.display="block";
 }
 
 function startCounter(){
@@ -307,7 +272,7 @@ function startCounter(){
 
     const hour = now.getHours() + now.getMinutes()/60;
 
-    if(hour >= mh && now >= maghrib){
+    if(hour >= mh && hour < 24 && now >= maghrib){
       note.textContent = "صحة فطورك 🤍 تقبّل الله صيامك";
     } else if(hour >= 0 && hour < 4.5){
       note.textContent = "الليل فرصة… قيام وذكر واستغفار";
