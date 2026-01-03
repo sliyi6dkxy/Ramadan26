@@ -20,11 +20,11 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:20px 18px 24px; /* تم تقليل padding من الأعلى */
+  padding:20px 18px 24px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start; /* يرفع المحتوى للأعلى */
+  justify-content:flex-start;
 }
 
 /* الرسائل */
@@ -37,7 +37,7 @@ body{
   font-size:27px;
   margin-bottom:6px;
   display:inline-block;
-  animation:moonFloat 2s ease-in-out infinite alternate; /* حركة الهلال */
+  animation:moonFloat 2s ease-in-out infinite alternate;
 }
 @keyframes moonFloat{
   0%{ transform:translateY(0);}
@@ -47,7 +47,7 @@ body{
 .message h1{ font-size:24px; font-weight:600; margin:6px 0; }
 .message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
 
-/* التسجيل */
+/* تسجيل */
 .register-box{ text-align:center; margin-top:14px; }
 .register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
 .input-group{ display:flex; gap:10px; }
@@ -55,6 +55,15 @@ input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1
 button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
+
+/* أنيميشن الانتقال */
+.fade-slide {
+  animation: fadeSlideIn 0.6s ease forwards;
+}
+@keyframes fadeSlideIn {
+  from { opacity:0; transform:translateY(50px); }
+  to { opacity:1; transform:translateY(0); }
+}
 
 /* العداد */
 .counter-box{
@@ -236,6 +245,7 @@ function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
+  box.classList.add("fade-slide"); // إضافة الأنيميشن هنا
 
   box.innerHTML = `
     <div class="message">
