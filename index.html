@@ -15,63 +15,44 @@ body{
   color:#4b3b2a;
   min-height:100vh;
   text-align:center;
-  display:flex;
-  justify-content:center;
 }
 
 .container{
   max-width:420px;
-  width:100%;
-  margin:0;
-  padding:50px 18px 24px; /* رفع المحتوى للأعلى */
+  margin:0 auto;
+  padding:20px 18px 24px; /* تم تقليل padding من الأعلى */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start; /* يرفع المحتوى للأعلى */
 }
 
 /* الرسائل */
 .message{
   margin-bottom:22px;
+  text-align:center;
+  position:relative;
 }
-.message .moon{ 
-  font-size:32px; 
-  margin-bottom:10px; 
-  animation:float 2s ease-in-out infinite alternate;
+.message .moon{
+  font-size:27px;
+  margin-bottom:6px;
+  display:inline-block;
+  animation:moonFloat 2s ease-in-out infinite alternate; /* حركة الهلال */
 }
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
-  100%{transform:translateY(0);}
+@keyframes moonFloat{
+  0%{ transform:translateY(0);}
+  50%{ transform:translateY(-8px);}
+  100%{ transform:translateY(0);}
 }
-.message h1{ font-size:28px; font-weight:600; margin:8px 0; }
-.message p{ font-size:18px; line-height:1.7; margin:0; opacity:.95; }
+.message h1{ font-size:24px; font-weight:600; margin:6px 0; }
+.message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
 
 /* التسجيل */
-.register-box{ text-align:center; margin-top:20px; }
-.register-box .subtitle{
-  font-size:17px;
-  line-height:1.8;
-  margin-bottom:18px;
-  font-weight:500;
-  color:#3e3b36;
-}
-.input-group{ display:flex; gap:10px; justify-content:center; }
-input{
-  flex:1; 
-  padding:14px 18px; 
-  font-size:16px; 
-  border-radius:25px; 
-  border:1px solid #d6c6a5; 
-  outline:none; 
-  box-shadow:0 3px 8px rgba(0,0,0,.05);
-}
-button{
-  padding:14px 20px; 
-  font-size:16px; 
-  border-radius:25px; 
-  border:none; 
-  background:#7a9b7e; 
-  color:white; 
-  cursor:pointer; 
-  box-shadow:0 3px 8px rgba(0,0,0,.08);
-}
+.register-box{ text-align:center; margin-top:14px; }
+.register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
+.input-group{ display:flex; gap:10px; }
+input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1px solid #d6c6a5; outline:none; }
+button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
 
@@ -137,7 +118,7 @@ button:hover{ background:#688c6d; }
 .wird-box{
   background:#fff;
   border-radius:16px;
-  padding:12px 16px;
+  padding:10px 14px;
   margin-bottom:20px;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
   display:inline-block;
@@ -146,8 +127,8 @@ button:hover{ background:#688c6d; }
   line-height:1.5;
   font-size:15px;
 }
-.wird-box h2{ font-size:18px; margin-bottom:6px; }
-.wird-box p{ font-size:15px; margin:0; }
+.wird-box h2{ font-size:17px; margin-bottom:4px; }
+.wird-box p{ font-size:14.5px; margin:0; }
 
 /* الصور */
 .images-box{
@@ -171,7 +152,7 @@ button:hover{ background:#688c6d; }
 .hadith-box{
   background:#fff;
   border-radius:16px;
-  padding:12px 16px;
+  padding:10px 14px;
   font-size:15px;
   line-height:1.5;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
@@ -301,6 +282,7 @@ function showWelcome(name, firstTime){
   initLightbox();
 }
 
+// العداد
 function startCounter(){
   const title = document.getElementById("counterTitle");
   const timeEl = document.getElementById("counterTime");
@@ -338,6 +320,7 @@ function startCounter(){
   setInterval(update,1000);
 }
 
+// Lightbox
 function initLightbox(){
   const imgs = document.querySelectorAll(".images-box img");
   const lightbox = document.getElementById("lightbox");
