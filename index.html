@@ -15,30 +15,34 @@ body{
   color:#4b3b2a;
   min-height:100vh;
   text-align:center;
+  display:flex;
+  justify-content:center;
 }
 
 .container{
   max-width:420px;
-  margin:0 auto;
-  padding:34px 18px 24px;
+  width:100%;
+  margin:0;
+  padding:60px 18px 24px; /* رفع المحتوى للأعلى */
 }
 
 /* الرسائل */
 .message{
   margin-bottom:22px;
 }
-.message .moon{ font-size:27px; margin-bottom:6px; }
-.message h1{ font-size:24px; font-weight:600; margin:6px 0; }
-.message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
+.message .moon{ font-size:30px; margin-bottom:8px; }
+.message h1{ font-size:26px; font-weight:600; margin:6px 0; }
+.message p{ font-size:17.5px; line-height:1.7; margin:0; opacity:.95; }
 
 /* التسجيل */
 .register-box{ text-align:center; margin-top:14px; }
-.register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
-.input-group{ display:flex; gap:10px; }
-input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1px solid #d6c6a5; outline:none; }
-button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
+.register-box .subtitle{ font-size:17px; line-height:1.8; margin-bottom:18px; font-weight:500; }
+.input-group{ display:flex; gap:10px; justify-content:center; }
+input{ flex:1; padding:13px 16px; font-size:16px; border-radius:22px; border:1px solid #d6c6a5; outline:none; }
+button{ padding:12px 18px; font-size:16px; border-radius:22px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
+</style>
 
 /* العداد */
 .counter-box{
