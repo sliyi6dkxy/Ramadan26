@@ -14,13 +14,13 @@ body{
   background:#fbf6e8;
   color:#4b3b2a;
   min-height:100vh;
+  text-align:center;
 }
 
 .container{
   max-width:420px;
   margin:0 auto;
   padding:34px 18px 24px;
-  text-align:center;
 }
 
 /* الرسائل */
@@ -45,22 +45,30 @@ button:hover{ background:#688c6d; }
   background:#fff;
   border-radius:16px;
   padding:14px 12px;
-  text-align:center;
-  margin:10px 0 24px;
+  margin:10px 0 12px;
   box-shadow:0 5px 12px rgba(0,0,0,.06);
 }
 .counter-title{ font-size:15.5px; margin-bottom:4px; }
 .counter-time{ font-size:22px; font-weight:600; letter-spacing:2px; margin:6px 0; }
 .counter-note{ font-size:14.5px; opacity:.9; }
 
+/* فاصل ملهم */
+.section-separator{
+  font-size:18px;
+  margin:18px 0 12px;
+  opacity:.85;
+}
+
 /* ورد اليوم */
 .wird-box{
   background:#fff;
   border-radius:16px;
   padding:16px;
-  text-align:center;
   margin-bottom:20px;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
+  text-align:center;
 }
 .wird-box h2{ font-size:18px; margin-bottom:6px; }
 .wird-box p{ font-size:16px; line-height:1.8; margin:0; }
@@ -91,6 +99,8 @@ button:hover{ background:#688c6d; }
   font-size:16px;
   line-height:1.9;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
 }
 
 /* Lightbox */
@@ -104,11 +114,21 @@ button:hover{ background:#688c6d; }
   justify-content:center;
   align-items:center;
   z-index:9999;
+  animation:fadeIn .3s;
 }
 #lightbox img{
   max-width:90%;
   max-height:90%;
   border-radius:10px;
+  animation:zoomIn .3s;
+}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes zoomIn{
+  from{transform:scale(0.7); opacity:0;}
+  to{transform:scale(1); opacity:1;}
 }
 </style>
 </head>
@@ -171,6 +191,8 @@ function showWelcome(name, firstTime){
       <div class="counter-time" id="counterTime">-- : -- : --</div>
       <div class="counter-note" id="counterNote"></div>
     </div>
+
+    <div class="section-separator">💫 لحظات مباركة… 3 دقائق من وقتك 🌿</div>
 
     <div class="wird-box">
       <h2>📖 ورد اليوم</h2>
@@ -255,7 +277,5 @@ window.onload = ()=>{
 };
 </script>
 
-</body>
-</html>
 </body>
 </html>
