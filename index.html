@@ -3,90 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>صور رمضان</title>
+<title>إمساكية رمضان</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 body{
   margin:0;
   font-family:'Tajawal', sans-serif;
   background:#fbf6e8;
   color:#4b3b2a;
+  min-height:100vh;
 }
 
-.image-gallery{
+.container{
+  max-width:420px;
+  margin:0 auto;
+  padding:34px 18px 24px;
+  text-align:center;
+}
+
+/* الرسائل */
+.message{
+  margin-bottom:22px;
+}
+.message .moon{ font-size:27px; margin-bottom:6px; }
+.message h1{ font-size:24px; font-weight:600; margin:6px 0; }
+.message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
+
+/* التسجيل */
+.register-box{ text-align:center; margin-top:14px; }
+.register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
+.input-group{ display:flex; gap:10px; }
+input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1px solid #d6c6a5; outline:none; }
+button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
+button:hover{ background:#688c6d; }
+.hidden{ display:none; }
+
+/* العداد */
+.counter-box{
+  background:#fff;
+  border-radius:16px;
+  padding:14px 12px;
+  text-align:center;
+  margin:10px 0 24px;
+  box-shadow:0 5px 12px rgba(0,0,0,.06);
+}
+.counter-title{ font-size:15.5px; margin-bottom:4px; }
+.counter-time{ font-size:22px; font-weight:600; letter-spacing:2px; margin:6px 0; }
+.counter-note{ font-size:14.5px; opacity:.9; }
+
+/* ورد اليوم */
+.wird-box{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  text-align:center;
+  margin-bottom:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
+}
+.wird-box h2{ font-size:18px; margin-bottom:6px; }
+.wird-box p{ font-size:16px; line-height:1.8; margin:0; }
+
+/* الصور */
+.images-box{
   display:flex;
-  overflow-x:auto;
   gap:10px;
-  padding:20px;
+  justify-content:center;
+  margin-bottom:6px;
 }
-
-.image-gallery img{
-  height:120px;
-  border-radius:12px;
+.images-box img{
+  width:48%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 4px 8px rgba(0,0,0,.08);
   cursor:pointer;
-  transition: transform 0.3s;
+  transition: transform .3s;
+}
+.images-box img:hover{ transform:scale(1.05); }
+.image-note{ font-size:13px; color:#666; margin-bottom:18px; }
+
+/* الحديث */
+.hadith-box{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  font-size:16px;
+  line-height:1.9;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
-.image-gallery img:hover{
-  transform: scale(1.1);
-}
-
-/* تكبير عند الضغط */
-.enlarge {
-  position: fixed;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  max-width:80%;
-  max-height:80%;
-  border-radius:12px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
-  z-index:1000;
-}
-.overlay {
-  position: fixed;
+/* Lightbox */
+#lightbox{
+  display:none;
+  position:fixed;
   top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.5);
-  z-index:999;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.8);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
 }
 </style>
 </head>
+
 <body>
 
-<h2 style="text-align:center; padding-top:20px;">صور رمضان</h2>
+<div class="container">
 
-<div class="image-gallery">
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="صورة 1">
-  <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="صورة 2">
+  <div id="registerBox">
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>رمضان كريم</h1>
+      <p>أدخل اسمك ليصلك كل جديد يوميًا خلال الشهر المبارك</p>
+    </div>
+
+    <div class="register-box">
+      <div class="subtitle">متابعة خفيفة • تذكير • أجر بإذن الله</div>
+      <div class="input-group">
+        <input type="text" id="username" placeholder="اسمك">
+        <button onclick="saveName()">متابعة</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcomeBox" class="hidden"></div>
+
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.style.display='none'">
+  <img id="lightbox-img" src="">
 </div>
 
 <script>
-const images = document.querySelectorAll('.image-gallery img');
+const STORAGE_KEY = "ramadan_user_name";
+const FAJR_TIME = "05:12";
+const MAGHRIB_TIME = "18:47";
 
-images.forEach(img=>{
-  img.addEventListener('click', ()=>{
-    // إنشاء overlay
-    const overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
+function saveName(){
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+  localStorage.setItem(STORAGE_KEY, name);
+  showWelcome(name,true);
+}
 
-    // إنشاء نسخة مكبرة
-    const enlarged = img.cloneNode();
-    enlarged.classList.add('enlarge');
-    document.body.appendChild(enlarged);
+function showWelcome(name, firstTime){
+  document.getElementById("registerBox").classList.add("hidden");
+  const box = document.getElementById("welcomeBox");
+  box.classList.remove("hidden");
 
-    // إزالة عند الضغط على overlay أو الصورة
-    overlay.addEventListener('click', ()=>{
-      overlay.remove();
-      enlarged.remove();
-    });
-    enlarged.addEventListener('click', ()=>{
-      overlay.remove();
-      enlarged.remove();
+  box.innerHTML = `
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>مرحبًا ${name}</h1>
+      <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
+    </div>
+
+    <div class="counter-box">
+      <div class="counter-title" id="counterTitle"></div>
+      <div class="counter-time" id="counterTime">-- : -- : --</div>
+      <div class="counter-note" id="counterNote"></div>
+    </div>
+
+    <div class="wird-box">
+      <h2>📖 ورد اليوم</h2>
+      <p>
+        اجعل لك لحظة هادئة، افتح المصحف،  
+        واقرأ ما تيسّر بنية القرب من الله.
+      </p>
+    </div>
+
+    <div class="images-box">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="">
+      <img src="https://raw.githubusercontent.com/sliyi6dkxy/Ramadan26/main/Picsart_25-03-25_22-21-41-520.png" alt="">
+    </div>
+    <div class="image-note">اضغط على الصورة لتكبيرها</div>
+
+    <div class="hadith-box">
+      قال رسول الله ﷺ  
+      <br>
+      «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
+    </div>
+  `;
+
+  startCounter();
+  initLightbox();
+}
+
+// العداد
+function startCounter(){
+  const title = document.getElementById("counterTitle");
+  const timeEl = document.getElementById("counterTime");
+  const note = document.getElementById("counterNote");
+
+  function update(){
+    const now = new Date();
+    const [fh,fm] = FAJR_TIME.split(":").map(Number);
+    const [mh,mm] = MAGHRIB_TIME.split(":").map(Number);
+
+    const today = new Date();
+    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm);
+    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm);
+
+    let target;
+    if(now<fajr){ target=fajr; title.textContent="🌙 متبقي على أذان الفجر"; }
+    else if(now<maghrib){ target=maghrib; title.textContent="⏳ متبقي على أذان المغرب"; }
+    else{ target=new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm); title.textContent="🌙 متبقي على أذان الفجر"; }
+
+    const diff = target-now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+    timeEl.textContent=`${s} : ${m} : ${h}`;
+
+    const hour = now.getHours()+now.getMinutes()/60;
+    if(hour>=mh && hour<24 && now>=maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
+    else if(hour>=0 && hour<4.5) note.textContent="الليل فرصة… قيام وذكر واستغفار";
+    else if(hour>=4.5 && now<fajr) note.textContent="اقترب الفجر… نية صادقة وسحور مبارك";
+    else if(now>=fajr && hour<12) note.textContent="صباح مبارك 🌿 تقبّل الله طاعتك";
+    else note.textContent="سل صيامك بذكر الله… لم يتبقَ إلا القليل";
+  }
+
+  update();
+  setInterval(update,1000);
+}
+
+// Lightbox
+function initLightbox(){
+  const imgs = document.querySelectorAll(".images-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  imgs.forEach(img=>{
+    img.addEventListener("click", ()=>{
+      lightbox.style.display="flex";
+      lightboxImg.src = img.src;
     });
   });
-});
+}
+
+window.onload = ()=>{
+  const savedName = localStorage.getItem(STORAGE_KEY);
+  if(savedName) showWelcome(savedName,false);
+};
 </script>
 
+</body>
+</html>
 </body>
 </html>
