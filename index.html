@@ -20,67 +20,39 @@ body{
 .container{
   max-width:420px;
   margin:0 auto;
-  padding:20px 18px 24px;
+  padding:20px 18px 24px; /* تم تقليل padding من الأعلى */
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
-}
-
-/* انيميشن دخول الصفحة الرئيسية */
-.page-enter{
-  animation:pageEnter .6s ease-out forwards;
-}
-@keyframes pageEnter{
-  from{
-    opacity:0;
-    transform:translateY(40px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  justify-content:flex-start; /* يرفع المحتوى للأعلى */
 }
 
 /* الرسائل */
 .message{
   margin-bottom:22px;
   text-align:center;
+  position:relative;
 }
 .message .moon{
   font-size:27px;
   margin-bottom:6px;
   display:inline-block;
-  animation:moonFloat 2s ease-in-out infinite alternate;
+  animation:moonFloat 2s ease-in-out infinite alternate; /* حركة الهلال */
 }
 @keyframes moonFloat{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-  100%{transform:translateY(0);}
+  0%{ transform:translateY(0);}
+  50%{ transform:translateY(-8px);}
+  100%{ transform:translateY(0);}
 }
 .message h1{ font-size:24px; font-weight:600; margin:6px 0; }
 .message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
 
 /* التسجيل */
-.register-box{ margin-top:14px; }
-.register-box .subtitle{ font-size:16.5px; margin-bottom:18px; }
+.register-box{ text-align:center; margin-top:14px; }
+.register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
 .input-group{ display:flex; gap:10px; }
-input{
-  flex:1;
-  padding:12px 16px;
-  font-size:15.5px;
-  border-radius:20px;
-  border:1px solid #d6c6a5;
-}
-button{
-  padding:12px 18px;
-  font-size:15.5px;
-  border-radius:20px;
-  border:none;
-  background:#7a9b7e;
-  color:#fff;
-  cursor:pointer;
-}
+input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1px solid #d6c6a5; outline:none; }
+button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
 
@@ -92,30 +64,55 @@ button:hover{ background:#688c6d; }
   margin:10px 0 20px;
   box-shadow:0 5px 12px rgba(0,0,0,.06);
 }
-.counter-title{ font-size:15.5px; }
-.counter-time{ font-size:22px; font-weight:600; margin:6px 0; }
+.counter-title{ font-size:15.5px; margin-bottom:4px; }
+.counter-time{ font-size:22px; font-weight:600; letter-spacing:2px; margin:6px 0; }
 .counter-note{ font-size:14.5px; opacity:.9; }
 
-/* الفاصل */
-.section-separator{ margin:30px 0 24px; }
+/* فاصل ديناميكي */
+.section-separator{
+  margin:30px 0 24px;
+  position:relative;
+}
 .separator-bg{
   height:50px;
   width:220px;
+  margin:0 auto;
   border-radius:25px;
-  background:linear-gradient(270deg,#7a9b7e,#a7c4a0,#7a9b7e);
+  background: linear-gradient(270deg,#7a9b7e,#a7c4a0,#7a9b7e);
   background-size:600% 600%;
   animation:gradientShift 6s ease infinite;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
   display:flex;
-  align-items:center;
   justify-content:center;
-  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  align-items:center;
+  position:relative;
 }
 @keyframes gradientShift{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
-.separator-text{ color:#fff; font-weight:600; }
+.separator-text{
+  font-size:16px;
+  font-weight:600;
+  color:#fff;
+  z-index:2;
+  padding:0 20px;
+}
+.separator-icon{
+  position:absolute;
+  font-size:20px;
+  color:#fff;
+  left:12px;
+  animation:floatSide 2.5s ease-in-out infinite alternate;
+}
+@keyframes floatSide{
+  0%{transform:translate(0,0);}
+  25%{transform:translate(12px,-5px);}
+  50%{transform:translate(0,-8px);}
+  75%{transform:translate(-12px,-5px);}
+  100%{transform:translate(0,0);}
+}
 
 /* ورد اليوم */
 .wird-box{
@@ -124,44 +121,72 @@ button:hover{ background:#688c6d; }
   padding:10px 14px;
   margin-bottom:20px;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
+  text-align:center;
+  line-height:1.5;
+  font-size:15px;
 }
+.wird-box h2{ font-size:17px; margin-bottom:4px; }
+.wird-box p{ font-size:14.5px; margin:0; }
 
 /* الصور */
 .images-box{
   display:flex;
   gap:10px;
   justify-content:center;
+  margin-bottom:6px;
 }
 .images-box img{
   width:48%;
   border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 4px 8px rgba(0,0,0,.08);
   cursor:pointer;
-  transition:transform .3s;
+  transition: transform .3s;
 }
 .images-box img:hover{ transform:scale(1.05); }
-.image-note{ font-size:13px; margin:8px 0 18px; }
+.image-note{ font-size:13px; color:#666; margin-bottom:18px; }
 
 /* الحديث */
 .hadith-box{
   background:#fff;
   border-radius:16px;
   padding:10px 14px;
+  font-size:15px;
+  line-height:1.5;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
+  text-align:center;
 }
 
 /* Lightbox */
 #lightbox{
   display:none;
   position:fixed;
-  inset:0;
+  top:0; left:0;
+  width:100%;
+  height:100%;
   background:rgba(0,0,0,.8);
   justify-content:center;
   align-items:center;
+  z-index:9999;
+  animation:fadeIn .3s;
 }
 #lightbox img{
   max-width:90%;
   max-height:90%;
   border-radius:10px;
+  animation:zoomIn .3s;
+}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes zoomIn{
+  from{transform:scale(0.7); opacity:0;}
+  to{transform:scale(1); opacity:1;}
 }
 </style>
 </head>
@@ -190,97 +215,128 @@ button:hover{ background:#688c6d; }
 
 </div>
 
+<!-- Lightbox -->
 <div id="lightbox" onclick="this.style.display='none'">
-  <img id="lightbox-img">
+  <img id="lightbox-img" src="">
 </div>
 
 <script>
-const STORAGE_KEY="ramadan_user_name";
-const FAJR_TIME="05:12";
-const MAGHRIB_TIME="18:47";
+const STORAGE_KEY = "ramadan_user_name";
+const FAJR_TIME = "05:12";
+const MAGHRIB_TIME = "18:47";
 
 function saveName(){
-  const name=username.value.trim();
-  if(!name)return;
-  localStorage.setItem(STORAGE_KEY,name);
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+  localStorage.setItem(STORAGE_KEY, name);
   showWelcome(name,true);
 }
 
-function showWelcome(name,firstTime){
-  registerBox.classList.add("hidden");
-  welcomeBox.classList.remove("hidden");
-  if(firstTime) welcomeBox.classList.add("page-enter");
+function showWelcome(name, firstTime){
+  document.getElementById("registerBox").classList.add("hidden");
+  const box = document.getElementById("welcomeBox");
+  box.classList.remove("hidden");
 
-  welcomeBox.innerHTML=`
+  box.innerHTML = `
     <div class="message">
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
-      <p>نسأل الله أن يبارك لك في هذا الشهر</p>
+      <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
 
     <div class="counter-box">
-      <div id="counterTitle"></div>
-      <div id="counterTime">--:--:--</div>
-      <div id="counterNote"></div>
+      <div class="counter-title" id="counterTitle"></div>
+      <div class="counter-time" id="counterTime">-- : -- : --</div>
+      <div class="counter-note" id="counterNote"></div>
     </div>
 
     <div class="section-separator">
       <div class="separator-bg">
+        <span class="separator-icon">🌿</span>
         <span class="separator-text">💫 لحظات مباركة… 3 دقائق من وقتك</span>
       </div>
     </div>
 
     <div class="wird-box">
       <h2>📖 ورد اليوم</h2>
-      <p>اقرأ ما تيسّر بنية القرب من الله</p>
+      <p>
+        اجعل لك لحظة هادئة، افتح المصحف،  
+        واقرأ ما تيسّر بنية القرب من الله.
+      </p>
     </div>
 
     <div class="images-box">
-      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53">
-      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d">
+      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53" alt="">
+      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d" alt="">
     </div>
-
     <div class="image-note">اضغط على الصورة لتكبيرها</div>
 
     <div class="hadith-box">
-      «اقرؤوا القرآن فإنه يأتي شفيعًا لأصحابه»
+      قال رسول الله ﷺ  
+      <br>
+      «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
   `;
+
   startCounter();
   initLightbox();
 }
 
+// العداد
 function startCounter(){
-  const t=counterTitle,c=counterTime,n=counterNote;
-  setInterval(()=>{
-    const now=new Date();
-    const [fh,fm]=FAJR_TIME.split(":");
-    const [mh,mm]=MAGHRIB_TIME.split(":");
-    const fajr=new Date(now.getFullYear(),now.getMonth(),now.getDate(),fh,fm);
-    const maghrib=new Date(now.getFullYear(),now.getMonth(),now.getDate(),mh,mm);
-    let target=now<fajr?fajr:now<maghrib?maghrib:new Date(fajr.getTime()+86400000);
-    t.textContent=now<fajr?"متبقي على الفجر":"متبقي على المغرب";
-    const d=target-now;
-    c.textContent=
-      String(Math.floor(d/3600000)).padStart(2,"0")+":"+
-      String(Math.floor(d/60000)%60).padStart(2,"0")+":"+
-      String(Math.floor(d/1000)%60).padStart(2,"0");
-    n.textContent="جعل الله وقتك مباركًا";
-  },1000);
+  const title = document.getElementById("counterTitle");
+  const timeEl = document.getElementById("counterTime");
+  const note = document.getElementById("counterNote");
+
+  function update(){
+    const now = new Date();
+    const [fh,fm] = FAJR_TIME.split(":").map(Number);
+    const [mh,mm] = MAGHRIB_TIME.split(":").map(Number);
+
+    const today = new Date();
+    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm);
+    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm);
+
+    let target;
+    if(now<fajr){ target=fajr; title.textContent="🌙 متبقي على أذان الفجر"; }
+    else if(now<maghrib){ target=maghrib; title.textContent="⏳ متبقي على أذان المغرب"; }
+    else{ target=new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm); title.textContent="🌙 متبقي على أذان الفجر"; }
+
+    const diff = target-now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+    timeEl.textContent=`${s} : ${m} : ${h}`;
+
+    const hour = now.getHours()+now.getMinutes()/60;
+    if(hour>=mh && hour<24 && now>=maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
+    else if(hour>=0 && hour<4.5) note.textContent="الليل فرصة… قيام وذكر واستغفار";
+    else if(hour>=4.5 && now<fajr) note.textContent="اقترب الفجر… نية صادقة وسحور مبارك";
+    else if(now>=fajr && hour<12) note.textContent="صباح مبارك 🌿 تقبّل الله طاعتك";
+    else note.textContent="سل صيامك بذكر الله… لم يتبقَ إلا القليل";
+  }
+
+  update();
+  setInterval(update,1000);
 }
 
+// Lightbox
 function initLightbox(){
-  document.querySelectorAll(".images-box img").forEach(img=>{
-    img.onclick=()=>{
+  const imgs = document.querySelectorAll(".images-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  imgs.forEach(img=>{
+    img.addEventListener("click", ()=>{
       lightbox.style.display="flex";
-      lightboxImg.src=img.src;
-    }
+      lightboxImg.src = img.src;
+    });
   });
 }
 
-window.onload=()=>{
-  const name=localStorage.getItem(STORAGE_KEY);
-  if(name) showWelcome(name,false);
+window.onload = ()=>{
+  const savedName = localStorage.getItem(STORAGE_KEY);
+  if(savedName) showWelcome(savedName,false);
 };
 </script>
 
