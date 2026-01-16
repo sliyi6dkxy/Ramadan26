@@ -27,35 +27,16 @@ body{
   justify-content:flex-start;
 }
 
-/* ================== إضافة جديدة: شاشة الانتقال ================== */
-#transitionScreen{
-  position:fixed;
-  top:0; left:0;
-  width:100%;
-  height:100%;
-  background:#fbf6e8;
-  z-index:10000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+/* ===== أنيميشن دخول الصفحة ===== */
+.page-enter{
+  opacity:0;
+  transform:translateY(40px);
+}
+.page-enter-active{
   opacity:1;
+  transform:translateY(0);
   transition:opacity .8s ease, transform .8s ease;
 }
-#transitionScreen.hide{
-  opacity:0;
-  transform:translateY(-30px);
-  pointer-events:none;
-}
-#transitionScreen .moon{
-  font-size:40px;
-  margin-bottom:12px;
-}
-#transitionScreen p{
-  font-size:17px;
-  opacity:.9;
-}
-/* ================================================================ */
 
 /* الرسائل */
 .message{
@@ -223,13 +204,6 @@ button:hover{ background:#688c6d; }
 
 <body>
 
-<!-- ===== إضافة جديدة: شاشة الانتقال ===== -->
-<div id="transitionScreen" class="hidden">
-  <div class="moon">🌙</div>
-  <p>أهلاً بك… لحظات ونبدأ</p>
-</div>
-<!-- ======================================= -->
-
 <div class="container">
 
   <div id="registerBox">
@@ -252,6 +226,7 @@ button:hover{ background:#688c6d; }
 
 </div>
 
+<!-- Lightbox -->
 <div id="lightbox" onclick="this.style.display='none'">
   <img id="lightbox-img" src="">
 </div>
@@ -261,32 +236,27 @@ const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:52";
 const MAGHRIB_TIME = "18:40";
 
-/* ===== إضافة جديدة: تشغيل أنيميشن الانتقال ===== */
-function runTransition(callback){
-  const screen = document.getElementById("transitionScreen");
-  screen.classList.remove("hidden");
-  window.scrollTo(0,0);
-  setTimeout(()=>{
-    screen.classList.add("hide");
-    setTimeout(()=>{
-      screen.remove();
-      if(callback) callback();
-    },800);
-  },600);
-}
-/* ============================================== */
-
+// حفظ الاسم
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
   localStorage.setItem(STORAGE_KEY, name);
-  runTransition(()=>showWelcome(name,true));
+  showWelcome(name,true);
 }
 
+// عرض الصفحة الرئيسية
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
+
+  // ===== إضافة الأنيميشن =====
+  if(firstTime){
+    box.classList.add("page-enter");
+    requestAnimationFrame(()=>{
+      box.classList.add("page-enter-active");
+    });
+  }
 
   box.innerHTML = `
     <div class="message">
@@ -317,8 +287,8 @@ function showWelcome(name, firstTime){
     </div>
 
     <div class="images-box">
-      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53">
-      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d">
+      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53" alt="">
+      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d" alt="">
     </div>
     <div class="image-note">اضغط على الصورة لتكبيرها</div>
 
@@ -329,12 +299,67 @@ function showWelcome(name, firstTime){
     </div>
   `;
 
+  // ===== حل مشكلة الظهور من منتصف الصفحة =====
+  window.scrollTo(0,0);
+
   startCounter();
   initLightbox();
 }
 
+// العداد
+function startCounter(){
+  const title = document.getElementById("counterTitle");
+  const timeEl = document.getElementById("counterTime");
+  const note = document.getElementById("counterNote");
+
+  function update(){
+    const now = new Date();
+    const [fh,fm] = FAJR_TIME.split(":").map(Number);
+    const [mh,mm] = MAGHRIB_TIME.split(":").map(Number);
+
+    const today = new Date();
+    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm);
+    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm);
+
+    let target;
+    if(now<fajr){ target=fajr; title.textContent="🌙 متبقي على أذان الفجر"; }
+    else if(now<maghrib){ target=maghrib; title.textContent="⏳ متبقي على أذان المغرب"; }
+    else{ target=new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm); title.textContent="🌙 متبقي على أذان الفجر"; }
+
+    const diff = target-now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+    timeEl.textContent=`${h} : ${m} : ${s}`;
+
+    const hour = now.getHours()+now.getMinutes()/60;
+    if(hour>=mh && hour<24 && now>=maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
+    else if(hour>=0 && hour<4.5) note.textContent="الليل فرصة… قيام وذكر واستغفار";
+    else if(hour>=4.5 && now<fajr) note.textContent="اقترب الفجر… نية صادقة وسحور مبارك";
+    else if(now>=fajr && hour<12) note.textContent="صباح مبارك 🌿 تقبّل الله طاعتك";
+    else note.textContent="سل صيامك بذكر الله… لم يتبقَ إلا القليل";
+  }
+
+  update();
+  setInterval(update,1000);
+}
+
+// Lightbox
+function initLightbox(){
+  const imgs = document.querySelectorAll(".images-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  imgs.forEach(img=>{
+    img.addEventListener("click", ()=>{
+      lightbox.style.display="flex";
+      lightboxImg.src = img.src;
+    });
+  });
+}
+
+// عند تحميل الصفحة
 window.onload = ()=>{
-  window.scrollTo(0,0);
   const savedName = localStorage.getItem(STORAGE_KEY);
   if(savedName) showWelcome(savedName,false);
 };
