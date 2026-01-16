@@ -60,12 +60,10 @@ body{
 
 /* التاريخ الهجري */
 .hijri-date{
-  font-size:18px; /* أكبر قليلاً */
-  color:#4b3b2a; /* نفس لون الاسم */
-  font-weight:600;
-  margin-bottom:12px;
-  opacity:0.95;
-  transition: all 0.5s ease; /* لتغيير ديناميكي سلس */
+  font-size:15px;
+  color:#555;
+  margin-bottom:6px;
+  opacity:0.9;
 }
 
 /* التسجيل */
@@ -246,17 +244,6 @@ const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:52";
 const MAGHRIB_TIME = "18:40";
 
-// ===== تحديد بداية رمضان بالميلادي هنا =====
-const ramadanStart = new Date(2026,1,16); // مثال: 14 مارس 2026
-const hijriDates = [
-  "1 رمضان", "2 رمضان", "3 رمضان", "4 رمضان", "5 رمضان",
-  "6 رمضان", "7 رمضان", "8 رمضان", "9 رمضان", "10 رمضان",
-  "11 رمضان", "12 رمضان", "13 رمضان", "14 رمضان", "15 رمضان",
-  "16 رمضان", "17 رمضان", "18 رمضان", "19 رمضان", "20 رمضان",
-  "21 رمضان", "22 رمضان", "23 رمضان", "24 رمضان", "25 رمضان",
-  "26 رمضان", "27 رمضان", "28 رمضان", "29 رمضان", "30 رمضان"
-];
-
 // حفظ الاسم
 function saveName(){
   const name = document.getElementById("username").value.trim();
@@ -265,27 +252,22 @@ function saveName(){
   showWelcome(name,true);
 }
 
-// حساب اليوم الهجري ديناميكيًا
-function getHijriDay(){
-  const today = new Date();
-  const diff = today - ramadanStart;
-  const dayIndex = Math.floor(diff / (1000*60*60*24));
-  if(dayIndex < 0 || dayIndex >= hijriDates.length) return "";
-  return "اليوم : " + hijriDates[dayIndex] + " 1447";
-}
-
 // عرض الصفحة الرئيسية
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
 
+  // ===== إضافة الأنيميشن =====
   if(firstTime){
     box.classList.add("page-enter");
     requestAnimationFrame(()=>{
       box.classList.add("page-enter-active");
     });
   }
+
+  // ===== التاريخ الهجري =====
+  const todayHijri = "15 رمضان 1447 هـ"; // مثال ثابت، يمكن تغييره حسب الرؤية
 
   box.innerHTML = `
     <div class="message">
@@ -294,7 +276,7 @@ function showWelcome(name, firstTime){
       <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
 
-    <div id="hijriDate" class="hijri-date">${getHijriDay()}</div>
+    <div class="hijri-date">📅 اليوم الهجري: ${todayHijri}</div>
 
     <div class="counter-box">
       <div class="counter-title" id="counterTitle"></div>
@@ -330,7 +312,9 @@ function showWelcome(name, firstTime){
     </div>
   `;
 
+  // ===== حل مشكلة الظهور من منتصف الصفحة =====
   window.scrollTo(0,0);
+
   startCounter();
   initLightbox();
 }
