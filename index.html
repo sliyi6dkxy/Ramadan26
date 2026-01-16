@@ -58,6 +58,14 @@ body{
 .message h1{ font-size:24px; font-weight:600; margin:6px 0; }
 .message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
 
+/* التاريخ الهجري */
+.hijri-date{
+  font-size:15px;
+  color:#555;
+  margin-bottom:6px;
+  opacity:0.9;
+}
+
 /* التسجيل */
 .register-box{ text-align:center; margin-top:14px; }
 .register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
@@ -258,12 +266,17 @@ function showWelcome(name, firstTime){
     });
   }
 
+  // ===== التاريخ الهجري =====
+  const todayHijri = "15 رمضان 1447 هـ"; // مثال ثابت، يمكن تغييره حسب الرؤية
+
   box.innerHTML = `
     <div class="message">
       <div class="moon">🌙</div>
       <h1>مرحبًا ${name}</h1>
       <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
+
+    <div class="hijri-date">📅 اليوم الهجري: ${todayHijri}</div>
 
     <div class="counter-box">
       <div class="counter-title" id="counterTitle"></div>
