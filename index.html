@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إمساكية رمضان</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -16,7 +15,6 @@ body{
   min-height:100vh;
   text-align:center;
 }
-
 .container{
   max-width:420px;
   margin:0 auto;
@@ -26,7 +24,6 @@ body{
   align-items:center;
   justify-content:flex-start;
 }
-
 /* ===== أنيميشن دخول الصفحة ===== */
 .page-enter{
   opacity:0;
@@ -37,7 +34,6 @@ body{
   transform:translateY(0);
   transition:opacity .8s ease, transform .8s ease;
 }
-
 /* الرسائل */
 .message{
   margin-bottom:22px;
@@ -57,17 +53,15 @@ body{
 }
 .message h1{ font-size:24px; font-weight:600; margin:6px 0; }
 .message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
-
 /* التاريخ الهجري */
 .hijri-date{
-  font-size:18px; /* أكبر قليلاً */
-  color:#4b3b2a; /* نفس لون الاسم */
+  font-size:18px;
+  color:#4b3b2a;
   font-weight:600;
   margin-bottom:12px;
   opacity:0.95;
-  transition: all 0.5s ease; /* لتغيير ديناميكي سلس */
+  transition: all 0.5s ease;
 }
-
 /* التسجيل */
 .register-box{ text-align:center; margin-top:14px; }
 .register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
@@ -76,7 +70,6 @@ input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1
 button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
-
 /* العداد */
 .counter-box{
   background:#fff;
@@ -88,7 +81,6 @@ button:hover{ background:#688c6d; }
 .counter-title{ font-size:15.5px; margin-bottom:4px; }
 .counter-time{ font-size:22px; font-weight:600; letter-spacing:2px; margin:6px 0; }
 .counter-note{ font-size:14.5px; opacity:.9; }
-
 /* فاصل ديناميكي */
 .section-separator{
   margin:30px 0 24px;
@@ -134,7 +126,6 @@ button:hover{ background:#688c6d; }
   75%{transform:translate(-12px,-5px);}
   100%{transform:translate(0,0);}
 }
-
 /* ورد اليوم */
 .wird-box{
   background:#fff;
@@ -150,7 +141,6 @@ button:hover{ background:#688c6d; }
 }
 .wird-box h2{ font-size:17px; margin-bottom:4px; }
 .wird-box p{ font-size:14.5px; margin:0; }
-
 /* الصور */
 .images-box{
   display:flex;
@@ -168,7 +158,6 @@ button:hover{ background:#688c6d; }
 }
 .images-box img:hover{ transform:scale(1.05); }
 .image-note{ font-size:13px; color:#666; margin-bottom:18px; }
-
 /* الحديث */
 .hadith-box{
   background:#fff;
@@ -181,7 +170,6 @@ button:hover{ background:#688c6d; }
   max-width:100%;
   text-align:center;
 }
-
 /* Lightbox */
 #lightbox{
   display:none;
@@ -213,7 +201,6 @@ button:hover{ background:#688c6d; }
 </head>
 
 <body>
-
 <div class="container">
 
   <div id="registerBox">
@@ -247,7 +234,7 @@ const FAJR_TIME = "05:52";
 const MAGHRIB_TIME = "18:40";
 
 // ===== تحديد بداية رمضان بالميلادي هنا =====
-const ramadanStart = new Date(2026,2,14); // مثال: 14 مارس 2026
+const ramadanStart = new Date(2026,1,14); // مثال: 14 مارس 2026
 const hijriDates = [
   "1 رمضان", "2 رمضان", "3 رمضان", "4 رمضان", "5 رمضان",
   "6 رمضان", "7 رمضان", "8 رمضان", "9 رمضان", "10 رمضان",
