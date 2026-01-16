@@ -17,11 +17,6 @@ body{
   text-align:center;
 }
 
-/* ADDED – منع مشكلة النزول عند التحديث */
-html, body{
-  scroll-behavior:auto;
-}
-
 .container{
   max-width:420px;
   margin:0 auto;
@@ -31,6 +26,36 @@ html, body{
   align-items:center;
   justify-content:flex-start;
 }
+
+/* ================== إضافة جديدة: شاشة الانتقال ================== */
+#transitionScreen{
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background:#fbf6e8;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  opacity:1;
+  transition:opacity .8s ease, transform .8s ease;
+}
+#transitionScreen.hide{
+  opacity:0;
+  transform:translateY(-30px);
+  pointer-events:none;
+}
+#transitionScreen .moon{
+  font-size:40px;
+  margin-bottom:12px;
+}
+#transitionScreen p{
+  font-size:17px;
+  opacity:.9;
+}
+/* ================================================================ */
 
 /* الرسائل */
 .message{
@@ -60,22 +85,6 @@ input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1
 button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
 button:hover{ background:#688c6d; }
 .hidden{ display:none; }
-
-/* ADDED – أنيميشن الانتقال */
-.page-enter{
-  animation:pageEnter .6s ease forwards;
-}
-.page-exit{
-  animation:pageExit .4s ease forwards;
-}
-@keyframes pageEnter{
-  from{opacity:0; transform:translateY(30px);}
-  to{opacity:1; transform:translateY(0);}
-}
-@keyframes pageExit{
-  from{opacity:1; transform:translateY(0);}
-  to{opacity:0; transform:translateY(-20px);}
-}
 
 /* العداد */
 .counter-box{
@@ -214,6 +223,13 @@ button:hover{ background:#688c6d; }
 
 <body>
 
+<!-- ===== إضافة جديدة: شاشة الانتقال ===== -->
+<div id="transitionScreen" class="hidden">
+  <div class="moon">🌙</div>
+  <p>أهلاً بك… لحظات ونبدأ</p>
+</div>
+<!-- ======================================= -->
+
 <div class="container">
 
   <div id="registerBox">
@@ -245,28 +261,32 @@ const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:52";
 const MAGHRIB_TIME = "18:40";
 
+/* ===== إضافة جديدة: تشغيل أنيميشن الانتقال ===== */
+function runTransition(callback){
+  const screen = document.getElementById("transitionScreen");
+  screen.classList.remove("hidden");
+  window.scrollTo(0,0);
+  setTimeout(()=>{
+    screen.classList.add("hide");
+    setTimeout(()=>{
+      screen.remove();
+      if(callback) callback();
+    },800);
+  },600);
+}
+/* ============================================== */
+
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
   localStorage.setItem(STORAGE_KEY, name);
-
-  /* ADDED – أنيميشن خروج */
-  const reg = document.getElementById("registerBox");
-  reg.classList.add("page-exit");
-
-  /* ADDED – تأخير قبل الدخول */
-  setTimeout(()=>{
-    showWelcome(name,true);
-  },400);
+  runTransition(()=>showWelcome(name,true));
 }
 
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
-
-  /* ADDED – أنيميشن دخول */
-  box.classList.add("page-enter");
 
   box.innerHTML = `
     <div class="message">
@@ -313,53 +333,8 @@ function showWelcome(name, firstTime){
   initLightbox();
 }
 
-function startCounter(){
-  const title = document.getElementById("counterTitle");
-  const timeEl = document.getElementById("counterTime");
-  const note = document.getElementById("counterNote");
-
-  function update(){
-    const now = new Date();
-    const [fh,fm] = FAJR_TIME.split(":").map(Number);
-    const [mh,mm] = MAGHRIB_TIME.split(":").map(Number);
-
-    const today = new Date();
-    const fajr = new Date(today.getFullYear(), today.getMonth(), today.getDate(), fh, fm);
-    const maghrib = new Date(today.getFullYear(), today.getMonth(), today.getDate(), mh, mm);
-
-    let target;
-    if(now<fajr){ target=fajr; title.textContent="🌙 متبقي على أذان الفجر"; }
-    else if(now<maghrib){ target=maghrib; title.textContent="⏳ متبقي على أذان المغرب"; }
-    else{ target=new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, fh, fm); title.textContent="🌙 متبقي على أذان الفجر"; }
-
-    const diff = target-now;
-    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
-    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
-    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
-    timeEl.textContent=`${s} : ${m} : ${h}`;
-
-    note.textContent="ذكرٌ يرفعك عند الله";
-  }
-
-  update();
-  setInterval(update,1000);
-}
-
-function initLightbox(){
-  const imgs = document.querySelectorAll(".images-box img");
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-
-  imgs.forEach(img=>{
-    img.addEventListener("click", ()=>{
-      lightbox.style.display="flex";
-      lightboxImg.src = img.src;
-    });
-  });
-}
-
 window.onload = ()=>{
-  window.scrollTo(0,0); /* ADDED */
+  window.scrollTo(0,0);
   const savedName = localStorage.getItem(STORAGE_KEY);
   if(savedName) showWelcome(savedName,false);
 };
