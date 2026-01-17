@@ -278,8 +278,9 @@ function showWelcome(name, firstTime){
   // ===== التاريخ الهجري =====
   const today = new Date();
   const dayDiff = Math.floor((today-firstRamadanDate)/(1000*60*60*24));
-  let hijriDay = (dayDiff>=0 && dayDiff<hijriDates.length) ? hijriDates[dayDiff] : "";
-
+  let hijriDay = (dayDiff>=0 && dayDiff<hijriDates.length)
+  ? `اليوم : ${hijriDates[dayDiff]} 1447`
+  : "";
   box.innerHTML = `
     <div class="message">
       <div class="moon">🌙</div>
