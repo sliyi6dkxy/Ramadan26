@@ -58,14 +58,6 @@ body{
 .message h1{ font-size:24px; font-weight:600; margin:6px 0; }
 .message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
 
-/* ===== التاريخ الهجري ===== */
-.hijri-date{
-  font-size:15px;
-  font-weight:600;
-  margin-bottom:10px;
-  opacity:0.85;
-}
-
 /* التسجيل */
 .register-box{ text-align:center; margin-top:14px; }
 .register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
@@ -191,11 +183,21 @@ button:hover{ background:#688c6d; }
   justify-content:center;
   align-items:center;
   z-index:9999;
+  animation:fadeIn .3s;
 }
 #lightbox img{
   max-width:90%;
   max-height:90%;
   border-radius:10px;
+  animation:zoomIn .3s;
+}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes zoomIn{
+  from{transform:scale(0.7); opacity:0;}
+  to{transform:scale(1); opacity:1;}
 }
 </style>
 </head>
@@ -224,6 +226,7 @@ button:hover{ background:#688c6d; }
 
 </div>
 
+<!-- Lightbox -->
 <div id="lightbox" onclick="this.style.display='none'">
   <img id="lightbox-img" src="">
 </div>
@@ -233,27 +236,7 @@ const STORAGE_KEY = "ramadan_user_name";
 const FAJR_TIME = "05:52";
 const MAGHRIB_TIME = "18:40";
 
-/* === HIJRI ADDITION === */
-/* حدّد هنا أول يوم رمضان بالميلادي */
-const ramadanStartDate = new Date(2026, 1, 11); // 11 مارس 2026
-
-const hijriDays = [
-  "1 رمضان","2 رمضان","3 رمضان","4 رمضان","5 رمضان",
-  "6 رمضان","7 رمضان","8 رمضان","9 رمضان","10 رمضان",
-  "11 رمضان","12 رمضان","13 رمضان","14 رمضان","15 رمضان",
-  "16 رمضان","17 رمضان","18 رمضان","19 رمضان","20 رمضان",
-  "21 رمضان","22 رمضان","23 رمضان","24 رمضان","25 رمضان",
-  "26 رمضان","27 رمضان","28 رمضان","29 رمضان","30 رمضان"
-];
-
-function getHijriDate(){
-  const today = new Date();
-  const diffDays = Math.floor((today - ramadanStartDate) / (1000*60*60*24));
-  if(diffDays < 0 || diffDays >= hijriDays.length) return "";
-  return "اليوم: " + hijriDays[diffDays];
-}
-/* === END HIJRI ADDITION === */
-
+// حفظ الاسم
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
@@ -261,14 +244,18 @@ function saveName(){
   showWelcome(name,true);
 }
 
+// عرض الصفحة الرئيسية
 function showWelcome(name, firstTime){
   document.getElementById("registerBox").classList.add("hidden");
   const box = document.getElementById("welcomeBox");
   box.classList.remove("hidden");
 
+  // ===== إضافة الأنيميشن =====
   if(firstTime){
     box.classList.add("page-enter");
-    requestAnimationFrame(()=> box.classList.add("page-enter-active"));
+    requestAnimationFrame(()=>{
+      box.classList.add("page-enter-active");
+    });
   }
 
   box.innerHTML = `
@@ -277,8 +264,6 @@ function showWelcome(name, firstTime){
       <h1>مرحبًا ${name}</h1>
       <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
     </div>
-
-    <div class="hijri-date">${getHijriDate()}</div>
 
     <div class="counter-box">
       <div class="counter-title" id="counterTitle"></div>
@@ -295,31 +280,37 @@ function showWelcome(name, firstTime){
 
     <div class="wird-box">
       <h2>📖 ورد اليوم</h2>
-      <p>اجعل لك لحظة هادئة، افتح المصحف، واقرأ ما تيسّر</p>
+      <p>
+        اجعل لك لحظة هادئة، افتح المصحف،  
+        واقرأ ما تيسّر بنية القرب من الله.
+      </p>
     </div>
 
     <div class="images-box">
-      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53">
-      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d">
+      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53" alt="">
+      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d" alt="">
     </div>
-
     <div class="image-note">اضغط على الصورة لتكبيرها</div>
 
     <div class="hadith-box">
-      قال رسول الله ﷺ<br>
+      قال رسول الله ﷺ  
+      <br>
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
   `;
 
+  // ===== حل مشكلة الظهور من منتصف الصفحة =====
   window.scrollTo(0,0);
+
   startCounter();
   initLightbox();
 }
 
+// العداد
 function startCounter(){
-  const title = counterTitle;
-  const timeEl = counterTime;
-  const note = counterNote;
+  const title = document.getElementById("counterTitle");
+  const timeEl = document.getElementById("counterTime");
+  const note = document.getElementById("counterNote");
 
   function update(){
     const now = new Date();
@@ -340,21 +331,34 @@ function startCounter(){
     const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
     const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
     timeEl.textContent=`${h} : ${m} : ${s}`;
+
+    const hour = now.getHours()+now.getMinutes()/60;
+    if(hour>=mh && hour<24 && now>=maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
+    else if(hour>=0 && hour<4.5) note.textContent="الليل فرصة… قيام وذكر واستغفار";
+    else if(hour>=4.5 && now<fajr) note.textContent="اقترب الفجر… نية صادقة وسحور مبارك";
+    else if(now>=fajr && hour<12) note.textContent="صباح مبارك 🌿 تقبّل الله طاعتك";
+    else note.textContent="سل صيامك بذكر الله… لم يتبقَ إلا القليل";
   }
 
   update();
   setInterval(update,1000);
 }
 
+// Lightbox
 function initLightbox(){
-  document.querySelectorAll(".images-box img").forEach(img=>{
-    img.onclick=()=>{
+  const imgs = document.querySelectorAll(".images-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  imgs.forEach(img=>{
+    img.addEventListener("click", ()=>{
       lightbox.style.display="flex";
-      document.getElementById("lightbox-img").src = img.src;
-    }
+      lightboxImg.src = img.src;
+    });
   });
 }
 
+// عند تحميل الصفحة
 window.onload = ()=>{
   const savedName = localStorage.getItem(STORAGE_KEY);
   if(savedName) showWelcome(savedName,false);
