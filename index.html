@@ -330,7 +330,7 @@ function startCounter(){
     const h = String(Math.floor(diff/3600000)).padStart(2,"0");
     const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
     const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
-    timeEl.textContent=`${h} : ${m} : ${s}`;
+    timeEl.textContent = `${s} : ${m} : ${h}`;
 
     const hour = now.getHours()+now.getMinutes()/60;
     if(hour>=mh && hour<24 && now>=maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
