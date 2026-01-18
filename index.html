@@ -4,139 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ختمة رمضان</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 <style>
 body{
-  margin:0;
-  font-family:'Tajawal', sans-serif;
-  background:#fefbf3;
-  color:#4b3b2a;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.container{
-  max-width:500px;
-  width:90%;
-  background:#fff;
-  padding:25px 20px;
-  border-radius:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  font-family: 'Tajawal', sans-serif;
   text-align:center;
+  background:#fef9f0;
+  color:#4b3b2a;
+  padding:20px;
 }
-h1{
-  font-size:26px;
-  margin-bottom:12px;
-}
-p{
-  font-size:17px;
-  line-height:1.6;
-}
-.button{
+button{
   padding:10px 16px;
-  border-radius:14px;
+  margin:5px;
   border:none;
+  border-radius:12px;
   background:#7a9b7e;
   color:white;
-  font-size:16px;
   cursor:pointer;
-  margin:6px 4px;
-  transition:0.3s;
-}
-.button:hover{ background:#688c6d; }
-.buttons-row{ display:flex; justify-content:center; flex-wrap:wrap; margin-top:12px; }
-.result-box{
-  margin-top:18px;
-  background:#f0f7f2;
-  padding:14px 12px;
-  border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
   font-size:16px;
 }
-.hijri-date{
-  font-size:18px;
-  margin-bottom:10px;
-  font-weight:600;
-  color:#4b3b2a;
+button:hover{
+  background:#688c6d;
+}
+.hidden{ display:none; }
+.result-box{
+  margin-top:20px;
+  padding:14px;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  display:inline-block;
+  min-width:220px;
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🕌 ختمة القرآن في رمضان</h1>
-  <div class="hijri-date" id="hijriDate"></div>
+<h1>🕌 ختمة القرآن</h1>
 
-  <button class="button" id="startKhatma">ختم القرآن</button>
+<!-- زر الختمة الرئيسي -->
+<button id="startButton">اختر ختمتك</button>
 
-  <div class="buttons-row hidden" id="khatmaOptions">
-    <button class="button" data-count="1">ختمة واحدة</button>
-    <button class="button" data-count="2">ختمتين</button>
-    <button class="button" data-count="3">ثلاث ختمات</button>
-    <button class="button" data-count="4">أربع ختمات</button>
-  </div>
-
-  <div class="result-box" id="khatmaResult"></div>
+<!-- أزرار الختمات (مخفية مبدئياً) -->
+<div id="khutmaButtons" class="hidden">
+  <button data-kh="1">ختمة واحدة</button>
+  <button data-kh="2">ختمتين</button>
+  <button data-kh="3">ثلاث ختمات</button>
+  <button data-kh="4">أربع ختمات</button>
 </div>
 
-<script>
-// ======= ضبط أول يوم رمضان =======
-const firstRamadanDate = new Date("2026-01-13"); // عدّل هنا حسب الرؤية
-const hijriDates = [
-  "1 رمضان","2 رمضان","3 رمضان","4 رمضان","5 رمضان",
-  "6 رمضان","7 رمضان","8 رمضان","9 رمضان","10 رمضان",
-  "11 رمضان","12 رمضان","13 رمضان","14 رمضان","15 رمضان",
-  "16 رمضان","17 رمضان","18 رمضان","19 رمضان","20 رمضان",
-  "21 رمضان","22 رمضان","23 رمضان","24 رمضان","25 رمضان",
-  "26 رمضان","27 رمضان","28 رمضان","29 رمضان","30 رمضان"
-];
+<!-- عرض النتيجة -->
+<div id="result" class="result-box hidden"></div>
 
-// عرض التاريخ الهجري
-function updateHijriDate(){
+<script>
+// ======= إعدادات الختمة =======
+const totalPages = 604; // عدد صفحات القرآن
+const totalRamadanDays = 30; // عدد أيام رمضان
+const pagesPerDay = (kh) => Math.ceil(totalPages/totalRamadanDays/kh); // حساب حسب الختمات
+
+// ====== تحديد اليوم الحالي في رمضان (حسب تاريخ ثابت) ======
+const firstRamadanDate = new Date("2026-01-18"); // ضع هنا أول يوم رمضان ميلادي
+function getRamadanDay(){
   const today = new Date();
-  const dayDiff = Math.floor((today-firstRamadanDate)/(1000*60*60*24));
-  const text = (dayDiff>=0 && dayDiff<hijriDates.length)
-    ? `اليوم : ${hijriDates[dayDiff]} 1447`
-    : "خارج شهر رمضان";
-  document.getElementById("hijriDate").textContent = text;
-  return dayDiff; // نعيد رقم اليوم
+  const diffDays = Math.floor((today-firstRamadanDate)/(1000*60*60*24));
+  if(diffDays<0 || diffDays>=totalRamadanDays) return null; // خارج رمضان
+  return diffDays + 1; // اليوم 1..30
 }
 
-updateHijriDate();
-
-// ======= إدارة الختمة =======
-const startBtn = document.getElementById("startKhatma");
-const khatmaOptions = document.getElementById("khatmaOptions");
-const khatmaResult = document.getElementById("khatmaResult");
-
-// الصفحات الكاملة للقرآن
-const totalPages = 604;
+// ======== التحكم في الأزرار =======
+const startBtn = document.getElementById("startButton");
+const khButtonsDiv = document.getElementById("khutmaButtons");
+const resultDiv = document.getElementById("result");
 
 startBtn.addEventListener("click", ()=>{
-  const dayDiff = updateHijriDate();
-  if(dayDiff<0 || dayDiff>=hijriDates.length){
-    khatmaResult.textContent = "يمكنك استخدام الختمة فقط خلال شهر رمضان 🌙";
-    return;
-  }
-  khatmaOptions.classList.remove("hidden");
-  khatmaResult.textContent = "";
+  khButtonsDiv.classList.toggle("hidden"); // إظهار/إخفاء أزرار الختمات
 });
 
-// عند اختيار ختمة
-khatmaOptions.querySelectorAll("button").forEach(btn=>{
+// عند الضغط على أي ختمة
+khButtonsDiv.querySelectorAll("button").forEach(btn=>{
   btn.addEventListener("click", ()=>{
-    const count = Number(btn.dataset.count);
-    const dayDiff = updateHijriDate();
+    const kh = parseInt(btn.dataset.kh); // عدد الختمات
+    const today = getRamadanDay();
+    if(!today){
+      resultDiv.innerHTML = "⛔ خارج شهر رمضان";
+      resultDiv.classList.remove("hidden");
+      return;
+    }
 
-    // تقسيم الصفحات حسب عدد الختمات
-    const pagesPerKhatma = Math.ceil(totalPages / count / hijriDates.length);
+    const perDay = pagesPerDay(kh); // الصفحات لكل يوم لكل ختمة
+    let startPage = ((today-1)*perDay) % totalPages +1;
+    let endPage = startPage + perDay -1;
+    if(endPage>totalPages) endPage = totalPages;
 
-    const startPage = ((dayDiff * pagesPerKhatma) % totalPages) + 1;
-    const endPage = Math.min(startPage + pagesPerKhatma - 1, totalPages);
-
-    khatmaResult.innerHTML = `🕌 اليوم تقرأ من الصفحة (${startPage}) إلى الصفحة (${endPage})<br>
-      📖 عدد الختمات المختارة: ${count}`;
+    resultDiv.innerHTML = `
+      🕌 اليوم ${today} من رمضان <br>
+      ختمة ${kh} • اقرأ من الصفحة (${startPage}) إلى (${endPage})
+    `;
+    resultDiv.classList.remove("hidden");
   });
 });
 </script>
