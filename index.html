@@ -2,94 +2,148 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>زر ختم القرآن</title>
+<title>ختمة القرآن</title>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #fff;
-    text-align: center;
-    padding: 40px;
-  }
+body{
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-  .khatma-btn {
-    padding: 14px 28px;
-    font-size: 18px;
-    background: #2ecc71;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
+.card{
+  background: #fff;
+  padding: 20px;
+  width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
 
-  .options {
-    margin-top: 20px;
-    display: none;
-  }
+#hijriDate{
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
 
-  .options button {
-    margin: 6px;
-    padding: 10px 18px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background: #3498db;
-    color: #fff;
-  }
+#khatmaBtn{
+  background: #1e1e1e;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
 
-  .result {
-    margin-top: 20px;
-    font-size: 18px;
-    line-height: 1.8;
-  }
+.options{
+  margin-top: 12px;
+  display: none;
+}
+
+.options button{
+  margin: 4px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#result{
+  margin-top: 12px;
+  font-size: 14px;
+  color: #333;
+}
 </style>
 </head>
 
 <body>
 
-<button class="khatma-btn" onclick="toggleOptions()">📖 ختم القرآن</button>
+<div class="card">
 
-<div class="options" id="options">
-  <button onclick="showReading(1)">ختمة واحدة</button>
-  <button onclick="showReading(2)">ختمتين</button>
-  <button onclick="showReading(3)">3 ختمات</button>
-  <button onclick="showReading(4)">4 ختمات</button>
+  <!-- التاريخ الهجري -->
+  <div id="hijriDate">🗓</div>
+
+  <!-- زر الختمة -->
+  <button id="khatmaBtn">📖 ختم القرآن</button>
+
+  <!-- الخيارات -->
+  <div class="options" id="options">
+    <button onclick="selectKhatma(1)">ختمة واحدة</button>
+    <button onclick="selectKhatma(2)">ختمتين</button>
+    <button onclick="selectKhatma(3)">ثلاث ختمات</button>
+    <button onclick="selectKhatma(4)">أربع ختمات</button>
+  </div>
+
+  <!-- النتيجة -->
+  <div id="result"></div>
+
 </div>
 
-<div class="result" id="result"></div>
-
 <script>
-function toggleOptions() {
-  const opt = document.getElementById("options");
-  opt.style.display = opt.style.display === "block" ? "none" : "block";
+// ==========================
+// 1️⃣ تحديد أول يوم رمضان (يدوي)
+// ==========================
+const ramadanStart = new Date(2026, 1, 18); 
+// ⚠️ ملاحظة: الشهر يبدأ من 0
+// 1 = فبراير
+
+// ==========================
+// 2️⃣ حساب اليوم الهجري
+// ==========================
+function getRamadanDay(){
+  const today = new Date();
+  const diff = Math.floor(
+    (today - ramadanStart) / (1000 * 60 * 60 * 24)
+  );
+  return diff + 1;
 }
 
-function showReading(khatmas) {
-  const ramadanStart = new Date(2026, 1, 14); // عدّل عند ثبوت الرؤية
-  const today = new Date();
+const hijriDates = [
+  "1 رمضان","2 رمضان","3 رمضان","4 رمضان","5 رمضان",
+  "6 رمضان","7 رمضان","8 رمضان","9 رمضان","10 رمضان",
+  "11 رمضان","12 رمضان","13 رمضان","14 رمضان","15 رمضان",
+  "16 رمضان","17 رمضان","18 رمضان","19 رمضان","20 رمضان",
+  "21 رمضان","22 رمضان","23 رمضان","24 رمضان","25 رمضان",
+  "26 رمضان","27 رمضان","28 رمضان","29 رمضان","30 رمضان"
+];
 
-  const dayDiff = Math.floor(
-    (today - ramadanStart) / (1000 * 60 * 60 * 24)
-  ) + 1;
+const day = getRamadanDay();
 
-  if (dayDiff < 1 || dayDiff > 30) {
-    document.getElementById("result").textContent =
-      "الخطة متاحة خلال شهر رمضان فقط 🌙";
-    return;
-  }
+if(day >= 1 && day <= 30){
+  document.getElementById("hijriDate").textContent =
+    `🗓 اليوم : ${hijriDates[day-1]} 1447`;
+}else{
+  document.getElementById("hijriDate").textContent =
+    "خارج شهر رمضان";
+}
 
+// ==========================
+// 3️⃣ زر إظهار الخيارات
+// ==========================
+document.getElementById("khatmaBtn").onclick = function(){
+  const opt = document.getElementById("options");
+  opt.style.display = opt.style.display === "block" ? "none" : "block";
+};
+
+// ==========================
+// 4️⃣ حساب الختمة
+// ==========================
+function selectKhatma(count){
   const totalPages = 604;
-  const pagesPerDay = Math.ceil((totalPages * khatmas) / 30);
+  const pagesPerDay = Math.ceil((totalPages * count) / 30);
 
-  const startPage = (dayDiff - 1) * pagesPerDay + 1;
-  const endPage = Math.min(startPage + pagesPerDay - 1, totalPages * khatmas);
+  const startPage = (day - 1) * pagesPerDay + 1;
+  let endPage = startPage + pagesPerDay - 1;
+  if(endPage > totalPages) endPage = totalPages;
 
-  document.getElementById("result").innerHTML = `
-    📅 اليوم: ${dayDiff} رمضان<br>
-    📘 عدد الختمات: ${khatmas}<br>
-    ➡️ اقرأ من الصفحة <b>${startPage}</b> إلى <b>${endPage}</b>
-  `;
+  document.getElementById("result").textContent =
+    `📘 اليوم تقرأ من الصفحة ${startPage} إلى ${endPage}`;
 }
 </script>
 
