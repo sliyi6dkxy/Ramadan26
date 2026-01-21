@@ -385,14 +385,37 @@ function startCounter(){
     }
     title.textContent = prayerName;
 
-    // الرسائل أسفل العداد
-    const hour = now.getHours()+now.getMinutes()/60;
-    if(hour>=18 && hour<24 && now>=prayersToday.Maghrib) note.textContent="صحة فطورك 🤍 تقبّل الله صيامك";
-    else if(hour>=0 && hour<4.5) note.textContent="الليل فرصة… قيام وذكر واستغفار";
-    else if(hour>=4.5 && now<prayersToday.Fajr) note.textContent="اقترب الفجر… نية صادقة وسحور مبارك";
-    else if(now>=prayersToday.Fajr && hour<12) note.textContent="صباح مبارك 🌿 تقبّل الله طاعتك";
-    else note.textContent="سل صيامك بذكر الله… لم يتبقَ إلا القليل";
-  }
+    // ===== الرسائل حسب تقسيم اليوم =====
+const nowMinutes = now.getHours() * 60 + now.getMinutes();
+const fajrMinutes =
+  prayersToday.Fajr.getHours() * 60 + prayersToday.Fajr.getMinutes();
+const maghribMinutes =
+  prayersToday.Maghrib.getHours() * 60 + prayersToday.Maghrib.getMinutes();
+
+if (nowMinutes >= 0 && nowMinutes < 330) {
+  // 12:00 → 5:30
+  note.textContent = "🌙 وقت السحور — اجعل نيتك خالصة، فالسحور بركة";
+
+} else if (nowMinutes >= 330 && nowMinutes < fajrMinutes) {
+  // 5:30 → الفجر
+  note.textContent = "⏳ اقترب وقت الفجر — دقائق ويبدأ يوم الطاعة";
+
+} else if (nowMinutes >= fajrMinutes && nowMinutes < 510) {
+  // الفجر → 8:30
+  note.textContent = "🌅 فجر مبارك — بداية يوم بطاعة الله";
+
+} else if (nowMinutes >= 510 && nowMinutes < 720) {
+  // 8:30 → 12:00
+  note.textContent = "☀️ صباح مبارك — تقبّل الله طاعتك";
+
+} else if (nowMinutes >= 720 && nowMinutes < maghribMinutes) {
+  // 12:00 → المغرب
+  note.textContent = "🤲 سل صيامك بذكر الله — فالأجر عظيم بإذن الله";
+
+} else {
+  // المغرب → 12:00
+  note.textContent = "🌙 صحة فطورك — تقبّل الله صيامك";
+}
 
   update();
   setInterval(update,1000);
