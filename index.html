@@ -412,8 +412,11 @@ if (nowMinutes >= 0 && nowMinutes < 330) {
 } else {
   note.textContent = "🌙 صحة فطورك — تقبّل الله صيامك";
 }
-  update();
-  setInterval(update,1000);
+
+} // ✅ إغلاق دالة update
+
+update();
+setInterval(update,1000);
 }
 
 // Lightbox
