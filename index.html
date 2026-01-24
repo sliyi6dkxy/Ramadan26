@@ -227,6 +227,44 @@ button:hover{ background:#688c6d; }
   color:#4b3b2a;
   cursor:default;
 }
+  /* ===== عداد العيد ===== */
+.eid-counter-box{
+  background:#fff;
+  border-radius:18px;
+  padding:14px 10px;
+  margin:26px 0 10px;
+  box-shadow:0 6px 14px rgba(0,0,0,.08);
+}
+
+.eid-title{
+  font-size:16px;
+  margin-bottom:10px;
+  font-weight:600;
+}
+
+.eid-timer{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.eid-unit{
+  flex:1;
+  background:#fbf6e8;
+  border-radius:14px;
+  padding:8px 4px;
+}
+
+.eid-unit span{
+  display:block;
+  font-size:20px;
+  font-weight:600;
+}
+
+.eid-unit small{
+  font-size:12px;
+  opacity:.8;
+}
 </style>
 </head>
 
@@ -258,7 +296,29 @@ button:hover{ background:#688c6d; }
 <div id="lightbox" onclick="this.style.display='none'">
   <img id="lightbox-img" src="">
 </div>
+<!-- 🎉 عداد العيد -->
+<div class="eid-counter-box">
+  <div class="eid-title">🎉 متبقي على العيد</div>
 
+  <div class="eid-timer">
+    <div class="eid-unit">
+      <span id="eidDays">00</span>
+      <small>أيام</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidHours">00</span>
+      <small>ساعات</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidMinutes">00</span>
+      <small>دقائق</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidSeconds">00</span>
+      <small>ثواني</small>
+    </div>
+  </div>
+</div>
 <script>
 const STORAGE_KEY = "ramadan_user_name";
 
@@ -511,6 +571,45 @@ window.onload = ()=>{
 
   checkWirdStatus(); // ← هذا السطر مهم جدًا
 };
+  // ===== عداد العيد =====
+const eidDate = new Date("2026-03-20T18:30:00"); 
+// ⬆️ غيّر التاريخ والوقت كما تريد (وقت ليلة العيد مثلاً)
+
+function startEidCounter(){
+  const dEl = document.getElementById("eidDays");
+  const hEl = document.getElementById("eidHours");
+  const mEl = document.getElementById("eidMinutes");
+  const sEl = document.getElementById("eidSeconds");
+
+  if(!dEl) return;
+
+  function updateEid(){
+    const now = new Date();
+    const diff = eidDate - now;
+
+    if(diff <= 0){
+      // الانتقال لصفحة العيد
+      window.location.href = "eid.html";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    dEl.textContent = String(days).padStart(2,"0");
+    hEl.textContent = String(hours).padStart(2,"0");
+    mEl.textContent = String(minutes).padStart(2,"0");
+    sEl.textContent = String(seconds).padStart(2,"0");
+  }
+
+  updateEid();
+  setInterval(updateEid,1000);
+}
+
+// تشغيل عداد العيد
+startEidCounter();
 </script>
 
 </body>
