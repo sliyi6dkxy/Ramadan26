@@ -296,29 +296,7 @@ button:hover{ background:#688c6d; }
 <div id="lightbox" onclick="this.style.display='none'">
   <img id="lightbox-img" src="">
 </div>
-<!-- 🎉 عداد العيد -->
-<div class="eid-counter-box">
-  <div class="eid-title">🎉 متبقي على العيد</div>
 
-  <div class="eid-timer">
-    <div class="eid-unit">
-      <span id="eidDays">00</span>
-      <small>أيام</small>
-    </div>
-    <div class="eid-unit">
-      <span id="eidHours">00</span>
-      <small>ساعات</small>
-    </div>
-    <div class="eid-unit">
-      <span id="eidMinutes">00</span>
-      <small>دقائق</small>
-    </div>
-    <div class="eid-unit">
-      <span id="eidSeconds">00</span>
-      <small>ثواني</small>
-    </div>
-  </div>
-</div>
 <script>
 const STORAGE_KEY = "ramadan_user_name";
 
@@ -414,6 +392,29 @@ function showWelcome(name, firstTime){
   <button id="wirdBtn" onclick="markWirdDone()" class="wird-btn">
     📖 أنجزت ورد اليوم
   </button>
+</div>
+<!-- 🎉 عداد العيد -->
+<div class="eid-counter-box">
+  <div class="eid-title">🎉 متبقي على العيد</div>
+
+  <div class="eid-timer">
+    <div class="eid-unit">
+      <span id="eidDays">00</span>
+      <small>أيام</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidHours">00</span>
+      <small>ساعات</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidMinutes">00</span>
+      <small>دقائق</small>
+    </div>
+    <div class="eid-unit">
+      <span id="eidSeconds">00</span>
+      <small>ثواني</small>
+    </div>
+  </div>
 </div>
   `;
 
