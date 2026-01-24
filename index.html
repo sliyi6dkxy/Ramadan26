@@ -391,28 +391,51 @@ const nowMinutes = now.getHours() * 60 + now.getMinutes();
 const fajrMinutes =
   prayersToday.Fajr.getHours() * 60 + prayersToday.Fajr.getMinutes();
 
+const dhuhrMinutes =
+  prayersToday.Dhuhr.getHours() * 60 + prayersToday.Dhuhr.getMinutes();
+
+const asrMinutes =
+  prayersToday.Asr.getHours() * 60 + prayersToday.Asr.getMinutes();
+
 const maghribMinutes =
   prayersToday.Maghrib.getHours() * 60 + prayersToday.Maghrib.getMinutes();
 
+// من 12:00 إلى 5:30 صباحًا — السحور
 if (nowMinutes >= 0 && nowMinutes < 330) {
   note.textContent = "🌙 وقت السحور — اجعل نيتك خالصة، فالسحور بركة";
 
+// من 5:30 إلى أذان الفجر
 } else if (nowMinutes >= 330 && nowMinutes < fajrMinutes) {
   note.textContent = "⏳ اقترب وقت الفجر — دقائق ويبدأ يوم الطاعة";
 
+// من أذان الفجر إلى 8:30
 } else if (nowMinutes >= fajrMinutes && nowMinutes < 510) {
-  note.textContent = "🌅 فجر مبارك — بداية يوم بطاعة الله";
+  note.textContent = "🌅 بعد الفجر — صباح مبارك، تقبّل الله طاعتك";
 
+// من 8:30 إلى 12:00
 } else if (nowMinutes >= 510 && nowMinutes < 720) {
-  note.textContent = "☀️ صباح مبارك — تقبّل الله طاعتك";
+  note.textContent = "☀️ صباح هادئ — اذكر الله وابدأ يومك بنية صادقة";
 
-} else if (nowMinutes >= 720 && nowMinutes < maghribMinutes) {
-  note.textContent = "🤲 سل صيامك بذكر الله — فالأجر عظيم بإذن الله";
+// من 12:00 إلى أذان الظهر
+} else if (nowMinutes >= 720 && nowMinutes < dhuhrMinutes) {
+  note.textContent = "🕰️ اقترب أذان الظهر — استعد للقاء الصلاة";
 
+// من أذان الظهر إلى 4:30
+} else if (nowMinutes >= dhuhrMinutes && nowMinutes < 990) {
+  note.textContent = "🌿 ما بعد الظهر — الصبر عبادة، وكل لحظة تُكتب أجرًا";
+
+// من 4:30 إلى أذان العصر
+} else if (nowMinutes >= 990 && nowMinutes < asrMinutes) {
+  note.textContent = "⏳ اقترب وقت العصر — جدّد نيتك وأكثر من الذكر";
+
+// من أذان العصر إلى المغرب
+} else if (nowMinutes >= asrMinutes && nowMinutes < maghribMinutes) {
+  note.textContent = "🤲 لم يتبقَّ إلا القليل — سل صيامك بذكر الله";
+
+// من المغرب إلى 12:00 ليلًا
 } else {
   note.textContent = "🌙 صحة فطورك — تقبّل الله صيامك";
 }
-
 } // ✅ إغلاق دالة update
 
 update();
