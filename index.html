@@ -227,13 +227,52 @@ button:hover{ background:#688c6d; }
   color:#4b3b2a;
   cursor:default;
 }
-  /* ===== عداد العيد ===== */
-.eid-counter-box{
-  background:#fff;
-  border-radius:18px;
-  padding:14px 10px;
-  margin:26px 0 10px;
-  box-shadow:0 6px 14px rgba(0,0,0,.08);
+  /* 🎉 صندوق عداد العيد */
+.eid-counter-box {
+  max-width: 260px;          /* تصغير العرض */
+  margin: 20px auto;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* عنوان العداد */
+.eid-title {
+  font-size: 14px;           /* تصغير الخط */
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* ترتيب الوحدات */
+.eid-timer {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+/* كل وحدة */
+.eid-unit {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 6px 4px;
+}
+
+/* الرقم */
+.eid-unit span {
+  font-size: 16px;           /* تصغير الأرقام */
+  font-weight: bold;
+  display: block;
+}
+
+/* النص تحت الرقم */
+.eid-unit small {
+  font-size: 10px;
+  opacity: 0.8;
+}
 }
 
 .eid-title{
@@ -399,7 +438,7 @@ function showWelcome(name, firstTime){
 
   <div class="eid-timer">
     <div class="eid-unit">
-      <span id="eidDays">00</span>
+      <span id="eidDays">19</span>
       <small>أيام</small>
     </div>
     <div class="eid-unit">
