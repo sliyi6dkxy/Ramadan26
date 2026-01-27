@@ -198,12 +198,16 @@ document.getElementById("welcomeText").textContent = `عيدك مبارك يا $
 const userPoints = localStorage.getItem("user_points") || 0;
 const userAchievements = localStorage.getItem("user_achievements") || 0;
 const userName = localStorage.getItem("ramadan_user_name") || "ضيفنا الكريم";
- // تحديث الإحصائيات في صفحة العيد
+ /* ===== تحديث الإحصائيات ===== */
 const statsElements = document.querySelectorAll(".stats .stat span:last-child");
-if(statsElements.length >= 2){
-  statsElements[0].textContent = userPoints;       // نقاط الدخول
-  statsElements[1].textContent = userAchievements; // أيام الإنجاز
-} 
+
+if(statsElements.length >= 4){
+  statsElements[0].textContent = userPoints;              // نقاط الدخول
+  statsElements[1].textContent = userAchievements;        // نقاط الإنجاز
+  statsElements[2].textContent = userAchievements;        // أيام الإنجاز (مؤقتاً نفس القيمة)
+  statsElements[3].textContent =
+    localStorage.getItem("first_visit_date") || "رمضان"; // أول زيارة
+}
 
 /* ===== الرسالة ===== */
 const box = document.getElementById("messageBox");
