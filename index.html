@@ -561,7 +561,7 @@ window.onload = ()=>{
   checkWirdStatus(); // ← هذا السطر مهم جدًا
 };
   // ===== عداد العيد =====
-const eidTargetDate = new Date("2026-02-17T06:00:00"); 
+const eidTargetDate = new Date("2026-01-27T18:27:00"); 
 // ↑ غيّر التاريخ والوقت هنا فقط
 
 function startEidCounter(){
@@ -569,11 +569,14 @@ function startEidCounter(){
     const now = new Date();
     const diff = eidTargetDate - now;
 
-    if(diff <= 0){
-      // عند وصول العيد
-      window.location.href = "eid.html"; // صفحة العيد
-      return;
-    }
+  if(diff <= 0){
+  // ✅ تسجيل أن العيد بدأ
+  localStorage.setItem("eid_ready", "1");
+
+  // ✅ الانتقال لصفحة العيد
+  window.location.href = "eid.html";
+  return;
+  }
 
     const totalSeconds = Math.floor(diff / 1000);
     const seconds = totalSeconds % 60;
