@@ -232,7 +232,7 @@ button:hover{ background:#688c6d; }
 .eid-strip {
   margin: 16px auto;
   width: 320px; /* نفس عرض المستطيلات الأخرى */
-  height: 90px; /* ارتفاع قصير مناسب */
+  height: 100px; /* ارتفاع مناسب لتوازن النص والعداد */
   background: #fff; /* أبيض */
   border-radius: 16px;
   text-align: center;
@@ -240,27 +240,27 @@ button:hover{ background:#688c6d; }
 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* يضع المحتوى في منتصف المستطيل رأسياً */
-  align-items: center; /* يضع المحتوى في منتصف المستطيل أفقياً */
+  justify-content: center; /* المحتوى في وسط المستطيل رأسيًا */
+  align-items: center; /* المحتوى في وسط المستطيل أفقيًا */
 }
 
 /* النص العلوي */
 .eid-strip-title {
-  font-size: 16px; /* أكبر من العداد */
+  font-size: 17px; /* أكبر من العداد لكن ليس ضخم جدًا */
   font-weight: 600;
   color: #4b3b2a;
-  margin-bottom: 8px; /* فرق بين النص والعداد */
+  margin-bottom: 12px; /* فرق مناسب بين النص والعداد */
 }
 
 /* العداد */
 .eid-strip-time {
-  font-size: 14px; /* أكبر من السابق، متناسق */
+  font-size: 16px; /* حجم متوازن مع النص */
   font-weight: 600;
   letter-spacing: 2px;
   color: #4b3b2a;
-  font-variant-numeric: tabular-nums; /* تجعل الأرقام ثابتة */
+  font-variant-numeric: tabular-nums; /* الأرقام ثابتة الحجم */
   display: flex;
-  gap: 8px; /* مسافة بين الأيام والساعات والدقائق والثواني */
+  gap: 10px; /* مسافة بين الأيام والساعات والدقائق والثواني */
 }
 </style>
 </head>
