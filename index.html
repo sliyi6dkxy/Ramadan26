@@ -230,28 +230,33 @@ button:hover{ background:#688c6d; }
 /* ===== عداد العيد البسيط ===== */
 .eid-strip {
   margin: 16px auto;
-  width: 280px; /* قلّل الطول */
-  background: #bfbfbf; /* نفس لون المربعات السابقة */
-  border-radius: 12px;
-  padding: 10px 8px; /* تقليل الحشو ليصبح أقصر */
+  width: 320px; /* نفس عرض المستطيلات الأخرى */
+  background: #fff; /* أبيض مثل باقي المربعات */
+  border-radius: 16px;
+  padding: 12px 0; /* ارتفاع قصير ومناسب */
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* ظل خفيف مثل باقي المربعات */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .eid-strip-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: #2f2414;
+  color: #4b3b2a; /* نفس لون النص في الصفحة */
   margin-bottom: 6px;
 }
 
 .eid-strip-time {
-  font-size: 18px; /* أصغر قليلًا ليصبح متناسق */
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: 2px;
-  color: #2f2414;
-  font-variant-numeric: tabular-nums;
-  min-height: 26px;
+  color: #4b3b2a;
+  font-variant-numeric: tabular-nums; /* تجعل الأرقام ثابتة */
+  display: flex;
+  gap: 6px; /* مسافة بين الأيام والساعات والدقائق والثواني */
 }
 </style>
 </head>
