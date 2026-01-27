@@ -188,6 +188,11 @@ body{
 </div>
 
 <script>
+  // منع الدخول قبل وقت العيد
+if (!localStorage.getItem("eid_ready")) {
+  alert("⏳ العيد لم يحن وقته بعد");
+  window.location.href = "index.html";
+}
 /* ===== الاسم ===== */
 const NAME_KEY = "ramadan_user_name";
 const MESSAGE_SENT_KEY = "eid_message_sent";
