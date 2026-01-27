@@ -227,41 +227,36 @@ button:hover{ background:#688c6d; }
   color:#4b3b2a;
   cursor:default;
 }
-/* ===== عداد العيد البسيط ===== */
-/* المستطيل */
+/* ===== عداد العيد الجديد ===== */
 .eid-strip {
+  width: 320px;               /* نفس عرض المستطيلات الأخرى */
+  height: 70px;               /* ارتفاع قصير ومتناسق */
+  background: #fff;           /* أبيض مثل المستطيلات الأخرى */
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   margin: 16px auto;
-  width: 320px;      /* نفس عرض المستطيلات الأخرى */
-  height: 80px;      /* ارتفاع قصير ومتناسق */
-  background: #fff;  /* أبيض مثل باقي المستطيلات */
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-
   display: flex;
   flex-direction: column;
-  justify-content: center; /* المحتوى في وسط المستطيل رأسيًا */
-  align-items: center;     /* المحتوى في منتصف المستطيل أفقيًا */
-  padding: 8px 0;          /* قليل من الحشو من الأعلى والأسفل */
+  justify-content: center;    /* المحتوى في منتصف المستطيل رأسيًا */
+  align-items: center;        /* المحتوى في المنتصف أفقيًا */
+  padding: 6px 0;
 }
 
-/* النص العلوي */
 .eid-strip-title {
-  font-size: 18px;   /* أكبر من العداد، متناسق مع الارتفاع */
+  font-size: 17px;            /* أكبر من العداد قليلًا */
   font-weight: 600;
   color: #4b3b2a;
-  margin-bottom: 8px; /* فرق مناسب بين النص والعداد */
+  margin-bottom: 4px;         /* فرق بسيط جدًا بين النص والعداد */
 }
 
-/* العداد */
 .eid-strip-time {
-  font-size: 16px;        /* حجم واضح ومناسب مع النص */
+  font-size: 19px;            /* واضح ومتناسق مع المستطيل */
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: #4b3b2a;
-  font-variant-numeric: tabular-nums; /* أرقام ثابتة الحجم */
+  font-variant-numeric: tabular-nums; /* الأرقام ثابتة الحجم */
   display: flex;
-  gap: 10px;              /* مسافة بين الأيام والساعات والدقائق والثواني */
+  gap: 8px;                   /* مسافة بين الأيام والساعات والدقائق والثواني */
 }
 </style>
 </head>
