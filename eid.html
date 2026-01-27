@@ -194,6 +194,16 @@ const MESSAGE_SENT_KEY = "eid_message_sent";
 
 const name = localStorage.getItem(NAME_KEY) || "ضيفنا الكريم";
 document.getElementById("welcomeText").textContent = `عيدك مبارك يا ${name}`;
+  // جلب البيانات من الصفحة الرئيسية
+const userPoints = localStorage.getItem("user_points") || 0;
+const userAchievements = localStorage.getItem("user_achievements") || 0;
+const userName = localStorage.getItem("ramadan_user_name") || "ضيفنا الكريم";
+ // تحديث الإحصائيات في صفحة العيد
+const statsElements = document.querySelectorAll(".stats .stat span:last-child");
+if(statsElements.length >= 2){
+  statsElements[0].textContent = userPoints;       // نقاط الدخول
+  statsElements[1].textContent = userAchievements; // أيام الإنجاز
+} 
 
 /* ===== الرسالة ===== */
 const box = document.getElementById("messageBox");
