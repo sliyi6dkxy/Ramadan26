@@ -228,10 +228,11 @@ button:hover{ background:#688c6d; }
   cursor:default;
 }
 /* ===== عداد العيد البسيط ===== */
+/* المستطيل */
 .eid-strip {
   margin: 16px auto;
-  width: 320px; /* عرض مثل المستطيلات الأخرى */
-  height: 80px; /* ارتفاع قصير وثابت */
+  width: 320px; /* نفس عرض المستطيلات الأخرى */
+  height: 90px; /* ارتفاع قصير مناسب */
   background: #fff; /* أبيض */
   border-radius: 16px;
   text-align: center;
@@ -243,21 +244,23 @@ button:hover{ background:#688c6d; }
   align-items: center; /* يضع المحتوى في منتصف المستطيل أفقياً */
 }
 
+/* النص العلوي */
 .eid-strip-title {
-  font-size: 13px; /* تصغير الخط */
+  font-size: 16px; /* أكبر من العداد */
   font-weight: 600;
   color: #4b3b2a;
-  margin-bottom: 4px; /* مسافة صغيرة بين العنوان والعداد */
+  margin-bottom: 8px; /* فرق بين النص والعداد */
 }
 
+/* العداد */
 .eid-strip-time {
-  font-size: 16px; /* حجم مناسب للأرقام */
+  font-size: 14px; /* أكبر من السابق، متناسق */
   font-weight: 600;
   letter-spacing: 2px;
   color: #4b3b2a;
   font-variant-numeric: tabular-nums; /* تجعل الأرقام ثابتة */
   display: flex;
-  gap: 6px; /* مسافة بين الأيام والساعات والدقائق والثواني */
+  gap: 8px; /* مسافة بين الأيام والساعات والدقائق والثواني */
 }
 </style>
 </head>
