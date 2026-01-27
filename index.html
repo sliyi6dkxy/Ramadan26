@@ -320,6 +320,13 @@ function saveName(){
   if(!name) return;
   localStorage.setItem(STORAGE_KEY, name);
   showWelcome(name,true);
+  // هذه قيم افتراضية لتوضيح المثال
+const userPoints = 25; // عدد نقاط الدخول
+const userAchievements = 10; // عدد الأيام التي أنجزها المستخدم
+
+// حفظها في LocalStorage
+localStorage.setItem("user_points", userPoints);
+localStorage.setItem("user_achievements", userAchievements);
 }
 
 // عرض الصفحة الرئيسية
