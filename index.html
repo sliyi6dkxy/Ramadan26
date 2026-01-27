@@ -228,25 +228,33 @@ button:hover{ background:#688c6d; }
   cursor:default;
 }
 /* ===== عداد العيد البسيط ===== */
-.eid-counter-simple{
-  margin-top:18px;
-  padding:12px 14px;
-  background:rgba(0,0,0,0.35);
-  border-radius:14px;
-  display:inline-block;
+.eid-strip {
+  margin: 16px auto;
+  width: 90%;
+  max-width: 360px;
+  background: linear-gradient(135deg, #e8dcc6, #d6c3a3);
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
-.eid-title{
-  font-size:14px;
-  margin-bottom:6px;
-  color:#f5e7c6;
+.eid-strip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b3b1f;
+  margin-bottom: 6px;
 }
 
-.eid-time{
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:2px;
-  color:#ffffff;
+.eid-strip-time {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #2f2414;
+
+  /* هذا يمنع الاهتزاز والتمدد */
+  font-variant-numeric: tabular-nums;
+  min-height: 28px;
 }
 </style>
 </head>
@@ -377,9 +385,9 @@ function showWelcome(name, firstTime){
   </button>
 </div>
 <!-- 🎉 عداد العيد -->
-<div class="eid-counter-simple">
-  <div class="eid-title">🎉 متبقي على العيد</div>
-  <div class="eid-time">
+<div class="eid-strip">
+  <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
+  <div class="eid-strip-time">
     <span id="eidSeconds">00</span> :
     <span id="eidMinutes">00</span> :
     <span id="eidHours">00</span> :
