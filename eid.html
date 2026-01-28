@@ -173,11 +173,12 @@ body{
 
   <div class="message-box section delay3" id="messageBox"></div>
 
- <div class="stats section delay4">
-  <h3>إحصائياتك</h3>
-  <div class="stat"><span>⭐ أول زيارة</span><span id="firstVisit">—</span></div>
-  <div class="stat"><span>🎯 نقاط الإنجاز</span><span id="userAchievements">—</span></div>
- </div>
+<div class="stats section delay4">
+  <h3>📊 إحصائياتك</h3>
+  <div class="stat"><span>⭐ تاريخ أول زيارة</span><span id="firstVisitDate">—</span></div>
+  <div class="stat"><span>🎯 نقاط الإنجاز</span><span id="achievementPoints">0</span></div>
+  <div class="stat"><span>⭐ نقاط الدخول</span><span id="visitPoints">0</span></div>
+</div>
 
   <div class="goodbye section delay4">
     نسعد بوجودك معنا، وكل عام وأنت بخير 🤍
@@ -202,18 +203,29 @@ const firstVisitDate = localStorage.getItem("first_visit_date") || "—";
 const userAchievements = localStorage.getItem("user_achievements") || 0;
 
 // تحديث الإحصائيات
-document.getElementById("firstVisit").textContent = firstVisitDate;
-document.getElementById("userAchievements").textContent = userAchievements;
- /* ===== تحديث الإحصائيات ===== */
-const statsElements = document.querySelectorAll(".stats .stat span:last-child");
+function updateStats() {
+  const firstVisit = localStorage.getItem("first_visit_date") || "—";
+  const achievementPoints = JSON.parse(localStorage.getItem("achievement_days") || "[]").length;
+  const visitPoints = JSON.parse(localStorage.getItem("visit_days") || "[]").length;
 
-if(statsElements.length >= 4){
-  statsElements[0].textContent = userPoints;              // نقاط الدخول
-  statsElements[1].textContent = userAchievements;        // نقاط الإنجاز
-  statsElements[2].textContent = userAchievements;        // أيام الإنجاز (مؤقتاً نفس القيمة)
-  statsElements[3].textContent =
-    localStorage.getItem("first_visit_date") || "رمضان"; // أول زيارة
+  document.getElementById("firstVisitDate").textContent = firstVisit;
+  document.getElementById("achievementPoints").textContent = achievementPoints;
+  document.getElementById("visitPoints").textContent = visitPoints;
 }
+}
+  function markWirdDone(){
+  // تسجيل الإنجاز
+  const today = new Date().toLocaleDateString("ar-EG");
+  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
+
+  if (!achievementDays.includes(today)) {
+    achievementDays.push(today);
+    localStorage.setItem("achievement_days", JSON.stringify(achievementDays));
+  }
+
+  // تحديث الإحصائيات فورًا
+  updateStats();
+  }
 
 /* ===== الرسالة ===== */
 const box = document.getElementById("messageBox");
