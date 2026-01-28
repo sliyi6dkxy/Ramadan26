@@ -677,8 +677,9 @@ function startEidCounter(){
   localStorage.setItem("eid_ready", "1");
 
   // ✅ الانتقال لصفحة العيد
-  window.location.href = "eid.html";
-  return;
+  if(diff <= 0){
+  localStorage.setItem("eid_ready", "1");
+  // لا تحويل تلقائي
   }
 
     const totalSeconds = Math.floor(diff / 1000);
