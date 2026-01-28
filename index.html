@@ -630,11 +630,6 @@ function updateStats() {
   if (firstVisitEl) firstVisitEl.textContent = points; // تاريخ أول زيارة في خانة أخرى إذا أردت
 }
 
-// عند تحميل الصفحة الرئيسية
-window.onload = () => {
-  trackVisit();       // نقطة دخول
-  checkWirdStatus();  // حالة زر الإنجاز
-};
 
 function checkWirdStatus(){
   const today = new Date().toDateString();
@@ -656,10 +651,6 @@ if (!visitDays.includes(today)) {
   visitDays.push(today);
   localStorage.setItem("visit_days", JSON.stringify(visitDays));
 }
-// عند تحميل الصفحة
-window.onload = ()=>{
-  const savedName = localStorage.getItem(STORAGE_KEY);
-  if(savedName) showWelcome(savedName,false);
 
   checkWirdStatus(); // ← هذا السطر مهم جدًا
 };
@@ -699,6 +690,15 @@ function startEidCounter(){
   updateEid();
   setInterval(updateEid,1000);
 }
+  window.onload = () => {
+  const savedName = localStorage.getItem(STORAGE_KEY);
+  if (savedName) {
+    showWelcome(savedName, false);
+  }
+
+  trackVisit();      // نقطة دخول واحدة يوميًا
+  checkWirdStatus(); // حالة زر الورد
+};
 </script>
 
 </body>
