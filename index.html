@@ -530,17 +530,111 @@ function initLightbox(){
   });
 }
 // ===== زر إنجاز ورد اليوم =====
-function markWirdDone(){
-  const today = new Date().toDateString();
-  localStorage.setItem("wird_done", today);
+function markWirdDone() {
+  const today = new Date().toLocaleDateString("ar-EG");
 
+  // ✅ تسجيل النقاط اليومية للزر
+  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
+  let userPoints = Number(localStorage.getItem("user_points") || 0);
+
+  if (!achievementDays.includes(today)) {
+    // 1️⃣ إضافة اليوم لقائمة الإنجازات
+    achievementDays.push(today);
+    localStorage.setItem("achievement_days", JSON.stringify(achievementDays));
+
+    // 2️⃣ إضافة نقطة لكل يوم عند الضغط على زر الإنجاز
+    userPoints += 1;
+    localStorage.setItem("user_points", userPoints);
+
+    const days = achievementDays.length;
+
+    // 🌟 رسائل خاصة لأيام معينة (مرة واحدة)
+    const specialMessages = {
+      5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
+      10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
+      15: "🔥 15 يومًا من الالتزام! هذا اجتهاد يُفتخر به",
+      20: "🏆 20 يوم إنجاز! مستوى عالي جدًا، بارك الله فيك",
+      25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
+    };
+
+    // 🌸 10 رسائل يومية مرتبة للأيام العادية
+    const dailyMessages = [
+      "🤍 بارك الله فيك، واصل ولا تتوقف",
+      "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
+      "✨ إنجازك اليوم نور في طريقك",
+      "🌸 أحسنت، الله يكتب أجرك",
+      "📖 الاستمرار هو سر التوفيق",
+      "💫 أنت رائع اليوم، واصل الاجتهاد",
+      "🌟 كل يوم هو فرصة جديدة للخير",
+      "🌿 اجعل اليوم مميزًا بنية صادقة",
+      "🎯 الالتزام اليومي يبني عادة قوية",
+      "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
+    ];
+
+    // عرض رسالة خاصة أو عامة
+    if (specialMessages[days]) {
+      if (!localStorage.getItem("achievement_msg_" + days)) {
+        alert(specialMessages[days]);
+        localStorage.setItem("achievement_msg_" + days, "1");
+      }
+    } else {
+      const index = (days - 1) % dailyMessages.length;
+      alert(dailyMessages[index]);
+    }
+  }
+
+  // ✅ تحديث شكل الزر
   const btn = document.getElementById("wirdBtn");
-  if(!btn) return;
-
-  btn.classList.add("done");
-  btn.textContent = "✅ أحسنت، تقبّل الله";
+  btn.textContent = "✅ تم الإنجاز";
   btn.disabled = true;
+
+  // ✅ تحديث الإحصائيات في الصفحة مباشرة
+  updateStats();
 }
+
+// ===== تسجيل نقطة دخول للصفحة الرئيسية =====
+function trackVisit() {
+  const today = new Date().toLocaleDateString("ar-EG");
+  let visitDays = JSON.parse(localStorage.getItem("visit_days") || "[]");
+  let userPoints = Number(localStorage.getItem("user_points") || 0);
+
+  if (!visitDays.includes(today)) {
+    visitDays.push(today);
+    localStorage.setItem("visit_days", JSON.stringify(visitDays));
+
+    // نقطة واحدة عند زيارة الصفحة
+    userPoints += 1;
+    localStorage.setItem("user_points", userPoints);
+  }
+
+  // حفظ تاريخ أول زيارة
+  if (!localStorage.getItem("first_visit_date")) {
+    localStorage.setItem("first_visit_date", today);
+  }
+
+  updateStats();
+}
+
+// ===== تحديث الإحصائيات في صفحة العيد =====
+function updateStats() {
+  const pointsEl = document.querySelector(".stats .stat span:nth-child(2)");
+  const achievementsEl = document.querySelector(".stats .stat span:nth-child(4)");
+  const firstVisitEl = document.querySelector(".stats .stat span:nth-child(6)");
+
+  const points = Number(localStorage.getItem("user_points") || 0);
+  const achievements = JSON.parse(localStorage.getItem("achievement_days") || "[]").length;
+  const firstVisit = localStorage.getItem("first_visit_date") || "-";
+
+  if (pointsEl) pointsEl.textContent = firstVisit;      // الآن نقاط الدخول = أول زيارة
+  if (achievementsEl) achievementsEl.textContent = achievements; // نقاط الإنجاز
+  if (firstVisitEl) firstVisitEl.textContent = points; // تاريخ أول زيارة في خانة أخرى إذا أردت
+}
+
+// عند تحميل الصفحة الرئيسية
+window.onload = () => {
+  trackVisit();       // نقطة دخول
+  checkWirdStatus();  // حالة زر الإنجاز
+};
 
 function checkWirdStatus(){
   const today = new Date().toDateString();
@@ -552,6 +646,15 @@ function checkWirdStatus(){
     btn.textContent = "✅ أحسنت، تقبّل الله";
     btn.disabled = true;
   }
+}
+  // ===== نقاط الدخول (أيام الزيارة) =====
+const today = new Date().toLocaleDateString("ar-EG");
+
+let visitDays = JSON.parse(localStorage.getItem("visit_days") || "[]");
+
+if (!visitDays.includes(today)) {
+  visitDays.push(today);
+  localStorage.setItem("visit_days", JSON.stringify(visitDays));
 }
 // عند تحميل الصفحة
 window.onload = ()=>{
