@@ -320,13 +320,6 @@ function saveName(){
   if(!name) return;
   localStorage.setItem(STORAGE_KEY, name);
   showWelcome(name,true);
-  // هذه قيم افتراضية لتوضيح المثال
-const userPoints = 25; // عدد نقاط الدخول
-const userAchievements = 10; // عدد الأيام التي أنجزها المستخدم
-
-// حفظها في LocalStorage
-localStorage.setItem("user_points", userPoints);
-localStorage.setItem("user_achievements", userAchievements);
 }
 
 // عرض الصفحة الرئيسية
@@ -615,20 +608,6 @@ function trackVisit() {
   updateStats();
 }
 
-// ===== تحديث الإحصائيات في صفحة العيد =====
-function updateStats() {
-  const pointsEl = document.querySelector(".stats .stat span:nth-child(2)");
-  const achievementsEl = document.querySelector(".stats .stat span:nth-child(4)");
-  const firstVisitEl = document.querySelector(".stats .stat span:nth-child(6)");
-
-  const points = Number(localStorage.getItem("user_points") || 0);
-  const achievements = JSON.parse(localStorage.getItem("achievement_days") || "[]").length;
-  const firstVisit = localStorage.getItem("first_visit_date") || "-";
-
-  if (pointsEl) pointsEl.textContent = firstVisit;      // الآن نقاط الدخول = أول زيارة
-  if (achievementsEl) achievementsEl.textContent = achievements; // نقاط الإنجاز
-  if (firstVisitEl) firstVisitEl.textContent = points; // تاريخ أول زيارة في خانة أخرى إذا أردت
-}
 
 
 function checkWirdStatus(){
@@ -642,18 +621,9 @@ function checkWirdStatus(){
     btn.disabled = true;
   }
 }
-  // ===== نقاط الدخول (أيام الزيارة) =====
-const today = new Date().toLocaleDateString("ar-EG");
-
-let visitDays = JSON.parse(localStorage.getItem("visit_days") || "[]");
-
-if (!visitDays.includes(today)) {
-  visitDays.push(today);
-  localStorage.setItem("visit_days", JSON.stringify(visitDays));
-}
 
   checkWirdStatus(); // ← هذا السطر مهم جدًا
-};
+  
   // ===== عداد العيد =====
 const eidTargetDate = new Date("2026-02-28T18:55:00"); 
 // ↑ غيّر التاريخ والوقت هنا فقط
@@ -663,9 +633,6 @@ function startEidCounter(){
     const now = new Date();
     const diff = eidTargetDate - now;
 
-  if(diff <= 0){
-  // ✅ تسجيل أن العيد بدأ
-  localStorage.setItem("eid_ready", "1");
 
   // ✅ الانتقال لصفحة العيد
   if(diff <= 0){
