@@ -213,15 +213,6 @@ function updateStats() {
   document.getElementById("visitPoints").textContent = visitPoints;
 }
 
-  function markWirdDone(){
-  // تسجيل الإنجاز
-  const today = new Date().toLocaleDateString("ar-EG");
-  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
-
-  if (!achievementDays.includes(today)) {
-    achievementDays.push(today);
-    localStorage.setItem("achievement_days", JSON.stringify(achievementDays));
-  }
 
   // تحديث الإحصائيات فورًا
   updateStats();
