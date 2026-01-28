@@ -188,7 +188,7 @@ body{
 
 <script>
   // منع الدخول قبل وقت العيد
-if (!localStorage.getItem("eid_ready")) {
+if (localStorage.getItem("eid_ready") !== "1") {
   alert("⏳ العيد لم يحن وقته بعد");
   window.location.href = "index.html";
 }
