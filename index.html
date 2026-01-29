@@ -15,8 +15,7 @@ body{
   color:#4b3b2a;
   min-height:100vh;
   text-align:center;
-  body{
-  padding-bottom: 100px;
+  padding-bottom: 100px; /* هذا مهم للمستطيل الثابت أسفل الصفحة */
 }
 
 .container{
@@ -403,13 +402,20 @@ function showWelcome(name, firstTime){
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
 <!-- 🎉 عداد العيد -->
+<div class="container">
+  <!-- هنا كل محتوى الصفحة -->
+  <div id="registerBox">...</div>
+  <div id="welcomeBox" class="hidden"></div>
+</div> <!-- نهاية الكونتينر -->
+
+<!-- 🎉 عداد العيد خارج الكونتينر -->
 <div class="eid-strip">
   <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
   <div class="eid-strip-time">
-    <span id="eidSeconds">00</span> :
-    <span id="eidMinutes">00</span> :
+    <span id="eidDays">00</span> :
     <span id="eidHours">00</span> :
-    <span id="eidDays">00</span>
+    <span id="eidMinutes">00</span> :
+    <span id="eidSeconds">00</span>
   </div>
 </div>
   `;
