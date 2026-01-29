@@ -519,7 +519,6 @@ function initLightbox(){
     });
   });
 }
-const STORAGE_KEY = "ramadan_user_name";
 const SCRIPT_URL = "ضع هنا رابط Web App الخاص بك"; // رابط Google Apps Script
 
 // ===== تسجيل أول زيارة + آخر زيارة + نقاط الدخول اليومية =====
@@ -620,48 +619,7 @@ function markWirdDone() {
   }
 }
 
-// ===== التحقق من حالة ورد اليوم عند تحميل الصفحة =====
-function checkWirdStatus() {
-  const today = new Date().toLocaleDateString("ar-EG");
-  const achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
-  const btn = document.getElementById("wirdBtn");
-  const messageDiv = document.getElementById("wirdMessage");
 
-  if (btn && achievementDays.includes(today)) {
-    btn.textContent = "✅ أحسنت، تقبّل الله";
-    btn.classList.add("done");
-    btn.disabled = true;
-
-    // إظهار رسالة اليوم إذا تم الضغط مسبقًا
-    const days = achievementDays.length;
-    const specialMessages = {
-      5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
-      10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
-      15: "🔥 15 يومًا من الالتزام! هذا اجتهاد يُفتخر به",
-      20: "🏆 20 يوم إنجاز! مستوى عالي جدًا، بارك الله فيك",
-      25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
-    };
-    const dailyMessages = [
-      "🤍 بارك الله فيك، واصل ولا تتوقف",
-      "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
-      "✨ إنجازك اليوم نور في طريقك",
-      "🌸 أحسنت، الله يكتب أجرك",
-      "📖 الاستمرار هو سر التوفيق",
-      "💫 أنت رائع اليوم، واصل الاجتهاد",
-      "🌟 كل يوم هو فرصة جديدة للخير",
-      "🌿 اجعل اليوم مميزًا بنية صادقة",
-      "🎯 الالتزام اليومي يبني عادة قوية",
-      "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
-    ];
-
-    if (specialMessages[days]) {
-      messageDiv.textContent = specialMessages[days];
-    } else {
-      const index = (days - 1) % dailyMessages.length;
-      messageDiv.textContent = dailyMessages[index];
-    }
-  }
-}
 
 // ===== إرسال البيانات إلى Google Sheets =====
 function sendDataToSheet(data){
@@ -680,32 +638,6 @@ function sendDataToSheet(data){
     mode: "no-cors"
   }).catch(err => console.log("خطأ في إرسال البيانات للشيتس:", err));
 }
-}
-
-// ===== تسجيل نقطة دخول للصفحة الرئيسية =====
-function trackVisit() {
-  const today = new Date().toLocaleDateString("ar-EG");
-  let visitDays = JSON.parse(localStorage.getItem("visit_days") || "[]");
-  let userPoints = Number(localStorage.getItem("user_points") || 0);
-
-  if (!visitDays.includes(today)) {
-    visitDays.push(today);
-    localStorage.setItem("visit_days", JSON.stringify(visitDays));
-
-    // نقطة واحدة عند زيارة الصفحة
-    userPoints += 1;
-    localStorage.setItem("user_points", userPoints);
-  }
-
-  // حفظ تاريخ أول زيارة
-  if (!localStorage.getItem("first_visit_date")) {
-    localStorage.setItem("first_visit_date", today);
-  }
-
-  updateStats();
-}
-
-
 
 function checkWirdStatus(){
   const today = new Date().toDateString();
