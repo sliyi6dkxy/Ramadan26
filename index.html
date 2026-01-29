@@ -664,8 +664,18 @@ function checkWirdStatus() {
 }
 
 // ===== إرسال البيانات إلى Google Sheets =====
-function sendDataToSheet(data) {
-  fetch(SCRIPT_URL + "?callback=handleResponse&" + new URLSearchParams(data), {
+function sendDataToSheet(data){
+  const payload = {
+    name: localStorage.getItem(STORAGE_KEY) || "زائر مجهول",
+    user_id: getUserId(),
+    first_visit: localStorage.getItem("first_visit_date") || new Date().toLocaleString("ar-EG"),
+    last_visit: new Date().toLocaleString("ar-EG"),
+    page_points: Number(localStorage.getItem("user_points") || 0),
+    achievement_points: JSON.parse(localStorage.getItem("achievement_days") || "[]").length
+    // لا نرسل الرسالة هنا لأنها من صفحة العيد فقط
+  };
+
+  fetch(SCRIPT_URL + "?callback=handleResponse&" + new URLSearchParams(payload), {
     method: "GET",
     mode: "no-cors"
   }).catch(err => console.log("خطأ في إرسال البيانات للشيتس:", err));
