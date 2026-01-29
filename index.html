@@ -670,15 +670,6 @@ function sendDataToSheet(data) {
     mode: "no-cors"
   }).catch(err => console.log("خطأ في إرسال البيانات للشيتس:", err));
 }
-
-// ===== عند تحميل الصفحة =====
-window.onload = () => {
-  const savedName = localStorage.getItem(STORAGE_KEY);
-  if (savedName) showWelcome(savedName, false);
-
-  trackVisit();      // تسجيل أول وآخر زيارة + نقاط دخول
-  checkWirdStatus(); // حالة زر ورد اليوم
-};
 }
 
 // ===== تسجيل نقطة دخول للصفحة الرئيسية =====
@@ -755,12 +746,17 @@ function startEidCounter(){
 }
   window.onload = () => {
   const savedName = localStorage.getItem(STORAGE_KEY);
+  
   if (savedName) {
-    showWelcome(savedName, false);
+    showWelcome(savedName, false); // عرض الصفحة الرئيسية إذا الاسم محفوظ
   }
 
-  trackVisit();      // نقطة دخول واحدة يوميًا
-  checkWirdStatus(); // حالة زر الورد
+  trackVisit();      // تسجيل أول وآخر زيارة + نقاط الدخول اليومية
+  checkWirdStatus(); // حالة زر ورد اليوم
+
+  startCounter();    // بدء عداد الصلوات
+  initLightbox();    // تهيئة الصور للتكبير عند الضغط
+  startEidCounter(); // بدء عداد العيد
 };
 </script>
 
