@@ -208,12 +208,14 @@ button:hover{ background:#688c6d; }
   to{transform:scale(1); opacity:1;}
 }
   .wird-btn{
-  padding:10px 18px;
+ /* زر ورد اليوم */
+.wird-btn{
+  padding:8px 16px;        /* تصغير حجم الزر */
   border-radius:20px;
   border:none;
   background:#7a9b7e;
   color:white;
-  font-size:14.5px;
+  font-size:14px;           /* حجم أصغر */
   cursor:pointer;
   transition:.3s;
 }
@@ -223,9 +225,17 @@ button:hover{ background:#688c6d; }
 }
 
 .wird-btn.done{
-  background:#c7b48b;
+  background:#c7b48b;      /* لون الزر بعد الإنجاز */
   color:#4b3b2a;
   cursor:default;
+}
+
+/* الرسالة تحت الزر */
+#wirdMessage {
+  font-size: 15px;          /* نفس حجم خط التاريخ الهجري */
+  color: #4b3b2a;           /* نفس اللون */
+  margin-top:5px;
+  line-height:1.5;
 }
 /* ===== عداد العيد الجديد ===== */
 .eid-strip {
@@ -381,8 +391,7 @@ function showWelcome(name, firstTime){
       <br>
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
-    <button id="wirdBtn" onclick="markWirdDone()">✔️ أنجز ورد اليوم</button>
-<div id="wirdMessage" style="margin-top:5px; font-size:0.9em; color:#4caf50;"></div>
+<button id="wirdBtn" class="wird-btn" onclick="markWirdDone()">✔️ أنجز ورد اليوم</button>
 <!-- 🎉 عداد العيد -->
 <div class="eid-strip">
   <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
@@ -553,24 +562,100 @@ function trackVisit() {
   });
 }
 
-// ===== زر إنجاز ورد اليوم =====
+// ===== زر ورد اليوم – نقطة واحدة يوميًا + سجل الإنجاز + رسائل ديناميكية =====
 function markWirdDone() {
-  const today = new Date().toLocaleDateString("ar-EG");
-  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
-  let userPoints = Number(localStorage.getItem("user_points") || 0);
-  const messageDiv = document.getElementById("wirdMessage"); // مكان الرسالة
+  const today = new Date().toDateString();
+  const btn = document.getElementById("wirdBtn");
+  const messageDiv = document.getElementById("wirdMessage");
 
-  if (!achievementDays.includes(today)) {
+  // تحقق إذا تم الإنجاز اليوم
+  if(localStorage.getItem("wird_done") === today){
+    return; // لا نفعل شيئًا إذا تم الإنجاز
+  }
+
+  // تسجيل الإنجاز اليوم
+  localStorage.setItem("wird_done", today);
+
+  // تحديث سجل الأيام
+  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
+  if(!achievementDays.includes(today)){
     achievementDays.push(today);
     localStorage.setItem("achievement_days", JSON.stringify(achievementDays));
+  }
+  const days = achievementDays.length;
 
-    // إضافة نقطة عند الإنجاز
-    userPoints += 1;
-    localStorage.setItem("user_points", userPoints);
+  // زيادة نقطة واحدة فقط
+  let userPoints = Number(localStorage.getItem("user_points") || 0);
+  userPoints += 1;
+  localStorage.setItem("user_points", userPoints);
 
-    const days = achievementDays.length;
+  // تغيير الزر بعد الضغط
+  if(btn){
+    btn.textContent = "✅ أحسنت، تقبّل الله";
+    btn.classList.add("done");
+    btn.disabled = true;
+  }
 
-    // رسائل خاصة لأيام معينة
+  // رسائل خاصة لكل يوم
+  const specialMessages = {
+    5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
+    10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
+    15: "🔥 15 يومًا من الالتزام! هذا اجتهاد يُفتخر به",
+    20: "🏆 20 يوم إنجاز! مستوى عالي جدًا، بارك الله فيك",
+    25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
+  };
+
+  const dailyMessages = [
+    "🤍 بارك الله فيك، واصل ولا تتوقف",
+    "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
+    "✨ إنجازك اليوم نور في طريقك",
+    "🌸 أحسنت، الله يكتب أجرك",
+    "📖 الاستمرار هو سر التوفيق",
+    "💫 أنت رائع اليوم، واصل الاجتهاد",
+    "🌟 كل يوم هو فرصة جديدة للخير",
+    "🌿 اجعل اليوم مميزًا بنية صادقة",
+    "🎯 الالتزام اليومي يبني عادة قوية",
+    "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
+  ];
+
+  // عرض الرسالة المناسبة
+  if(specialMessages[days]){
+    messageDiv.textContent = specialMessages[days];
+  } else {
+    const index = (days - 1) % dailyMessages.length;
+    messageDiv.textContent = dailyMessages[index];
+  }
+
+  // تصميم الرسالة مثل التاريخ الهجري
+  messageDiv.style.fontFamily = "'Tajawal', sans-serif";
+  messageDiv.style.fontSize = "15px";
+  messageDiv.style.color = "#4b3b2a";
+  messageDiv.style.marginTop = "5px";
+
+  // إرسال البيانات للشيتس
+  sendDataToSheet({
+    name: localStorage.getItem(STORAGE_KEY) || "زائر مجهول",
+    last_visit: today,
+    user_points: userPoints,
+    achievement_days: days
+  });
+}
+
+// ===== تحقق من حالة ورد اليوم عند تحميل الصفحة =====
+function checkWirdStatus(){
+  const today = new Date().toDateString();
+  const btn = document.getElementById("wirdBtn");
+  const messageDiv = document.getElementById("wirdMessage");
+
+  let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
+  const days = achievementDays.length;
+
+  if(localStorage.getItem("wird_done") === today && btn){
+    btn.textContent = "✅ أحسنت، تقبّل الله";
+    btn.classList.add("done");
+    btn.disabled = true;
+
+    // عرض الرسالة المناسبة إذا تم الإنجاز سابقًا اليوم
     const specialMessages = {
       5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
       10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
@@ -578,7 +663,6 @@ function markWirdDone() {
       20: "🏆 20 يوم إنجاز! مستوى عالي جدًا، بارك الله فيك",
       25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
     };
-
     const dailyMessages = [
       "🤍 بارك الله فيك، واصل ولا تتوقف",
       "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
@@ -592,33 +676,23 @@ function markWirdDone() {
       "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
     ];
 
-    // عرض الرسالة في الصفحة
-    if (specialMessages[days] && !localStorage.getItem("achievement_msg_" + days)) {
+    if(specialMessages[days]){
       messageDiv.textContent = specialMessages[days];
-      localStorage.setItem("achievement_msg_" + days, "1");
-    } else {
+    } else if(days>0){
       const index = (days - 1) % dailyMessages.length;
       messageDiv.textContent = dailyMessages[index];
     }
 
-    // إرسال البيانات للشيتس عند الإنجاز
-    sendDataToSheet({
-      name: localStorage.getItem(STORAGE_KEY) || "زائر مجهول",
-      last_visit: today,
-      user_points: userPoints,
-      achievement_days: days
-    });
-  }
-
-  // تعطيل الزر بعد الإنجاز
-  const btn = document.getElementById("wirdBtn");
-  if (btn) {
-    btn.textContent = "✅ تم الإنجاز";
-    btn.classList.add("done");
-    btn.disabled = true;
+    // تصميم الرسالة مثل التاريخ الهجري
+    messageDiv.style.fontFamily = "'Tajawal', sans-serif";
+    messageDiv.style.fontSize = "15px";
+    messageDiv.style.color = "#4b3b2a";
+    messageDiv.style.marginTop = "5px";
   }
 }
 
+// ← استدعاء عند تحميل الصفحة
+checkWirdStatus();
 
 
 // ===== إرسال البيانات إلى Google Sheets =====
