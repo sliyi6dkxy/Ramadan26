@@ -381,11 +381,8 @@ function showWelcome(name, firstTime){
       <br>
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
-    <div style="margin-top:18px">
-  <button id="wirdBtn" onclick="markWirdDone()" class="wird-btn">
-    📖 أنجزت ورد اليوم
-  </button>
-</div>
+    <button id="wirdBtn" onclick="markWirdDone()">✔️ أنجز ورد اليوم</button>
+<div id="wirdMessage" style="margin-top:5px; font-size:0.9em; color:#4caf50;"></div>
 <!-- 🎉 عداد العيد -->
 <div class="eid-strip">
   <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
@@ -522,26 +519,59 @@ function initLightbox(){
     });
   });
 }
+const STORAGE_KEY = "ramadan_user_name";
+const SCRIPT_URL = "ضع هنا رابط Web App الخاص بك"; // رابط Google Apps Script
+
+// ===== تسجيل أول زيارة + آخر زيارة + نقاط الدخول اليومية =====
+function trackVisit() {
+  const today = new Date().toLocaleDateString("ar-EG");
+  let visitDays = JSON.parse(localStorage.getItem("visit_days") || "[]");
+  let userPoints = Number(localStorage.getItem("user_points") || 0);
+
+  if (!visitDays.includes(today)) {
+    visitDays.push(today);
+    localStorage.setItem("visit_days", JSON.stringify(visitDays));
+
+    // نقطة دخول واحدة يوميًا
+    userPoints += 1;
+    localStorage.setItem("user_points", userPoints);
+  }
+
+  // حفظ أول زيارة
+  if (!localStorage.getItem("first_visit_date")) {
+    localStorage.setItem("first_visit_date", today);
+  }
+
+  // تحديث آخر زيارة
+  localStorage.setItem("last_visit_date", today);
+
+  // إرسال البيانات للشيتس
+  sendDataToSheet({
+    name: localStorage.getItem(STORAGE_KEY) || "زائر مجهول",
+    first_visit: localStorage.getItem("first_visit_date"),
+    last_visit: today,
+    user_points: userPoints
+  });
+}
+
 // ===== زر إنجاز ورد اليوم =====
 function markWirdDone() {
   const today = new Date().toLocaleDateString("ar-EG");
-
-  // ✅ تسجيل النقاط اليومية للزر
   let achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
   let userPoints = Number(localStorage.getItem("user_points") || 0);
+  const messageDiv = document.getElementById("wirdMessage"); // مكان الرسالة
 
   if (!achievementDays.includes(today)) {
-    // 1️⃣ إضافة اليوم لقائمة الإنجازات
     achievementDays.push(today);
     localStorage.setItem("achievement_days", JSON.stringify(achievementDays));
 
-    // 2️⃣ إضافة نقطة لكل يوم عند الضغط على زر الإنجاز
+    // إضافة نقطة عند الإنجاز
     userPoints += 1;
     localStorage.setItem("user_points", userPoints);
 
     const days = achievementDays.length;
 
-    // 🌟 رسائل خاصة لأيام معينة (مرة واحدة)
+    // رسائل خاصة لأيام معينة
     const specialMessages = {
       5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
       10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
@@ -550,7 +580,6 @@ function markWirdDone() {
       25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
     };
 
-    // 🌸 10 رسائل يومية مرتبة للأيام العادية
     const dailyMessages = [
       "🤍 بارك الله فيك، واصل ولا تتوقف",
       "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
@@ -564,25 +593,92 @@ function markWirdDone() {
       "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
     ];
 
-    // عرض رسالة خاصة أو عامة
-    if (specialMessages[days]) {
-      if (!localStorage.getItem("achievement_msg_" + days)) {
-        alert(specialMessages[days]);
-        localStorage.setItem("achievement_msg_" + days, "1");
-      }
+    // عرض الرسالة في الصفحة
+    if (specialMessages[days] && !localStorage.getItem("achievement_msg_" + days)) {
+      messageDiv.textContent = specialMessages[days];
+      localStorage.setItem("achievement_msg_" + days, "1");
     } else {
       const index = (days - 1) % dailyMessages.length;
-      alert(dailyMessages[index]);
+      messageDiv.textContent = dailyMessages[index];
     }
+
+    // إرسال البيانات للشيتس عند الإنجاز
+    sendDataToSheet({
+      name: localStorage.getItem(STORAGE_KEY) || "زائر مجهول",
+      last_visit: today,
+      user_points: userPoints,
+      achievement_days: days
+    });
   }
 
-  // ✅ تحديث شكل الزر
+  // تعطيل الزر بعد الإنجاز
   const btn = document.getElementById("wirdBtn");
-  btn.textContent = "✅ تم الإنجاز";
-  btn.disabled = true;
+  if (btn) {
+    btn.textContent = "✅ تم الإنجاز";
+    btn.classList.add("done");
+    btn.disabled = true;
+  }
+}
 
-  // ✅ تحديث الإحصائيات في الصفحة مباشرة
-  updateStats();
+// ===== التحقق من حالة ورد اليوم عند تحميل الصفحة =====
+function checkWirdStatus() {
+  const today = new Date().toLocaleDateString("ar-EG");
+  const achievementDays = JSON.parse(localStorage.getItem("achievement_days") || "[]");
+  const btn = document.getElementById("wirdBtn");
+  const messageDiv = document.getElementById("wirdMessage");
+
+  if (btn && achievementDays.includes(today)) {
+    btn.textContent = "✅ أحسنت، تقبّل الله";
+    btn.classList.add("done");
+    btn.disabled = true;
+
+    // إظهار رسالة اليوم إذا تم الضغط مسبقًا
+    const days = achievementDays.length;
+    const specialMessages = {
+      5:  "🌟 شكرًا لك على انضباطك! بداية رائعة 🤍",
+      10: "💪 عشرة أيام إنجاز! استمر، أنت تبني عادة جميلة",
+      15: "🔥 15 يومًا من الالتزام! هذا اجتهاد يُفتخر به",
+      20: "🏆 20 يوم إنجاز! مستوى عالي جدًا، بارك الله فيك",
+      25: "👑 25 يومًا! وصلت لمرحلة النخبة، جعله الله في ميزان حسناتك"
+    };
+    const dailyMessages = [
+      "🤍 بارك الله فيك، واصل ولا تتوقف",
+      "🌱 خطوة صغيرة اليوم، أثر عظيم غدًا",
+      "✨ إنجازك اليوم نور في طريقك",
+      "🌸 أحسنت، الله يكتب أجرك",
+      "📖 الاستمرار هو سر التوفيق",
+      "💫 أنت رائع اليوم، واصل الاجتهاد",
+      "🌟 كل يوم هو فرصة جديدة للخير",
+      "🌿 اجعل اليوم مميزًا بنية صادقة",
+      "🎯 الالتزام اليومي يبني عادة قوية",
+      "🌼 أحسنت، الله يزيدك أجرًا وفضلًا"
+    ];
+
+    if (specialMessages[days]) {
+      messageDiv.textContent = specialMessages[days];
+    } else {
+      const index = (days - 1) % dailyMessages.length;
+      messageDiv.textContent = dailyMessages[index];
+    }
+  }
+}
+
+// ===== إرسال البيانات إلى Google Sheets =====
+function sendDataToSheet(data) {
+  fetch(SCRIPT_URL + "?callback=handleResponse&" + new URLSearchParams(data), {
+    method: "GET",
+    mode: "no-cors"
+  }).catch(err => console.log("خطأ في إرسال البيانات للشيتس:", err));
+}
+
+// ===== عند تحميل الصفحة =====
+window.onload = () => {
+  const savedName = localStorage.getItem(STORAGE_KEY);
+  if (savedName) showWelcome(savedName, false);
+
+  trackVisit();      // تسجيل أول وآخر زيارة + نقاط دخول
+  checkWirdStatus(); // حالة زر ورد اليوم
+};
 }
 
 // ===== تسجيل نقطة دخول للصفحة الرئيسية =====
