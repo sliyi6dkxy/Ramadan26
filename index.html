@@ -208,14 +208,14 @@ button:hover{ background:#688c6d; }
   to{transform:scale(1); opacity:1;}
 }
   .wird-btn{
- /* زر ورد اليوم */
+/* زر ورد اليوم */
 .wird-btn{
-  padding:8px 16px;        /* تصغير حجم الزر */
+  padding:8px 16px;       
   border-radius:20px;
   border:none;
-  background:#7a9b7e;
+  background:#7a9b7e;      /* أخضر فاتح */
   color:white;
-  font-size:14px;           /* حجم أصغر */
+  font-size:14px;
   cursor:pointer;
   transition:.3s;
 }
@@ -225,15 +225,15 @@ button:hover{ background:#688c6d; }
 }
 
 .wird-btn.done{
-  background:#c7b48b;      /* لون الزر بعد الإنجاز */
-  color:#4b3b2a;
+  background:#3c5d3f;      /* أخضر قاتم عند الإنجاز */
+  color:#fff;
   cursor:default;
 }
 
 /* الرسالة تحت الزر */
 #wirdMessage {
-  font-size: 15px;          /* نفس حجم خط التاريخ الهجري */
-  color: #4b3b2a;           /* نفس اللون */
+  font-size: 15px;        
+  color: #4b3b2a;         
   margin-top:5px;
   line-height:1.5;
 }
@@ -391,15 +391,6 @@ function showWelcome(name, firstTime){
       <br>
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
-<div class="wird-box">
-  <h2>📖 ورد اليوم</h2>
-  <p>
-    اجعل لك لحظة هادئة، افتح المصحف،  
-    واقرأ ما تيسّر بنية القرب من الله.
-  </p>
-</div>
-<button id="wirdBtn" onclick="markWirdDone()">✔️ أنجز ورد اليوم</button>
-<div id="wirdMessage" style="margin-top:5px; font-family:'Tajawal', sans-serif; font-size:15px; color:#4b3b2a;"></div>
 <!-- 🎉 عداد العيد -->
 <div class="eid-strip">
   <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
