@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إمساكية رمضان</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Tajawal', sans-serif;
+  background:#fbf6e8;
+  color:#4b3b2a;
+  min-height:100vh;
+  text-align:center;
+}
+
+.container{
+  max-width:420px;
+  margin:0 auto;
+  padding:20px 18px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+/* ===== أنيميشن دخول الصفحة ===== */
+.page-enter{
+  opacity:0;
+  transform:translateY(40px);
+}
+.page-enter-active{
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity .8s ease, transform .8s ease;
+}
+
+/* الرسائل */
+.message{
+  margin-bottom:22px;
+  text-align:center;
+  position:relative;
+}
+.message .moon{
+  font-size:27px;
+  margin-bottom:6px;
+  display:inline-block;
+  animation:moonFloat 2s ease-in-out infinite alternate;
+}
+@keyframes moonFloat{
+  0%{ transform:translateY(0);}
+  50%{ transform:translateY(-8px);}
+  100%{ transform:translateY(0);}
+}
+.message h1{ font-size:24px; font-weight:600; margin:6px 0; }
+.message p{ font-size:17px; line-height:1.7; margin:0; opacity:.9; }
+
+/* التسجيل */
+.register-box{ text-align:center; margin-top:14px; }
+.register-box .subtitle{ font-size:16.5px; line-height:1.8; margin-bottom:18px; }
+.input-group{ display:flex; gap:10px; }
+input{ flex:1; padding:12px 16px; font-size:15.5px; border-radius:20px; border:1px solid #d6c6a5; outline:none; }
+button{ padding:12px 18px; font-size:15.5px; border-radius:20px; border:none; background:#7a9b7e; color:white; cursor:pointer; }
+button:hover{ background:#688c6d; }
+.hidden{ display:none; }
+
+/* العداد */
+.counter-box{
+  background:#fff;
+  border-radius:16px;
+  padding:14px 12px;
+  margin:10px 0 20px;
+  box-shadow:0 5px 12px rgba(0,0,0,.06);
+}
+.counter-title{ font-size:15.5px; margin-bottom:4px; }
+.counter-time{ font-size:22px; font-weight:600; letter-spacing:2px; margin:6px 0; }
+.counter-note{ font-size:14.5px; opacity:.9; }
+
+/* التاريخ الهجري */
+.hijri-date{
+  font-size:15px;
+  margin-bottom:4px;
+  color:#4b3b2a;
+  opacity:.9;
+}
+
+/* فاصل ديناميكي */
+.section-separator{
+  margin:30px 0 24px;
+  position:relative;
+}
+.separator-bg{
+  height:50px;
+  width:220px;
+  margin:0 auto;
+  border-radius:25px;
+  background: linear-gradient(270deg,#7a9b7e,#a7c4a0,#7a9b7e);
+  background-size:600% 600%;
+  animation:gradientShift 6s ease infinite;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+@keyframes gradientShift{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.separator-text{
+  font-size:16px;
+  font-weight:600;
+  color:#fff;
+  z-index:2;
+  padding:0 20px;
+}
+.separator-icon{
+  position:absolute;
+  font-size:20px;
+  color:#fff;
+  left:12px;
+  animation:floatSide 2.5s ease-in-out infinite alternate;
+}
+@keyframes floatSide{
+  0%{transform:translate(0,0);}
+  25%{transform:translate(12px,-5px);}
+  50%{transform:translate(0,-8px);}
+  75%{transform:translate(-12px,-5px);}
+  100%{transform:translate(0,0);}
+}
+
+/* ورد اليوم */
+.wird-box{
+  background:#fff;
+  border-radius:16px;
+  padding:10px 14px;
+  margin-bottom:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
+  text-align:center;
+  line-height:1.5;
+  font-size:15px;
+}
+.wird-box h2{ font-size:17px; margin-bottom:4px; }
+.wird-box p{ font-size:14.5px; margin:0; }
+
+/* الصور */
+.images-box{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:6px;
+}
+.images-box img{
+  width:48%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 4px 8px rgba(0,0,0,.08);
+  cursor:pointer;
+  transition: transform .3s;
+}
+.images-box img:hover{ transform:scale(1.05); }
+.image-note{ font-size:13px; color:#666; margin-bottom:18px; }
+
+/* الحديث */
+.hadith-box{
+  background:#fff;
+  border-radius:16px;
+  padding:10px 14px;
+  font-size:15px;
+  line-height:1.5;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  display:inline-block;
+  max-width:100%;
+  text-align:center;
+}
+
+/* Lightbox */
+#lightbox{
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.8);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  animation:fadeIn .3s;
+}
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
+  animation:zoomIn .3s;
+}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes zoomIn{
+  from{transform:scale(0.7); opacity:0;}
+  to{transform:scale(1); opacity:1;}
+}
+  .wird-btn{
+  padding:10px 18px;
+  border-radius:20px;
+  border:none;
+  background:#7a9b7e;
+  color:white;
+  font-size:14.5px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.wird-btn:hover{
+  background:#688c6d;
+}
+
+.wird-btn.done{
+  background:#c7b48b;
+  color:#4b3b2a;
+  cursor:default;
+}
+/* ===== عداد العيد البسيط مع ارتفاع ثابت ===== */
+.eid-counter-simple{
+  margin-top:18px;
+  padding:10px 14px;
+  background: rgba(245, 231, 198, 0.95); /* كريمي فاتح، شبه متماثل مع لون الصفحة لكن أغمق قليلًا */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* ظل خفيف مثل باقي المستطيلات */
+  border-radius:12px;
+  display:inline-block;
+  min-width:240px; /* يمنع التمدد حسب الرقم */
+  height:60px;     /* ارتفاع ثابت */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.eid-title{
+  font-size:16px;   /* أكبر قليلاً من المؤقت */
+  font-weight:600;
+  margin-bottom:4px;
+  color:#4b3b2a;
+}
+
+.eid-time{
+  font-size:18px;   /* أصغر قليلاً من العنوان */
+  font-weight:500;
+  letter-spacing:1.5px;
+  color:#4b3b2a;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div id="registerBox">
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>رمضان كريم</h1>
+      <p>أدخل اسمك ليصلك كل جديد يوميًا خلال الشهر المبارك</p>
+    </div>
+
+    <div class="register-box">
+      <div class="subtitle">متابعة خفيفة • تذكير • أجر بإذن الله</div>
+      <div class="input-group">
+        <input type="text" id="username" placeholder="اسمك">
+        <button onclick="saveName()">متابعة</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcomeBox" class="hidden"></div>
+
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.style.display='none'">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+const STORAGE_KEY = "ramadan_user_name";
+
+// ====== أوقات الصلوات ======
+const PRAYER_TIMES = {
+  Fajr: "05:52",
+  Dhuhr: "12:20",
+  Asr: "15:35",
+  Maghrib: "18:40",
+  Isha: "20:00"
+};
+
+// أول يوم رمضان
+const firstRamadanDate = new Date("2026-01-13"); // ضع هنا التاريخ الميلادي لأول يوم رمضان
+
+const hijriDates = [
+  "1 رمضان", "2 رمضان", "3 رمضان", "4 رمضان", "5 رمضان",
+  "6 رمضان", "7 رمضان", "8 رمضان", "9 رمضان", "10 رمضان",
+  "11 رمضان", "12 رمضان", "13 رمضان", "14 رمضان", "15 رمضان",
+  "16 رمضان", "17 رمضان", "18 رمضان", "19 رمضان", "20 رمضان",
+  "21 رمضان", "22 رمضان", "23 رمضان", "24 رمضان", "25 رمضان",
+  "26 رمضان", "27 رمضان", "28 رمضان", "29 رمضان", "30 رمضان"
+];
+
+// حفظ الاسم
+function saveName(){
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+  localStorage.setItem(STORAGE_KEY, name);
+  showWelcome(name,true);
+}
+
+// عرض الصفحة الرئيسية
+function showWelcome(name, firstTime){
+  document.getElementById("registerBox").classList.add("hidden");
+  const box = document.getElementById("welcomeBox");
+  box.classList.remove("hidden");
+
+  if(firstTime){
+    box.classList.add("page-enter");
+    requestAnimationFrame(()=> box.classList.add("page-enter-active"));
+  }
+
+  // التاريخ الهجري
+  const today = new Date();
+  const dayDiff = Math.floor((today-firstRamadanDate)/(1000*60*60*24));
+  let hijriDay = (dayDiff>=0 && dayDiff<hijriDates.length)
+  ? `اليوم : ${hijriDates[dayDiff]} 1447`
+  : "";
+
+  box.innerHTML = `
+    <div class="message">
+      <div class="moon">🌙</div>
+      <h1>مرحبًا ${name}</h1>
+      <p>${firstTime?"نسأل الله أن يبارك لك في هذا الشهر":"نسأل الله أن يكتب لك الأجر اليوم"}</p>
+    </div>
+
+    <div class="hijri-date">🗓 ${hijriDay}</div>
+
+    <div class="counter-box">
+      <div class="counter-title" id="counterTitle"></div>
+      <div class="counter-time" id="counterTime">-- : -- : --</div>
+      <div class="counter-note" id="counterNote"></div>
+    </div>
+
+    <div class="section-separator">
+      <div class="separator-bg">
+        <span class="separator-icon">🌿</span>
+        <span class="separator-text">💫 لحظات مباركة… 3 دقائق من وقتك</span>
+      </div>
+    </div>
+
+    <div class="wird-box">
+      <h2>📖 ورد اليوم</h2>
+      <p>
+        اجعل لك لحظة هادئة، افتح المصحف،  
+        واقرأ ما تيسّر بنية القرب من الله.
+      </p>
+    </div>
+
+    <div class="images-box">
+      <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53" alt="">
+      <img src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d" alt="">
+    </div>
+    <div class="image-note">اضغط على الصورة لتكبيرها</div>
+
+    <div class="hadith-box">
+      قال رسول الله ﷺ  
+      <br>
+      «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
+    </div>
+    <div style="margin-top:18px">
+  <button id="wirdBtn" onclick="markWirdDone()" class="wird-btn">
+    📖 أنجزت ورد اليوم
+  </button>
+</div>
+<!-- 🎉 عداد العيد -->
+<div class="eid-counter-simple">
+  <div class="eid-title">🎉 متبقي على العيد + المفاجأة 🎁</div>
+  <div class="eid-time">
+<span id="eidSeconds">00</span> :
+<span id="eidMinutes">00</span> :
+<span id="eidHours">00</span> :
+<span id="eidDays">00</span>
+</div>
+</div>
+  `;
+
+  window.scrollTo(0,0);
+  startCounter();
+  initLightbox();
+  startEidCounter();
+}
+
+// العداد لجميع الصلوات
+function startCounter(){
+  const title = document.getElementById("counterTitle");
+  const timeEl = document.getElementById("counterTime");
+  const note = document.getElementById("counterNote");
+
+  function update(){
+    const now = new Date();
+
+    // تحويل أوقات الصلاة إلى تواريخ اليوم
+    const prayersToday = {};
+    for(const [key,value] of Object.entries(PRAYER_TIMES)){
+      const [h,m] = value.split(":").map(Number);
+      prayersToday[key] = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+    }
+
+    // ترتيب الصلوات حسب الوقت
+    const upcomingPrayers = Object.entries(prayersToday)
+      .filter(([k,t])=> t>now)
+      .sort((a,b)=> a[1]-b[1]);
+
+    let nextPrayer;
+    if(upcomingPrayers.length>0){
+      nextPrayer = upcomingPrayers[0];
+    } else {
+      // إذا انتهت كل الصلوات، نبدأ من الفجر غدًا
+      const [fh,fm] = PRAYER_TIMES.Fajr.split(":").map(Number);
+      nextPrayer = ["Fajr", new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, fh, fm)];
+    }
+
+    const diff = nextPrayer[1]-now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+
+    timeEl.textContent = `${s} : ${m} : ${h}`;
+
+    // عنوان الصلاة القادمة
+    let prayerName = "";
+    switch(nextPrayer[0]){
+      case "Fajr": prayerName="🌙 متبقي على أذان الفجر"; break;
+      case "Dhuhr": prayerName="☀️ متبقي على أذان الظهر"; break;
+      case "Asr": prayerName="🌅 متبقي على أذان العصر"; break;
+      case "Maghrib": prayerName="⏳️ متبقي على أذان المغرب"; break;
+      case "Isha": prayerName="🕌 متبقي على أذان العشاء"; break;
+    }
+    title.textContent = prayerName;
+
+// ===== الرسائل حسب تقسيم اليوم =====
+const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+const fajrMinutes =
+  prayersToday.Fajr.getHours() * 60 + prayersToday.Fajr.getMinutes();
+
+const dhuhrMinutes =
+  prayersToday.Dhuhr.getHours() * 60 + prayersToday.Dhuhr.getMinutes();
+
+const asrMinutes =
+  prayersToday.Asr.getHours() * 60 + prayersToday.Asr.getMinutes();
+
+const maghribMinutes =
+  prayersToday.Maghrib.getHours() * 60 + prayersToday.Maghrib.getMinutes();
+
+// من 12:00 إلى 5:30 صباحًا — السحور
+if (nowMinutes >= 0 && nowMinutes < 330) {
+  note.textContent = "🌙 وقت السحور — اجعل نيتك خالصة، فالسحور بركة";
+
+// من 5:30 إلى أذان الفجر
+} else if (nowMinutes >= 330 && nowMinutes < fajrMinutes) {
+  note.textContent = "⏳ اقترب وقت الفجر — دقائق ويبدأ يوم الطاعة";
+
+// من أذان الفجر إلى 8:30
+} else if (nowMinutes >= fajrMinutes && nowMinutes < 510) {
+  note.textContent = "🌅 بعد الفجر — صباح مبارك، تقبّل الله طاعتك";
+
+// من 8:30 إلى 12:00
+} else if (nowMinutes >= 510 && nowMinutes < 720) {
+  note.textContent = "☀️ صباح هادئ — اذكر الله وابدأ يومك بنية صادقة";
+
+// من 12:00 إلى أذان الظهر
+} else if (nowMinutes >= 720 && nowMinutes < dhuhrMinutes) {
+  note.textContent = "🕰️ اقترب أذان الظهر — استعد للقاء الصلاة";
+
+// من أذان الظهر إلى 4:30
+} else if (nowMinutes >= dhuhrMinutes && nowMinutes < 990) {
+  note.textContent = "🌿 ما بعد الظهر — الصبر عبادة، وكل لحظة تُكتب أجرًا";
+
+// من 4:30 إلى أذان العصر
+} else if (nowMinutes >= 990 && nowMinutes < asrMinutes) {
+  note.textContent = "⏳ اقترب وقت العصر — جدّد نيتك وأكثر من الذكر";
+
+// من أذان العصر إلى المغرب
+} else if (nowMinutes >= asrMinutes && nowMinutes < maghribMinutes) {
+  note.textContent = "🤲 لم يتبقَّ إلا القليل — سل صيامك بذكر الله";
+
+// من المغرب إلى 12:00 ليلًا
+} else {
+  note.textContent = "🌙 صحة فطورك — تقبّل الله صيامك";
+}
+} // ✅ إغلاق دالة update
+
+update();
+setInterval(update,1000);
+}
+
+// Lightbox
+function initLightbox(){
+  const imgs = document.querySelectorAll(".images-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  imgs.forEach(img=>{
+    img.addEventListener("click", ()=>{
+      lightbox.style.display="flex";
+      lightboxImg.src = img.src;
+    });
+  });
+}
+// ===== زر إنجاز ورد اليوم =====
+function markWirdDone(){
+  const today = new Date().toDateString();
+  localStorage.setItem("wird_done", today);
+
+  const btn = document.getElementById("wirdBtn");
+  if(!btn) return;
+
+  btn.classList.add("done");
+  btn.textContent = "✅ أحسنت، تقبّل الله";
+  btn.disabled = true;
+}
+
+function checkWirdStatus(){
+  const today = new Date().toDateString();
+  const saved = localStorage.getItem("wird_done");
+  const btn = document.getElementById("wirdBtn");
+
+  if(saved === today && btn){
+    btn.classList.add("done");
+    btn.textContent = "✅ أحسنت، تقبّل الله";
+    btn.disabled = true;
+  }
+}
+// عند تحميل الصفحة
+window.onload = ()=>{
+  const savedName = localStorage.getItem(STORAGE_KEY);
+  if(savedName) showWelcome(savedName,false);
+
+  checkWirdStatus(); // ← هذا السطر مهم جدًا
+};
+  // ===== عداد العيد =====
+const eidTargetDate = new Date("2026-02-17T06:00:00"); 
+// ↑ غيّر التاريخ والوقت هنا فقط
+
+function startEidCounter(){
+  function updateEid(){
+    const now = new Date();
+    const diff = eidTargetDate - now;
+
+    if(diff <= 0){
+      // عند وصول العيد
+      window.location.href = "eid.html"; // صفحة العيد
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const seconds = totalSeconds % 60;
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const minutes = totalMinutes % 60;
+    const totalHours = Math.floor(totalMinutes / 60);
+    const hours = totalHours % 24;
+    const days = Math.floor(totalHours / 24);
+
+    document.getElementById("eidSeconds").textContent = String(seconds).padStart(2,"0");
+    document.getElementById("eidMinutes").textContent = String(minutes).padStart(2,"0");
+    document.getElementById("eidHours").textContent = String(hours).padStart(2,"0");
+    document.getElementById("eidDays").textContent = String(days).padStart(2,"0");
+  }
+
+  updateEid();
+  setInterval(updateEid,1000);
+}
+</script>
+
+</body>
+</html>
