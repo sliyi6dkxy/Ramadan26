@@ -560,40 +560,74 @@ window.onload = ()=>{
 
   checkWirdStatus(); // ← هذا السطر مهم جدًا
 };
-  // ===== عداد العيد =====
-const eidTargetDate = new Date("2026-02-27T18:55:00"); 
-// ↑ غيّر التاريخ والوقت هنا فقط
+ /* ===============================
+   إعداد عداد العيد (آمن من التعليق)
+================================ */
 
+// 🔹 تاريخ ووقت العيد (غيّره فقط من هنا)
+const eidTargetDate = new Date("2026-01-30T10:10:00");
+
+// 🔹 حماية: لو تغيّر تاريخ العيد نعيد الضبط تلقائيًا
+const savedEidDate = localStorage.getItem("eid_ready_date");
+
+if (savedEidDate && savedEidDate !== eidTargetDate.toISOString()) {
+  localStorage.removeItem("eid_ready_date");
+}
+
+/* ===============================
+   دالة تشغيل عداد العيد
+================================ */
 function startEidCounter(){
+
   function updateEid(){
     const now = new Date();
     const diff = eidTargetDate - now;
 
-  if(diff <= 0){
-  // ✅ تسجيل أن العيد بدأ
-  localStorage.setItem("eid_ready", "1");
+    // ✅ عند وصول وقت العيد
+    if(diff <= 0){
 
-  // ✅ الانتقال لصفحة العيد
-  window.location.href = "eid.html";
-  return;
-  }
+      // لو لم يتم التحويل سابقًا لهذا التاريخ
+      if(!localStorage.getItem("eid_ready_date")){
+        // نحفظ تاريخ العيد نفسه
+        localStorage.setItem(
+          "eid_ready_date",
+          eidTargetDate.toISOString()
+        );
 
+        // التحويل لصفحة العيد
+        window.location.href = "eid.html";
+      }
+      return;
+    }
+
+    // ===== حساب الوقت المتبقي =====
     const totalSeconds = Math.floor(diff / 1000);
     const seconds = totalSeconds % 60;
+
     const totalMinutes = Math.floor(totalSeconds / 60);
     const minutes = totalMinutes % 60;
+
     const totalHours = Math.floor(totalMinutes / 60);
     const hours = totalHours % 24;
+
     const days = Math.floor(totalHours / 24);
 
-    document.getElementById("eidSeconds").textContent = String(seconds).padStart(2,"0");
-    document.getElementById("eidMinutes").textContent = String(minutes).padStart(2,"0");
-    document.getElementById("eidHours").textContent = String(hours).padStart(2,"0");
-    document.getElementById("eidDays").textContent = String(days).padStart(2,"0");
+    // ===== تحديث عناصر العداد =====
+    document.getElementById("eidSeconds").textContent =
+      String(seconds).padStart(2,"0");
+
+    document.getElementById("eidMinutes").textContent =
+      String(minutes).padStart(2,"0");
+
+    document.getElementById("eidHours").textContent =
+      String(hours).padStart(2,"0");
+
+    document.getElementById("eidDays").textContent =
+      String(days).padStart(2,"0");
   }
 
   updateEid();
-  setInterval(updateEid,1000);
+  setInterval(updateEid, 1000);
 }
 </script>
 
