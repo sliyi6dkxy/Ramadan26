@@ -583,6 +583,71 @@ function startEidCounter(){
   updateEid();
   setInterval(updateEid,1000);
 }
+  // رابط الـ Web App في Google Apps Script
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+
+// مفتاح التخزين المحلي
+const STORAGE_KEY = "ramadan_user_name";
+const USER_ID_KEY = "ramadan_user_id";
+
+// حفظ الاسم عند أول تسجيل
+function saveName(){
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+
+  // إذا لم يكن هناك User ID سابق، نولده
+  let userId = localStorage.getItem(USER_ID_KEY);
+  if(!userId){
+    userId = "user_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+    localStorage.setItem(USER_ID_KEY, userId);
+  }
+
+  localStorage.setItem(STORAGE_KEY, name);
+  sendUserData(name, userId); // إرسال البيانات للـ Google Sheets
+  showWelcome(name,true);
+}
+
+// دالة إرسال البيانات
+function sendUserData(name, userId){
+  const now = new Date().toISOString();
+
+  // تحقق من أول دخول
+  const firstVisit = localStorage.getItem("first_visit_date") || now;
+  if(!localStorage.getItem("first_visit_date")){
+    localStorage.setItem("first_visit_date", now);
+  }
+
+  const lastVisit = now;
+  localStorage.setItem("last_visit_date", now);
+
+  // نقطة الدخول اليوم
+  const today = new Date().toDateString();
+  const lastLoginDate = localStorage.getItem("last_login_date") || "";
+  let dailyPoint = 0;
+  if(lastLoginDate !== today){
+    dailyPoint = 1; // نقطة واحدة لهذا اليوم
+    localStorage.setItem("last_login_date", today);
+  }
+
+  // تجهيز البيانات
+  const data = {
+    name: name,
+    user_id: userId,
+    first_visit: firstVisit,
+    last_visit: lastVisit,
+    login_point: dailyPoint
+  };
+
+  // إرسال للـ Web App
+  fetch(WEBAPP_URL + "?action=saveUser", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res=>res.text())
+  .then(console.log)
+  .catch(console.error);
+}
 </script>
 
 </body>
