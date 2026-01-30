@@ -229,31 +229,30 @@ button:hover{ background:#688c6d; }
 }
 /* ===== عداد العيد البسيط مع ارتفاع ثابت ===== */
 .eid-counter-simple{
-  margin-top:18px;
-  padding:10px 14px;
-  background:rgba(122,155,126,0.85);
-  border-radius:12px;
-  display:inline-block;
-  min-width:240px; /* يمنع التمدد حسب الرقم */
-  height:60px;     /* ارتفاع ثابت */
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  background: #ffffff; /* بدل اللون القديم */
+  min-width: 240px; 
+  height: 60px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* خفيف لإبراز المستطيل */
 }
 
 .eid-title{
-  font-size:16px;   /* أكبر قليلاً من المؤقت */
-  font-weight:600;
-  margin-bottom:4px;
-  color:#f5e7c6;
+  font-size: 15px;      /* حجم مناسب للعنوان */
+  font-weight: 600;
+  margin-bottom: 2px;   /* تقليل المسافة عن المؤقت */
+  color: #4b3b2a;       /* نفس لون النص في المستطيلات الأخرى */
 }
 
 .eid-time{
-  font-size:18px;   /* أصغر قليلاً من العنوان */
-  font-weight:500;
-  letter-spacing:1.5px;
-  color:#ffffff;
+  font-size: 16px;       /* أصغر من العنوان */
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: #4b3b2a;        /* نفس اللون الأساسي للنص */
 }
 </style>
 </head>
@@ -387,11 +386,11 @@ function showWelcome(name, firstTime){
 <div class="eid-counter-simple">
   <div class="eid-title">🎉 متبقي على العيد + المفاجأة 🎁</div>
   <div class="eid-time">
-    <span id="eidDays">00</span> :
-    <span id="eidHours">00</span> :
-    <span id="eidMinutes">00</span> :
-    <span id="eidSeconds">00</span>
-  </div>
+  <span id="eidDays">00</span> :
+  <span id="eidHours">00</span> :
+  <span id="eidMinutes">00</span> :
+  <span id="eidSeconds">00</span>
+</div>
 </div>
   `;
 
