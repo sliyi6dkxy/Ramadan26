@@ -290,6 +290,8 @@ button:hover{ background:#688c6d; }
 
 <script>
 const STORAGE_KEY = "ramadan_user_name";
+const USER_ID_KEY = "ramadan_user_id";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
 
 // ====== أوقات الصلوات ======
 const PRAYER_TIMES = {
@@ -322,6 +324,17 @@ function showWelcome(name, firstTime){
   if(firstTime){
     box.classList.add("page-enter");
     requestAnimationFrame(()=> box.classList.add("page-enter-active"));
+    // بعد innerHTML الذي سيأتي بعد ذلك (تأكد أن لديك box.innerHTML = `...`)
+  const btn = document.getElementById("wirdBtn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      markWirdDone();   // تغير حالة الزر محليًا
+      sendWirdPoint();  // إرسال النقاط إلى Google Sheet
+    });
+  }
+
+  // تحقق من حالة ورد اليوم إذا كان قد تم اليوم من قبل
+  checkWirdStatus();
   }
 
   // التاريخ الهجري
@@ -569,16 +582,15 @@ function startEidCounter(){
   updateEid();
   setInterval(updateEid,1000);
 }
-  // رابط الـ Web App في Google Apps Script
+const STORAGE_KEY = "ramadan_user_name";
+const USER_ID_KEY = "ramadan_user_id";
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
 
-
-// حفظ الاسم عند أول تسجيل
+// حفظ الاسم
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
 
-  // إذا لم يكن هناك User ID سابق، نولده
   let userId = localStorage.getItem(USER_ID_KEY);
   if(!userId){
     userId = "user_" + Date.now() + "_" + Math.floor(Math.random()*1000);
@@ -586,91 +598,86 @@ function saveName(){
   }
 
   localStorage.setItem(STORAGE_KEY, name);
-  sendUserData(name, userId); // إرسال البيانات للـ Google Sheets
+  sendUserData(name, userId);
   showWelcome(name,true);
 }
 
-// دالة إرسال البيانات
+// إرسال بيانات المستخدم
 function sendUserData(name, userId){
   const now = new Date().toISOString();
-
-  // تحقق من أول دخول
   const firstVisit = localStorage.getItem("first_visit_date") || now;
-  if(!localStorage.getItem("first_visit_date")){
-    localStorage.setItem("first_visit_date", now);
-  }
-
-  const lastVisit = now;
+  if(!localStorage.getItem("first_visit_date")) localStorage.setItem("first_visit_date", now);
   localStorage.setItem("last_visit_date", now);
 
-  // نقطة الدخول اليوم
   const today = new Date().toDateString();
   const lastLoginDate = localStorage.getItem("last_login_date") || "";
   let dailyPoint = 0;
   if(lastLoginDate !== today){
-    dailyPoint = 1; // نقطة واحدة لهذا اليوم
+    dailyPoint = 1;
     localStorage.setItem("last_login_date", today);
   }
 
-  // تجهيز البيانات
-  const data = {
-    name: name,
-    user_id: userId,
-    first_visit: firstVisit,
-    last_visit: lastVisit,
-    login_point: dailyPoint
-  };
+  const data = { name, user_id: userId, first_visit: firstVisit, last_visit: now, login_point: dailyPoint };
 
-  // إرسال للـ Web App
   fetch(WEBAPP_URL + "?action=saveUser", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
   })
-  .then(res=>res.text())
-  .then(console.log)
-  .catch(console.error);
+  .then(res=>res.text()).then(console.log).catch(console.error);
 }
-  // إرسال نقاط ورد اليوم إلى Google Sheet
+
+// زر ورد اليوم
+function markWirdDone(){
+  const today = new Date().toDateString();
+  localStorage.setItem("wird_done", today);
+
+  const btn = document.getElementById("wirdBtn");
+  if(!btn) return;
+  btn.classList.add("done");
+  btn.textContent = "✅ أحسنت، تقبّل الله";
+  btn.disabled = true;
+}
+
+function checkWirdStatus(){
+  const today = new Date().toDateString();
+  const btn = document.getElementById("wirdBtn");
+  if(localStorage.getItem("wird_done") === today && btn){
+    btn.classList.add("done");
+    btn.textContent = "✅ أحسنت، تقبّل الله";
+    btn.disabled = true;
+  }
+}
+
+// إرسال نقاط ورد اليوم
 function sendWirdPoint() {
   const userId = localStorage.getItem(USER_ID_KEY);
-  if (!userId) return;
+  if(!userId) return;
 
-  const today = new Date().toDateString();
-  const pointsToday = 1; // نقطة ضغط اليوم
   const totalPresses = parseInt(localStorage.getItem("wird_total_press") || 0) + 1;
   localStorage.setItem("wird_total_press", totalPresses);
 
-  const bonus = [5,10,15,20,25].includes(totalPresses) ? 3 : 0;
+  const pointsToday = 1;
+  const bonus = [5,10,15,20,25].includes(totalPresses)? 3:0;
   const totalPoints = pointsToday + bonus;
 
-  const data = {
-    user_id: userId,
-    points: totalPoints,
-    press_count: totalPresses,
-    date: new Date().toISOString()
-  };
+  const data = { user_id: userId, points: totalPoints, press_count: totalPresses, date: new Date().toISOString() };
 
   fetch(WEBAPP_URL + "?action=wirdPoint", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-  })
-  .then(res => res.text())
-  .then(console.log)
-  .catch(console.error);
+    method:"POST", body: JSON.stringify(data),
+    headers: {"Content-Type":"application/json"}
+  }).then(res=>res.text()).then(console.log).catch(console.error);
 }
 
-// ربط الزر عند تحميل الصفحة
-window.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("wirdBtn");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      markWirdDone();   // تغيير حالة الزر محليًا
-      sendWirdPoint();  // إرسال النقاط إلى Google Sheet
-    });
-  }
-});
+// داخل showWelcome بعد innerHTML
+const btn = document.getElementById("wirdBtn");
+if(btn){
+  btn.addEventListener("click", ()=>{
+    markWirdDone();
+    sendWirdPoint();
+  });
+}
+checkWirdStatus();
 </script>
 
 </body>
