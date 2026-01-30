@@ -578,56 +578,36 @@ if (savedEidDate && savedEidDate !== eidTargetDate.toISOString()) {
    دالة تشغيل عداد العيد
 ================================ */
 function startEidCounter(){
-
   function updateEid(){
     const now = new Date();
     const diff = eidTargetDate - now;
 
-    // ✅ عند وصول وقت العيد
+    // إذا وصل وقت العيد
     if(diff <= 0){
-
-      // لو لم يتم التحويل سابقًا لهذا التاريخ
-      if(!localStorage.getItem("eid_ready_date")){
-        // نحفظ تاريخ العيد نفسه
-        localStorage.setItem(
-          "eid_ready_date",
-          eidTargetDate.toISOString()
-        );
-
-        // التحويل لصفحة العيد
-        window.location.href = "eid.html";
-      }
+      console.log("وقت العيد!"); // للتأكد في الـ console
+      // التحويل مباشرة بدون شرط localStorage
+      window.location.href = "eid.html";
       return;
     }
 
     // ===== حساب الوقت المتبقي =====
     const totalSeconds = Math.floor(diff / 1000);
     const seconds = totalSeconds % 60;
-
     const totalMinutes = Math.floor(totalSeconds / 60);
     const minutes = totalMinutes % 60;
-
     const totalHours = Math.floor(totalMinutes / 60);
     const hours = totalHours % 24;
-
     const days = Math.floor(totalHours / 24);
 
-    // ===== تحديث عناصر العداد =====
-    document.getElementById("eidSeconds").textContent =
-      String(seconds).padStart(2,"0");
-
-    document.getElementById("eidMinutes").textContent =
-      String(minutes).padStart(2,"0");
-
-    document.getElementById("eidHours").textContent =
-      String(hours).padStart(2,"0");
-
-    document.getElementById("eidDays").textContent =
-      String(days).padStart(2,"0");
+    // ===== تحديث العرض =====
+    document.getElementById("eidSeconds").textContent = String(seconds).padStart(2,"0");
+    document.getElementById("eidMinutes").textContent = String(minutes).padStart(2,"0");
+    document.getElementById("eidHours").textContent = String(hours).padStart(2,"0");
+    document.getElementById("eidDays").textContent = String(days).padStart(2,"0");
   }
 
   updateEid();
-  setInterval(updateEid, 1000);
+  setInterval(updateEid,1000);
 }
 </script>
 
