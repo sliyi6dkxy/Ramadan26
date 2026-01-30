@@ -227,25 +227,32 @@ button:hover{ background:#688c6d; }
   color:#4b3b2a;
   cursor:default;
 }
-/* ===== عداد العيد البسيط ===== */
+/* ===== عداد العيد البسيط مع ارتفاع ثابت ===== */
 .eid-counter-simple{
   margin-top:18px;
-  padding:12px 14px;
-  background:rgba(0,0,0,0.35);
-  border-radius:14px;
+  padding:10px 14px;
+  background:rgba(122,155,126,0.85);
+  border-radius:12px;
   display:inline-block;
+  min-width:240px; /* يمنع التمدد حسب الرقم */
+  height:60px;     /* ارتفاع ثابت */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
 .eid-title{
-  font-size:14px;
-  margin-bottom:6px;
+  font-size:16px;   /* أكبر قليلاً من المؤقت */
+  font-weight:600;
+  margin-bottom:4px;
   color:#f5e7c6;
 }
 
 .eid-time{
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:2px;
+  font-size:18px;   /* أصغر قليلاً من العنوان */
+  font-weight:500;
+  letter-spacing:1.5px;
   color:#ffffff;
 }
 </style>
@@ -378,12 +385,12 @@ function showWelcome(name, firstTime){
 </div>
 <!-- 🎉 عداد العيد -->
 <div class="eid-counter-simple">
-  <div class="eid-title">🎉 متبقي على العيد</div>
+  <div class="eid-title">🎉 متبقي على العيد + المفاجأة 🎁</div>
   <div class="eid-time">
-    <span id="eidSeconds">00</span> :
-    <span id="eidMinutes">00</span> :
+    <span id="eidDays">00</span> :
     <span id="eidHours">00</span> :
-    <span id="eidDays">00</span>
+    <span id="eidMinutes">00</span> :
+    <span id="eidSeconds">00</span>
   </div>
 </div>
   `;
