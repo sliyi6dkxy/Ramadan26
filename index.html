@@ -543,6 +543,51 @@ function checkWirdStatus(){
     btn.textContent = "✅ أحسنت، تقبّل الله";
     btn.disabled = true;
   }
+  // إرسال نقاط ورد اليوم إلى Google Sheet
+function sendWirdPoint() {
+  const userId = localStorage.getItem(USER_ID_KEY);
+  if(!userId) return;
+
+  const today = new Date().toDateString();
+  const pointsToday = 1; // نقطة ضغط اليوم
+  let bonus = 0;
+
+  // احصل على عدد مرات الضغط السابقة (محليًا)
+  let totalPresses = parseInt(localStorage.getItem("wird_total_press")||0);
+  totalPresses += 1;
+  localStorage.setItem("wird_total_press", totalPresses);
+
+  // الأيام الخاصة للمكافأة: 5،10،15،20،25
+  if([5,10,15,20,25].includes(totalPresses)){
+    bonus = 3; // 3 نقاط مكافأة
+  }
+
+  const totalPoints = pointsToday + bonus;
+
+  const data = {
+    user_id: userId,
+    points: totalPoints,
+    press_count: totalPresses,
+    date: new Date().toISOString()
+  };
+
+  fetch(WEBAPP_URL + "?action=wirdPoint", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res=>res.text())
+  .then(console.log)
+  .catch(console.error);
+}
+
+// ربط الزر ليعمل كلا الدالتين عند الضغط
+const wirdBtn = document.getElementById("wirdBtn");
+if(wirdBtn){
+  wirdBtn.addEventListener("click", ()=>{
+    markWirdDone();   // تحديث الزر محليًا
+    sendWirdPoint();  // إرسال النقاط إلى Google Sheet
+  });
 }
 // عند تحميل الصفحة
 window.onload = ()=>{
