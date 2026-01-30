@@ -15,6 +15,9 @@ body{
   color:#4b3b2a;
   min-height:100vh;
   text-align:center;
+  body{
+  padding-bottom: 100px;
+  }
 }
 
 .container{
@@ -228,35 +231,24 @@ button:hover{ background:#688c6d; }
   cursor:default;
 }
 /* ===== عداد العيد الجديد ===== */
-.eid-strip {
-  width: 320px;               /* نفس عرض المستطيلات الأخرى */
-  height: 70px;               /* ارتفاع قصير ومتناسق */
-  background: #fff;           /* أبيض مثل المستطيلات الأخرى */
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  margin: 16px auto;
+.eid-strip{
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 320px;
+  height: 70px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+
   display: flex;
   flex-direction: column;
-  justify-content: center;    /* المحتوى في منتصف المستطيل رأسيًا */
-  align-items: center;        /* المحتوى في المنتصف أفقيًا */
-  padding: 6px 0;
-}
+  justify-content: center;
+  align-items: center;
 
-.eid-strip-title {
-  font-size: 17px;            /* أكبر من العداد قليلًا */
-  font-weight: 600;
-  color: #4b3b2a;
-  margin-bottom: 4px;         /* فرق بسيط جدًا بين النص والعداد */
-}
-
-.eid-strip-time {
-  font-size: 19px;            /* واضح ومتناسق مع المستطيل */
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: #4b3b2a;
-  font-variant-numeric: tabular-nums; /* الأرقام ثابتة الحجم */
-  display: flex;
-  gap: 8px;                   /* مسافة بين الأيام والساعات والدقائق والثواني */
+  z-index: 999;
 }
 </style>
 </head>
@@ -392,16 +384,6 @@ function showWelcome(name, firstTime){
   <button id="wirdBtn" onclick="markWirdDone()" class="wird-btn">
     📖 أنجزت ورد اليوم
   </button>
-</div>
-<!-- 🎉 عداد العيد -->
-<div class="eid-strip">
-  <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
-  <div class="eid-strip-time">
-    <span id="eidSeconds">00</span> :
-    <span id="eidMinutes">00</span> :
-    <span id="eidHours">00</span> :
-    <span id="eidDays">00</span>
-  </div>
 </div>
   `;
 
@@ -596,6 +578,15 @@ function startEidCounter(){
   setInterval(updateEid,1000);
 }
 </script>
-
+<!-- 🎉 عداد العيد (ثابت أسفل الصفحة) -->
+<div class="eid-strip">
+  <div class="eid-strip-title">🎉 متبقي على العيد + المفاجأة</div>
+  <div class="eid-strip-time">
+    <span id="eidDays">00</span> :
+    <span id="eidHours">00</span> :
+    <span id="eidMinutes">00</span> :
+    <span id="eidSeconds">00</span>
+  </div>
+</div>
 </body>
 </html>
