@@ -292,12 +292,8 @@ button:hover{ background:#688c6d; }
 // ===== مفاتيح عامة =====
 const STORAGE_KEY = "ramadan_user_name";
 const USER_ID_KEY = "ramadan_user_id";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyqM6sg8ho1X4dZDeIOpp1pODjckC3xfTNUc8zwZAodxzLZ7hlHjku0yZOsK60G5t4N4g/exec";
+const WEBAPP_URL = "رابط Web App هنا"; // ضع الرابط الصحيح
 
-  function getTodayString(){
-  const d = new Date();
-  return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
-  }
 function getUserId(){
   let userId = localStorage.getItem(USER_ID_KEY);
   if(!userId){
@@ -305,6 +301,14 @@ function getUserId(){
     localStorage.setItem(USER_ID_KEY, userId);
   }
   return userId;
+}
+
+function saveName(){
+  const name = document.getElementById("username").value.trim();
+  if(!name) return;
+  localStorage.setItem(STORAGE_KEY, name);
+  getUserId();
+  alert("تم حفظ اسمك!");
 }
   
 // ====== أوقات الصلوات ======
@@ -339,30 +343,30 @@ function saveName(){
   showWelcome(name,true);
 }
   function handleDailyLogin(){
-  const today = getTodayString(); // اليوم الحالي
-  const userId = getUserId(); // نستخدم نفس User ID
+  const today = new Date().toISOString().slice(0,10);
+  const userId = getUserId();
   if(!userId) return;
 
-  const lastLoginDay = localStorage.getItem("last_login_day");
+  const lastLogin = localStorage.getItem("last_login_day");
+  if(lastLogin === today) return; // تم تسجيل اليوم
 
-  // إذا لم يزر المستخدم اليوم
-  if(lastLoginDay !== today){
-    localStorage.setItem("last_login_day", today);
+  localStorage.setItem("last_login_day", today);
 
-    // إرسال النقطة إلى Google Sheets
-    const data = {
-      user_id: userId,
-      points: 1,
-      type: "daily_login",
-      date: new Date().toISOString()
-    };
+  const data = {
+    action: "loginPoint",   // مهم جدًا
+    user_id: userId,
+    points: 1,
+    date: new Date().toISOString()
+  };
 
-    fetch(WEBAPP_URL + "?action=loginPoint", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
-    });
-  }
+  fetch(WEBAPP_URL, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.json())
+  .then(res => console.log("Daily login sent:", res))
+  .catch(err => console.error(err));
   }
 
 // عرض الصفحة الرئيسية
@@ -598,32 +602,32 @@ function checkWirdStatus(){
 }
 
   // ===== إرسال نقاط ورد اليوم =====
-function sendWirdPoint() {
-  const userId = localStorage.getItem(USER_ID_KEY);
-  if (!userId) return;
-  // 🔢 عدد الأيام التي أُنجز فيها الورد (غير مرتبط بالتاريخ)
+function sendWirdPoint(){
+  const userId = getUserId();
+  if(!userId) return;
+
   let totalPresses = parseInt(localStorage.getItem("wird_total_press") || "0");
   totalPresses += 1;
   localStorage.setItem("wird_total_press", totalPresses);
 
-  // ⭐ النقاط
-  let totalPoints = 1; // النقطة العادية
+  let totalPoints = [5,10,15,20,25].includes(totalPresses) ? 3 : 1;
 
-if ([5, 10, 15, 20, 25].includes(totalPresses)) {
-  totalPoints = 3; // بونص فقط
-}
   const data = {
+    action: "wirdPoint",
     user_id: userId,
     points: totalPoints,
     press_count: totalPresses,
     date: new Date().toISOString()
   };
 
-  fetch(WEBAPP_URL + "?action=wirdPoint", {
+  fetch(WEBAPP_URL, {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
-  });
+  })
+  .then(res => res.json())
+  .then(res => console.log("Wird point sent:", res))
+  .catch(err => console.error(err));
 }
 // عند تحميل الصفحة
 window.onload = ()=>{
