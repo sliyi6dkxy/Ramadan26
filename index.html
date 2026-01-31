@@ -293,6 +293,11 @@ button:hover{ background:#688c6d; }
 const STORAGE_KEY = "ramadan_user_name";
 const USER_ID_KEY = "ramadan_user_id";
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycb.../exec";
+
+  function getTodayString(){
+  const d = new Date();
+  return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+  }
 function getUserId(){
   let userId = localStorage.getItem(USER_ID_KEY);
   if(!userId){
@@ -334,7 +339,7 @@ function saveName(){
   showWelcome(name,true);
 }
   function handleDailyLogin(){
-  const today = new Date().toDateString(); // اليوم الحالي
+  const today = getTodayString(); // اليوم الحالي
   const userId = getUserId(); // نستخدم نفس User ID
   if(!userId) return;
 
@@ -435,7 +440,14 @@ function showWelcome(name, firstTime){
 </div>
 </div>
   `;
-
+const btn = document.getElementById("wirdBtn");
+if(btn){
+  checkWirdStatus(); // يتأكد إذا المستخدم ضغط الزر اليوم
+  btn.addEventListener("click", () => {
+    sendWirdPoint();  // تسجيل النقاط
+    markWirdDone();   // قفل الزر وتغيير النص
+  });
+}
   window.scrollTo(0,0);
   startCounter();
   initLightbox();
@@ -562,7 +574,7 @@ function initLightbox(){
 }
 // ===== زر إنجاز ورد اليوم =====
 function markWirdDone(){
-  const today = new Date().toDateString();
+  const today = getTodayString();
   localStorage.setItem("wird_done", today);
 
   const btn = document.getElementById("wirdBtn");
@@ -574,7 +586,7 @@ function markWirdDone(){
 }
 
 function checkWirdStatus(){
-  const today = new Date().toDateString();
+  const today = getTodayString();
   const saved = localStorage.getItem("wird_done");
   const btn = document.getElementById("wirdBtn");
 
@@ -621,8 +633,6 @@ window.onload = ()=>{
     handleDailyLogin();
     showWelcome(savedName,false);
   }
-
-  checkWirdStatus();
 };
   // ===== عداد العيد =====
 const eidTargetDate = new Date("2026-02-17T06:00:00"); 
