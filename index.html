@@ -412,9 +412,9 @@ function showWelcome(name, firstTime){
       «اقرؤوا القرآن فإنه يأتي يوم القيامة شفيعًا لأصحابه»
     </div>
     <div style="margin-top:18px">
-  <button id="wirdBtn" onclick="markWirdDone()" class="wird-btn">
-    📖 أنجزت ورد اليوم
-  </button>
+ <button id="wirdBtn" class="wird-btn">
+  📖 أنجزت ورد اليوم
+</button>
 </div>
 <!-- 🎉 عداد العيد -->
 <div class="eid-counter-simple">
@@ -556,7 +556,6 @@ function initLightbox(){
 function markWirdDone(){
   const today = new Date().toDateString();
   localStorage.setItem("wird_done", today);
-  updateWirdCount();
 
   const btn = document.getElementById("wirdBtn");
   if(!btn) return;
@@ -577,12 +576,43 @@ function checkWirdStatus(){
     btn.disabled = true;
   }
 }
-  function updateWirdCount(){
-  let count = parseInt(localStorage.getItem("wird_total_press") || "0");
-  count += 1;
-  localStorage.setItem("wird_total_press", count);
-  return count;
-  }
+
+  // ===== إرسال نقاط ورد اليوم =====
+function sendWirdPoint() {
+  const userId = localStorage.getItem(USER_ID_KEY);
+  if (!userId) return;
+
+  const today = new Date().toDateString();
+
+  // 🔒 منع التكرار في نفس اليوم
+  const lastWirdDate = localStorage.getItem("last_wird_date");
+  if (lastWirdDate === today) return;
+
+  localStorage.setItem("last_wird_date", today);
+
+  // 🔢 عدد الأيام التي أُنجز فيها الورد (غير مرتبط بالتاريخ)
+  let totalPresses = parseInt(localStorage.getItem("wird_total_press") || "0");
+  totalPresses += 1;
+  localStorage.setItem("wird_total_press", totalPresses);
+
+  // ⭐ النقاط
+  const basePoint = 1;
+  const bonus = [5,10,15,20,25].includes(totalPresses) ? 3 : 0;
+  const totalPoints = basePoint + bonus;
+
+  const data = {
+    user_id: userId,
+    points: totalPoints,
+    press_count: totalPresses,
+    date: new Date().toISOString()
+  };
+
+  fetch(WEBAPP_URL + "?action=wirdPoint", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  });
+}
 // عند تحميل الصفحة
 window.onload = ()=>{
   const savedName = localStorage.getItem(STORAGE_KEY);
