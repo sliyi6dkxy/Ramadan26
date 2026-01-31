@@ -292,7 +292,7 @@ button:hover{ background:#688c6d; }
 // ===== مفاتيح عامة =====
 const STORAGE_KEY = "ramadan_user_name";
 const USER_ID_KEY = "ramadan_user_id";
-const WEBAPP_URL = "رابط Web App هنا"; // ضع الرابط الصحيح
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzdc0np9f0SxphiTOM1kZapJOlJXcOBETznz6fwLbZz4PpS6EJbgb-KaWjMnT9CJ9Rivw/exec";
 
 function getUserId(){
   let userId = localStorage.getItem(USER_ID_KEY);
@@ -306,8 +306,24 @@ function getUserId(){
 function saveName(){
   const name = document.getElementById("username").value.trim();
   if(!name) return;
+
   localStorage.setItem(STORAGE_KEY, name);
-  getUserId();
+  const userId = getUserId();
+
+  // إرسال الاسم لأول مرة للشيت
+  fetch(WEBAPP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "saveName",
+      user_id: userId,
+      name: name,
+      points: 0,
+      press_count: 0,
+      date: new Date().toISOString()
+    }),
+    headers: { "Content-Type": "application/json" }
+  });
+
   alert("تم حفظ اسمك!");
 }
   
