@@ -351,16 +351,17 @@ function saveName(){
     localStorage.setItem("last_login_day", today);
 
     fetch(WEBAPP_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        user_id:userId,
-        name:name,
-        login_point:1,
-        wird_points:0,
-        eid_message:""
-      })
-    });
+  method:"POST",
+  mode:"no-cors",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    user_id:userId,
+    name:name,
+    login_point:1,
+    wird_points:0,
+    eid_message:""
+  })
+});
   }
  }
 
@@ -612,16 +613,17 @@ function sendWirdPoint(){
   }
 
   fetch(WEBAPP_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      user_id:userId,
-      name:name,
-      login_point:0,
-      wird_points:points,
-      eid_message:""
-    })
-  });
+  method:"POST",
+  mode:"no-cors",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    user_id:userId,
+    name:name,
+    login_point:0,
+    wird_points:points,
+    eid_message:""
+  })
+});
 }
 // عند تحميل الصفحة
 window.onload = ()=>{
