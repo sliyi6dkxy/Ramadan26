@@ -334,22 +334,30 @@ function saveName(){
   showWelcome(name,true);
 }
   function handleDailyLogin(){
-  const today = new Date().toDateString();
-  const now = new Date().toISOString();
-
-  if(!localStorage.getItem("first_visit")){
-    localStorage.setItem("first_visit", now);
-  }
+  const today = new Date().toDateString(); // اليوم الحالي
+  const userId = getUserId(); // نستخدم نفس User ID
+  if(!userId) return;
 
   const lastLoginDay = localStorage.getItem("last_login_day");
+
+  // إذا لم يزر المستخدم اليوم
   if(lastLoginDay !== today){
     localStorage.setItem("last_login_day", today);
-    localStorage.setItem("login_point_today", "1");
-  } else {
-    localStorage.setItem("login_point_today", "0");
-  }
 
-  localStorage.setItem("last_visit", now);
+    // إرسال النقطة إلى Google Sheets
+    const data = {
+      user_id: userId,
+      points: 1,
+      type: "daily_login",
+      date: new Date().toISOString()
+    };
+
+    fetch(WEBAPP_URL + "?action=loginPoint", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    });
+  }
   }
 
 // عرض الصفحة الرئيسية
@@ -581,25 +589,17 @@ function checkWirdStatus(){
 function sendWirdPoint() {
   const userId = localStorage.getItem(USER_ID_KEY);
   if (!userId) return;
-
-  const today = new Date().toDateString();
-
-  // 🔒 منع التكرار في نفس اليوم
-  const lastWirdDate = localStorage.getItem("last_wird_date");
-  if (lastWirdDate === today) return;
-
-  localStorage.setItem("last_wird_date", today);
-
   // 🔢 عدد الأيام التي أُنجز فيها الورد (غير مرتبط بالتاريخ)
   let totalPresses = parseInt(localStorage.getItem("wird_total_press") || "0");
   totalPresses += 1;
   localStorage.setItem("wird_total_press", totalPresses);
 
   // ⭐ النقاط
-  const basePoint = 1;
-  const bonus = [5,10,15,20,25].includes(totalPresses) ? 3 : 0;
-  const totalPoints = basePoint + bonus;
+  let totalPoints = 1; // النقطة العادية
 
+if ([5, 10, 15, 20, 25].includes(totalPresses)) {
+  totalPoints = 3; // بونص فقط
+}
   const data = {
     user_id: userId,
     points: totalPoints,
@@ -660,10 +660,10 @@ function startEidCounter(){
   const btn = document.getElementById("wirdBtn");
   if (!btn) return;
 
-  btn.addEventListener("click", () => {
-    markWirdDone();   // قفل الزر
-    sendWirdPoint();  // حساب النقاط
-  });
+btn.addEventListener("click", () => {
+  sendWirdPoint();  // أولًا تسجيل النقاط
+  markWirdDone();   // بعد ذلك قفل الزر
+});
 });
 </script>
 
