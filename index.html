@@ -338,32 +338,31 @@ function saveName(){
 
   showWelcome(name,true);
 }
-  function handleDailyLogin(){
-  const today = getTodayString(); // اليوم الحالي
-  const userId = getUserId(); // نستخدم نفس User ID
-  if(!userId) return;
+ function handleDailyLogin(){
+  const today = getTodayString();
+  const userId = getUserId();
+  const name = localStorage.getItem(STORAGE_KEY);
+
+  if(!userId || !name) return;
 
   const lastLoginDay = localStorage.getItem("last_login_day");
 
-  // إذا لم يزر المستخدم اليوم
   if(lastLoginDay !== today){
     localStorage.setItem("last_login_day", today);
 
-    // إرسال النقطة إلى Google Sheets
-    const data = {
-      user_id: userId,
-      points: 1,
-      type: "daily_login",
-      date: new Date().toISOString()
-    };
-
-    fetch(WEBAPP_URL + "?action=loginPoint", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
+    fetch(WEBAPP_URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        user_id:userId,
+        name:name,
+        login_point:1,
+        wird_points:0,
+        eid_message:""
+      })
     });
   }
-  }
+ }
 
 // عرض الصفحة الرئيسية
 function showWelcome(name, firstTime){
@@ -598,31 +597,30 @@ function checkWirdStatus(){
 }
 
   // ===== إرسال نقاط ورد اليوم =====
-function sendWirdPoint() {
-  const userId = localStorage.getItem(USER_ID_KEY);
-  if (!userId) return;
-  // 🔢 عدد الأيام التي أُنجز فيها الورد (غير مرتبط بالتاريخ)
+function sendWirdPoint(){
+  const userId = getUserId();
+  const name = localStorage.getItem(STORAGE_KEY);
+  if(!userId || !name) return;
+
   let totalPresses = parseInt(localStorage.getItem("wird_total_press") || "0");
-  totalPresses += 1;
+  totalPresses++;
   localStorage.setItem("wird_total_press", totalPresses);
 
-  // ⭐ النقاط
-  let totalPoints = 1; // النقطة العادية
+  let points = 1;
+  if([5,10,15,20,25].includes(totalPresses)){
+    points = 3;
+  }
 
-if ([5, 10, 15, 20, 25].includes(totalPresses)) {
-  totalPoints = 3; // بونص فقط
-}
-  const data = {
-    user_id: userId,
-    points: totalPoints,
-    press_count: totalPresses,
-    date: new Date().toISOString()
-  };
-
-  fetch(WEBAPP_URL + "?action=wirdPoint", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
+  fetch(WEBAPP_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      user_id:userId,
+      name:name,
+      login_point:0,
+      wird_points:points,
+      eid_message:""
+    })
   });
 }
 // عند تحميل الصفحة
